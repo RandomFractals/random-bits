@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/line-bar-chart-cases
 // Title: Line/Bar Chart Cases
 // Author: Taras Novak (@randomfractals)
-// Version: 114
+// Version: 126
 // Runtime version: 1
 
 const m0 = {
-  id: "4dde53867b3adf5f@114",
+  id: "4dde53867b3adf5f@126",
   variables: [
     {
       inputs: ["md"],
@@ -26,9 +26,9 @@ c3({
   },
   axis: {
     x: {type: 'category', tick: {rotate: -45, multiline: false}, height: 40},
-    y: {label: {text: 'new cases', position: 'outer-middle'}},
-    y2: {show: true, min: 0, max: 12, padding: {top: 0, bottom: 0},
-      label: {text: 'complex cases', position: 'outer-middle'}
+    y: {label: {text: y[0], position: 'outer-middle'}},
+    y2: {show: true, min: 0, padding: {top: 0, bottom: 0},
+      label: {text: y2[0], position: 'outer-middle'}
     }
   },
   legend: {position: 'inset'},  
@@ -77,7 +77,7 @@ c3({
 };
 
 const notebook = {
-  id: "4dde53867b3adf5f@114",
+  id: "4dde53867b3adf5f@126",
   modules: [m0]
 };
 
