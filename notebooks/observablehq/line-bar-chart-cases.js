@@ -1,38 +1,47 @@
 // URL: https://beta.observablehq.com/@randomfractals/line-bar-chart-cases
-// Title: Line/Bar Chart Cases
+// Title: Line/Bar Chart Cases w/C3
 // Author: Taras Novak (@randomfractals)
-// Version: 126
+// Version: 143
 // Runtime version: 1
 
 const m0 = {
-  id: "4dde53867b3adf5f@126",
+  id: "4dde53867b3adf5f@143",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
-md`# Line/Bar Chart Cases`
+md`# Line/Bar Chart Cases w/C3`
 )})
     },
     {
-      name: "cases",
-      inputs: ["c3","x","y","y2"],
-      value: (function(c3,x,y,y2){return(
-c3({
-  data: {x: 'x',
-    columns: [x, y, y2],
-    axes: {'complex cases': 'y2'},
-    groups: [['new cases']],
-    types: {'new cases': 'bar'}
-  },
-  axis: {
-    x: {type: 'category', tick: {rotate: -45, multiline: false}, height: 40},
-    y: {label: {text: y[0], position: 'outer-middle'}},
-    y2: {show: true, min: 0, padding: {top: 0, bottom: 0},
-      label: {text: y2[0], position: 'outer-middle'}
-    }
-  },
-  legend: {position: 'inset'},  
-})
+      inputs: ["drawC3Graph","x","y","y2"],
+      value: (function(drawC3Graph,x,y,y2){return(
+drawC3Graph(x, y, y2)
+)})
+    },
+    {
+      name: "drawC3Graph",
+      inputs: ["c3"],
+      value: (function(c3){return(
+function drawC3Graph(x, y, y2) {
+  return c3({
+    size: {height: 240, width: 480},
+    data: {x: 'x',
+      columns: [x, y, y2],
+      axes: {'complex cases': 'y2'},
+      groups: [['new cases']],
+      types: {'new cases': 'bar'}
+    },
+    axis: {
+      x: {type: 'category', tick: {rotate: -45, multiline: false}, height: 40},
+      y: {label: {text: y[0], position: 'outer-middle'}},
+      y2: {show: true, min: 0, padding: {top: 0, bottom: 0},
+        label: {text: y2[0], position: 'outer-middle'}
+      }
+    },
+    legend: {position: 'inset'},  
+  });
+}
 )})
     },
     {
@@ -72,12 +81,18 @@ c3({
   };
 }
 )
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## [c3.js](https://c3js.org)`
+)})
     }
   ]
 };
 
 const notebook = {
-  id: "4dde53867b3adf5f@126",
+  id: "4dde53867b3adf5f@143",
   modules: [m0]
 };
 
