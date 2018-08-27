@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 363
+// Version: 365
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@363",
+  id: "5c54ccd4ac62f235@365",
   variables: [
     {
       inputs: ["md"],
@@ -41,8 +41,8 @@ md `### [@${userName}](https://beta.observablehq.com/@${userName}) data from htt
     },
     {
       name: "userBio",
-      inputs: ["html","userName","user"],
-      value: (function(html,userName,user){return(
+      inputs: ["html","userName","user","notebooks"],
+      value: (function(html,userName,user,notebooks){return(
 html `
 <style>
 #avatar {float: left;} 
@@ -54,6 +54,7 @@ html `
 </div>
 <i>${user.bio || "??"}</i>:
 <a href="${user.home_url}">${user.home_url}</a>
+Notebooks: ${notebooks.length}
 `
 )})
     },
@@ -126,7 +127,7 @@ md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
     {
       name: "MAXDOCS",
       value: (function(){return(
-210
+360
 )})
     },
     {
@@ -229,7 +230,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@363",
+  id: "5c54ccd4ac62f235@365",
   modules: [m0]
 };
 
