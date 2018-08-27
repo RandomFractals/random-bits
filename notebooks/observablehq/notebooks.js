@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 275
+// Version: 283
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@275",
+  id: "5c54ccd4ac62f235@283",
   variables: [
     {
       inputs: ["md"],
@@ -113,16 +113,17 @@ md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
 )})
     },
     {
+      name: "searchNotebooks",
       inputs: ["searchByTitle","notebooks"],
       value: (function(searchByTitle,notebooks){return(
-// search example for custom user notebooks collection display
 searchByTitle(notebooks, 'chicago crimes')
 )})
     },
     {
-      inputs: ["searchByTitle","notebooks"],
-      value: (function(searchByTitle,notebooks){return(
-searchByTitle(notebooks, 'chicago homicides')
+      name: "linkNotebooks",
+      inputs: ["md","getLinksMarkdown","searchByTitle","notebooks"],
+      value: (function(md,getLinksMarkdown,searchByTitle,notebooks){return(
+md `${getLinksMarkdown(searchByTitle(notebooks, 'chicago homicides'))}`
 )})
     },
     {
@@ -136,6 +137,17 @@ function searchByTitle(notebooks, title) {
     }
   });
   return matchingNotebooks;
+}
+)})
+    },
+    {
+      name: "getLinksMarkdown",
+      inputs: ["userName"],
+      value: (function(userName){return(
+function getLinksMarkdown(notebooks) {
+  const links = [];
+  return notebooks.map(notebook => `[${notebook.title}](https://beta.observablehq.com/@${userName}/${notebook.slug})<br /><br />`)
+    .reduce((html, link) => html + link);
 }
 )})
     },
@@ -202,7 +214,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@275",
+  id: "5c54ccd4ac62f235@283",
   modules: [m0]
 };
 
