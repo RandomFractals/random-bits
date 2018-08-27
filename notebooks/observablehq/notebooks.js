@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 365
+// Version: 382
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@365",
+  id: "5c54ccd4ac62f235@382",
   variables: [
     {
       inputs: ["md"],
@@ -41,8 +41,8 @@ md `### [@${userName}](https://beta.observablehq.com/@${userName}) data from htt
     },
     {
       name: "userBio",
-      inputs: ["html","userName","user","notebooks"],
-      value: (function(html,userName,user,notebooks){return(
+      inputs: ["html","userName","user","notebooks","notebooksStats"],
+      value: (function(html,userName,user,notebooks,notebooksStats){return(
 html `
 <style>
 #avatar {float: left;} 
@@ -54,7 +54,11 @@ html `
 </div>
 <i>${user.bio || "??"}</i>:
 <a href="${user.home_url}">${user.home_url}</a>
-Notebooks: ${notebooks.length}
+<br />
+Total Notebooks: ${notebooks.length} |
+Oroginal Notebooks: ${notebooksStats.original.length} |
+Forked Notebooks: ${notebooksStats.forked.length} |
+Total Likes: ${notebooksStats.liked.reduce((total, count) => total + count)}
 `
 )})
     },
@@ -131,10 +135,38 @@ md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
 )})
     },
     {
+      name: "notebooksStats",
+      inputs: ["getNotebooksStats","notebooks"],
+      value: (function(getNotebooksStats,notebooks){return(
+getNotebooksStats(notebooks)
+)})
+    },
+    {
       name: "searchNotebooks",
       inputs: ["searchByTitle","notebooks"],
       value: (function(searchByTitle,notebooks){return(
 searchByTitle(notebooks, 'chicago crimes')
+)})
+    },
+    {
+      name: "getNotebooksStats",
+      value: (function(){return(
+function getNotebooksStats(notebooks) {
+  const stats = {
+    original: [],
+    forked: [],
+    liked: []
+  };
+  notebooks.map(notebook => {
+    if (!notebook.fork_of) {
+      stats.original.push(notebook);
+    } else {
+      stats.forked.push(notebook);
+    }
+    stats.liked.push(notebook.likes);
+  });
+  return stats;
+}
 )})
     },
     {
@@ -230,7 +262,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@365",
+  id: "5c54ccd4ac62f235@382",
   modules: [m0]
 };
 
