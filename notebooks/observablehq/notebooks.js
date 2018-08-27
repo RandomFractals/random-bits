@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 258
+// Version: 275
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@258",
+  id: "5c54ccd4ac62f235@275",
   variables: [
     {
       inputs: ["md"],
@@ -113,6 +113,39 @@ md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
 )})
     },
     {
+      inputs: ["searchByTitle","notebooks"],
+      value: (function(searchByTitle,notebooks){return(
+// search example for custom user notebooks collection display
+searchByTitle(notebooks, 'chicago crimes')
+)})
+    },
+    {
+      inputs: ["searchByTitle","notebooks"],
+      value: (function(searchByTitle,notebooks){return(
+searchByTitle(notebooks, 'chicago homicides')
+)})
+    },
+    {
+      name: "searchByTitle",
+      value: (function(){return(
+function searchByTitle(notebooks, title) {
+  const matchingNotebooks = [];
+  notebooks.map(notebook => {
+    if( notebook.title.toLowerCase().indexOf(title) >= 0) {
+      matchingNotebooks.push(notebook); 
+    }
+  });
+  return matchingNotebooks;
+}
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `**TODO: add notebooks grid view display with thumbnails for creating custom user notebooks collections**`
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Getting Notebook Info`
@@ -169,7 +202,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@258",
+  id: "5c54ccd4ac62f235@275",
   modules: [m0]
 };
 
