@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 360
+// Version: 363
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@360",
+  id: "5c54ccd4ac62f235@363",
   variables: [
     {
       inputs: ["md"],
@@ -137,13 +137,6 @@ searchByTitle(notebooks, 'chicago crimes')
 )})
     },
     {
-      name: "linkNotebooks",
-      inputs: ["md","getLinksMarkdown","searchByTitle","notebooks"],
-      value: (function(md,getLinksMarkdown,searchByTitle,notebooks){return(
-md `${getLinksMarkdown(searchByTitle(notebooks, 'chicago homicides'))}`
-)})
-    },
-    {
       name: "searchByTitle",
       value: (function(){return(
 function searchByTitle(notebooks, title) {
@@ -171,6 +164,12 @@ function getLinksMarkdown(notebooks) {
       inputs: ["md"],
       value: (function(md){return(
 md `**TODO: add notebooks grid view display with thumbnails for creating custom user notebooks collections**`
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `see [Chicago Crimes EDA](https://beta.observablehq.com/@randomfractals/chicagocrimes) for search and links markdown api usage example.`
 )})
     },
     {
@@ -230,7 +229,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@360",
+  id: "5c54ccd4ac62f235@363",
   modules: [m0]
 };
 
