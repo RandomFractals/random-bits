@@ -1,16 +1,16 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 382
+// Version: 387
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@382",
+  id: "5c54ccd4ac62f235@387",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
-md`# Notebooks
+md `## Notebooks
 This notebook uses actual https://api.observablehq.com to display user stats and notebooks info`
 )})
     },
@@ -35,7 +35,7 @@ md `<input value=randomfractals>`
     {
       inputs: ["md","userName"],
       value: (function(md,userName){return(
-md `### [@${userName}](https://beta.observablehq.com/@${userName}) data from https://api.observablehq.com/user/@${userName}:
+md `**[@${userName}](https://beta.observablehq.com/@${userName})** *data from* https://api.observablehq.com/user/@${userName}:
 `
 )})
     },
@@ -56,7 +56,7 @@ html `
 <a href="${user.home_url}">${user.home_url}</a>
 <br />
 Total Notebooks: ${notebooks.length} |
-Oroginal Notebooks: ${notebooksStats.original.length} |
+Original Notebooks: ${notebooksStats.original.length} |
 Forked Notebooks: ${notebooksStats.forked.length} |
 Total Likes: ${notebooksStats.liked.reduce((total, count) => total + count)}
 `
@@ -262,7 +262,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@382",
+  id: "5c54ccd4ac62f235@387",
   modules: [m0]
 };
 
