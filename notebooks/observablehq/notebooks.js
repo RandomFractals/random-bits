@@ -1,17 +1,17 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 283
+// Version: 360
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@283",
+  id: "5c54ccd4ac62f235@360",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md`# Notebooks
-This notebook uses actual https://api.observablehq.com/ to display user stats and notebooks info`
+This notebook uses actual https://api.observablehq.com to display user stats and notebooks info`
 )})
     },
     {
@@ -24,7 +24,7 @@ md `## User Info`
       name: "viewof userName",
       inputs: ["md"],
       value: (function(md){return(
-md`<input value=randomfractals>`
+md `<input value=randomfractals>`
 )})
     },
     {
@@ -35,18 +35,26 @@ md`<input value=randomfractals>`
     {
       inputs: ["md","userName"],
       value: (function(md,userName){return(
-md `### [@${userName}](https://beta.observablehq.com/@randomfractals) data from https://api.observablehq.com/user/@${userName}:
+md `### [@${userName}](https://beta.observablehq.com/@${userName}) data from https://api.observablehq.com/user/@${userName}:
 `
 )})
     },
     {
       name: "userBio",
-      inputs: ["md","user"],
-      value: (function(md,user){return(
-md`<style>#avatar{float:right}#avatar img {max-width: 4em}</style><div id=avatar>![](${user.avatar_url})</div>
-### ${user.name} — _${user.bio || "??"}_
-
-${user.home_url}`
+      inputs: ["html","userName","user"],
+      value: (function(html,userName,user){return(
+html `
+<style>
+#avatar {float: left;} 
+#avatar img {max-width: 24px; border-radius: 12px; margin-right: 10px;}
+</style>
+<div id="avatar">
+  <a href="https://beta.observablehq.com/@${userName}" 
+    title="@${userName} a.k.a. ${user.name}" target="_blank"><img src="${user.avatar_url}"></img></a>
+</div>
+<i>${user.bio || "??"}</i>:
+<a href="${user.home_url}">${user.home_url}</a>
+`
 )})
     },
     {
@@ -71,14 +79,23 @@ vegalite({
     {
       name: "apiUrl",
       value: (function(){return(
-"https://cors-anywhere.herokuapp.com/" + "https://api.observablehq.com"
+'https://cors-anywhere.herokuapp.com/https://api.observablehq.com'
 )})
     },
     {
       name: "user",
-      inputs: ["apiUrl","userName"],
-      value: (function(apiUrl,userName){return(
-fetch(`${apiUrl}/user/@${userName}`).then(d => d.json())
+      inputs: ["getUserInfo","userName"],
+      value: (function(getUserInfo,userName){return(
+getUserInfo(userName)
+)})
+    },
+    {
+      name: "getUserInfo",
+      inputs: ["apiUrl"],
+      value: (function(apiUrl){return(
+function getUserInfo(userName) {
+  return fetch(`${apiUrl}/user/@${userName}`).then(d => d.json())
+}
 )})
     },
     {
@@ -145,7 +162,6 @@ function searchByTitle(notebooks, title) {
       inputs: ["userName"],
       value: (function(userName){return(
 function getLinksMarkdown(notebooks) {
-  const links = [];
   return notebooks.map(notebook => `[${notebook.title}](https://beta.observablehq.com/@${userName}/${notebook.slug})<br /><br />`)
     .reduce((html, link) => html + link);
 }
@@ -165,17 +181,17 @@ md `## Getting Notebook Info`
     },
     {
       name: "notebook",
-      inputs: ["getNotebookInfo"],
-      value: (function(getNotebookInfo){return(
-getNotebookInfo(0)
+      inputs: ["getNotebookInfo","notebooks"],
+      value: (function(getNotebookInfo,notebooks){return(
+getNotebookInfo(notebooks[0])
 )})
     },
     {
       name: "getNotebookInfo",
-      inputs: ["apiUrl","userName","notebooks"],
-      value: (function(apiUrl,userName,notebooks){return(
-function getNotebookInfo(notebookIndex) {
-  return fetch(`${apiUrl}/document/@${userName}/${notebooks[notebookIndex].slug}`).then(d => d.json())
+      inputs: ["apiUrl","userName"],
+      value: (function(apiUrl,userName){return(
+function getNotebookInfo(notebook) {
+  return fetch(`${apiUrl}/document/@${userName}/${notebook.slug}`).then(d => d.json())
 }
 )})
     },
@@ -190,7 +206,7 @@ md `## Displaying Notebook Cells Code`
       value: (function(html,notebook,color){return(
 html`${
   notebook.nodes
-    .map((d,i) => `<pre style="font-size:7px; color:${color(i)}">${d.value.replace(/</g, "&lt;")}</pre>`)
+    .map((d,i) => `<pre style="font-size:14px; color:${color(i)}">${d.value.replace(/</g, "&lt;")}</pre>`)
     .join("<hr style='margin:0;padding:0'>")
 }`
 )})
@@ -214,7 +230,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@283",
+  id: "5c54ccd4ac62f235@360",
   modules: [m0]
 };
 
