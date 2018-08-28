@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 387
+// Version: 395
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@387",
+  id: "5c54ccd4ac62f235@395",
   variables: [
     {
       inputs: ["md"],
@@ -41,8 +41,8 @@ md `**[@${userName}](https://beta.observablehq.com/@${userName})** *data from* h
     },
     {
       name: "userBio",
-      inputs: ["html","userName","user","notebooks","notebooksStats"],
-      value: (function(html,userName,user,notebooks,notebooksStats){return(
+      inputs: ["html","userName","user","notebooks","stats"],
+      value: (function(html,userName,user,notebooks,stats){return(
 html `
 <style>
 #avatar {float: left;} 
@@ -56,9 +56,9 @@ html `
 <a href="${user.home_url}">${user.home_url}</a>
 <br />
 Total Notebooks: ${notebooks.length} |
-Original Notebooks: ${notebooksStats.original.length} |
-Forked Notebooks: ${notebooksStats.forked.length} |
-Total Likes: ${notebooksStats.liked.reduce((total, count) => total + count)}
+Original Notebooks: ${stats.original.length} |
+Forked Notebooks: ${stats.forked.length} |
+Total Likes: ${stats.liked.reduce((total, count) => total + count)}
 `
 )})
     },
@@ -111,8 +111,8 @@ md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
     },
     {
       name: "notebooks",
-      inputs: ["MAXDOCS","apiUrl","userName"],
-      value: (async function*(MAXDOCS,apiUrl,userName)
+      inputs: ["MAX_DOCS","apiUrl","userName"],
+      value: (async function*(MAX_DOCS,apiUrl,userName)
 {
   const documents = [];
   var last = "4096-01-01T00:45:25.493Z"; // infinite future
@@ -123,22 +123,22 @@ md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
       documents.push(d);
       last = d.update_time;
     }).length;
-    yield documents.slice(0, MAXDOCS);
-  } while (seen && documents.length < MAXDOCS)
+    yield documents.slice(0, MAX_DOCS);
+  } while (seen && documents.length < MAX_DOCS)
 }
 )
     },
     {
-      name: "MAXDOCS",
+      name: "MAX_DOCS",
       value: (function(){return(
 360
 )})
     },
     {
-      name: "notebooksStats",
-      inputs: ["getNotebooksStats","notebooks"],
-      value: (function(getNotebooksStats,notebooks){return(
-getNotebooksStats(notebooks)
+      name: "stats",
+      inputs: ["getStats","notebooks"],
+      value: (function(getStats,notebooks){return(
+getStats(notebooks)
 )})
     },
     {
@@ -149,9 +149,9 @@ searchByTitle(notebooks, 'chicago crimes')
 )})
     },
     {
-      name: "getNotebooksStats",
+      name: "getStats",
       value: (function(){return(
-function getNotebooksStats(notebooks) {
+function getStats(notebooks) {
   const stats = {
     original: [],
     forked: [],
@@ -262,7 +262,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@387",
+  id: "5c54ccd4ac62f235@395",
   modules: [m0]
 };
 
