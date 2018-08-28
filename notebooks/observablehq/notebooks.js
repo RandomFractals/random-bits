@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 395
+// Version: 446
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@395",
+  id: "5c54ccd4ac62f235@446",
   variables: [
     {
       inputs: ["md"],
@@ -115,16 +115,17 @@ md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
       value: (async function*(MAX_DOCS,apiUrl,userName)
 {
   const documents = [];
-  var last = "4096-01-01T00:45:25.493Z"; // infinite future
-  var seen = false;
+  let lastDocumentTimestamp = "4096-01-01T00:45:25.493Z"; // infinite future
+  let documentsCount = 0;
   do {
-    seen = (await fetch(`${apiUrl}/documents/@${userName}?before=${last}`).then(d => d.json()))
-    .map(d => {
-      documents.push(d);
-      last = d.update_time;
-    }).length;
+    const notebooksDataUrl = `${apiUrl}/documents/@${userName}?before=${lastDocumentTimestamp}`;
+    documentsCount = (await fetch(notebooksDataUrl).then(d => d.json()))
+      .map(d => {
+        documents.push(d);
+        lastDocumentTimestamp = d.update_time;
+      }).length;
     yield documents.slice(0, MAX_DOCS);
-  } while (seen && documents.length < MAX_DOCS)
+  } while (documentsCount && documents.length < MAX_DOCS)
 }
 )
     },
@@ -262,7 +263,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@395",
+  id: "5c54ccd4ac62f235@446",
   modules: [m0]
 };
 
