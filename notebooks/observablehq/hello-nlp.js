@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 177
+// Version: 188
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@177",
+  id: "c2ff228e09d0a4ae@188",
   variables: [
     {
       inputs: ["md"],
@@ -198,6 +198,43 @@ normalVerbs.length + normalNouns.length
 )})
     },
     {
+      name: "initial scale",
+      value: (function(){return(
+1
+)})
+    },
+    {
+      name: "mutable scale",
+      inputs: ["Mutable","initial scale"],
+      value: (M, _) => new M(_)
+    },
+    {
+      name: "scale",
+      inputs: ["mutable scale"],
+      value: _ => _.generator
+    },
+    {
+      name: "fontSize",
+      inputs: ["freqToSize","words","cloudConfig","width","mutable scale"],
+      value: (function(freqToSize,words,cloudConfig,width,$0)
+{
+  let totalArea = 0;
+  let minSize = freqToSize(words[words.length-1].freq);
+  let maxSize = freqToSize(words[0].freq);
+  for (let w of words) {
+    let size = freqToSize(w.freq);
+    let fontSize = cloudConfig.minFontSize + (cloudConfig.maxFontSize - cloudConfig.minFontSize)*((size-minSize)/(maxSize-minSize));
+    totalArea += (w.text.length * 0.6 + cloudConfig.padding * 2) * fontSize * (fontSize + cloudConfig.padding * 2);
+  }
+  let s = Math.sqrt(width * cloudConfig.height/totalArea);
+  $0.value = s;
+  return function(w) {
+    return s*(cloudConfig.minFontSize + (cloudConfig.maxFontSize - cloudConfig.minFontSize)*((freqToSize(w.freq)-minSize)/(maxSize-minSize)))
+  }
+}
+)
+    },
+    {
       name: "doc",
       inputs: ["nlp","lyrics"],
       value: (function(nlp,lyrics){return(
@@ -322,11 +359,6 @@ require('d3-cloud')
     },
     {
       from: "@esperanc/wordle-like-clouds",
-      name: "fontSize",
-      remote: "fontSize"
-    },
-    {
-      from: "@esperanc/wordle-like-clouds",
       name: "freqToSize",
       remote: "freqToSize"
     },
@@ -334,11 +366,6 @@ require('d3-cloud')
       from: "@esperanc/wordle-like-clouds",
       name: "rotation",
       remote: "rotation"
-    },
-    {
-      from: "@esperanc/wordle-like-clouds",
-      name: "scale",
-      remote: "scale"
     },
     {
       inputs: ["md"],
@@ -480,27 +507,6 @@ function(d) {
 )})
     },
     {
-      name: "fontSize",
-      inputs: ["freqToSize","words","minFontSize","maxFontSize","padding","width","height","mutable scale"],
-      value: (function(freqToSize,words,minFontSize,maxFontSize,padding,width,height,$0)
-{
-  let totalArea = 0;
-  let minSize = freqToSize(words[words.length-1].freq);
-  let maxSize = freqToSize(words[0].freq);
-  for (let w of words) {
-    let size = freqToSize(w.freq);
-    let fontSize = minFontSize+(maxFontSize-minFontSize)*((size-minSize)/(maxSize-minSize));
-    totalArea += (w.text.length*0.6+padding*2)*fontSize*(fontSize+padding*2);
-  }
-  let s = Math.sqrt(width*height/totalArea);
-  $0.value = s;
-  return function(w) {
-    return  s*(minFontSize+(maxFontSize-minFontSize)*((freqToSize(w.freq)-minSize)/(maxSize-minSize)))
-  }
-}
-)
-    },
-    {
       name: "freqToSize",
       value: (function(){return(
 function(freq) {
@@ -515,161 +521,13 @@ function() {
   return ~~(Math.random() * 4) * 45-45; 
 }
 )})
-    },
-    {
-      name: "initial scale",
-      value: (function(){return(
-1
-)})
-    },
-    {
-      name: "mutable scale",
-      inputs: ["Mutable","initial scale"],
-      value: (M, _) => new M(_)
-    },
-    {
-      name: "scale",
-      inputs: ["mutable scale"],
-      value: _ => _.generator
-    },
-    {
-      name: "words",
-      inputs: ["year","totals","yearData","nwords"],
-      value: (function(year,totals,yearData,nwords)
-{
-  let field = "ate"+year;
-  let total = totals[field];
-  let words = yearData(year).map(w => ({text: w.Nome, freq: w[field]/total}) );
-  words.sort((a,b)=>b.freq-a.freq);
-  return words.slice(0,nwords);
-}
-)
-    },
-    {
-      name: "minFontSize",
-      value: (function(){return(
-10
-)})
-    },
-    {
-      name: "maxFontSize",
-      value: (function(){return(
-80
-)})
-    },
-    {
-      name: "padding",
-      value: (function(){return(
-1
-)})
-    },
-    {
-      name: "height",
-      inputs: ["width"],
-      value: (function(width){return(
-width*9/16
-)})
-    },
-    {
-      name: "year",
-      value: (function(){return(
-2010
-)})
-    },
-    {
-      from: "@esperanc/nomes-populares-no-brasil",
-      name: "totals",
-      remote: "totals"
-    },
-    {
-      from: "@esperanc/nomes-populares-no-brasil",
-      name: "yearData",
-      remote: "yearData"
-    },
-    {
-      name: "nwords",
-      value: (function(){return(
-299
-)})
-    }
-  ]
-};
-
-const m3 = {
-  id: "@esperanc/nomes-populares-no-brasil",
-  variables: [
-    {
-      name: "totals",
-      inputs: ["data"],
-      value: (function(data)
-{
-  let t = {ate1930: 0,
-           ate1940: 0, 
-           ate1950: 0,
-           ate1960: 0,
-           ate1970: 0,
-           ate1980: 0,
-           ate1990: 0,
-           ate2000: 0,
-           ate2010: 0 };
-  for (let d of data) {
-    for (let field in d) {
-      t[field]+=d[field];
-    }
-  }
-  return t;
-}
-)
-    },
-    {
-      name: "yearData",
-      inputs: ["data"],
-      value: (function(data){return(
-function (year) {
-  let tmp = [];
-  let yearKey = 'ate'+year;
-  for (let d of data) {
-    if (d [yearKey] > 0) tmp.push (d);
-  }
-  return tmp;
-}
-)})
-    },
-    {
-      name: "data",
-      inputs: ["d3"],
-      value: (function(d3)
-{
-
-  let data = d3.csv ( "https://gist.githubusercontent.com/esperanc/983d87a9eb084e93ac8f7f273e5d5f2f/raw/d77ae33450b116b3b65aa6dd6a8886599104c957/nomes-censo-ibge.csv", 
-       function(d) {
-    for (let field in d) {
-      if (field == "Nome") {
-        d[field] = d[field][0]+d[field].substring(1).toLowerCase(); // 
-      }
-      else {
-        d[field] = +d[field]; // Convert to number
-      }
-    }
-    return d;
-  });
-  return data;
-}
-)
-    },
-    {
-      name: "d3",
-      inputs: ["require"],
-      value: (function(require){return(
-require ('d3')
-)})
     }
   ]
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@177",
-  modules: [m0,m1,m2,m3]
+  id: "c2ff228e09d0a4ae@188",
+  modules: [m0,m1,m2]
 };
 
 export default notebook;
