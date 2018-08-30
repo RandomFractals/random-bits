@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 128
+// Version: 177
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@128",
+  id: "c2ff228e09d0a4ae@177",
   variables: [
     {
       inputs: ["md"],
@@ -120,6 +120,84 @@ Oblivion, yeah, yeah
 )})
     },
     {
+      name: "cloud",
+      inputs: ["d3cloud","width","words","cloudConfig","scale","rotation","baseFont","fontSize","DOM","d3"],
+      value: (function*(d3cloud,width,words,cloudConfig,scale,rotation,baseFont,fontSize,DOM,d3)
+{
+  var layout = d3cloud()
+    .size([width, width * 9/16]) 
+    .words(words)
+    .padding(cloudConfig.padding * scale)
+    .rotate(rotation)
+    .font(baseFont)
+    .fontSize(fontSize)
+    .on('word', draw);
+
+  const svg = DOM.svg(layout.size()[0], layout.size()[1]);
+  const group = d3.select(svg)
+    .append('g')
+    //.attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+  
+  function draw(word) {
+    group
+      .append("text")
+      .style("font-size", "2px")
+      .style("font-family", word.font)
+      .attr("text-anchor", "middle")
+      .attr("transform", function(d) {
+        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+      } (word))
+      .text(function(d) { return d.text; } (word))
+      .transition()
+      .duration(1000)
+      .ease(d3.easeLinear)
+      .style("font-size", function(d) { return d.size + "px"; } (word))
+    ;
+  }
+  
+  layout.start();
+  yield svg;
+}
+)
+    },
+    {
+      name: "words",
+      inputs: ["toWords","normalVerbs","normalNouns"],
+      value: (function(toWords,normalVerbs,normalNouns){return(
+toWords(normalVerbs).concat(toWords(normalNouns)).sort((a,b) => b.freq - a.freq)
+)})
+    },
+    {
+      name: "toWords",
+      value: (function(){return(
+function toWords(terms) {
+  return terms.map(term => ({
+    text: term.normal,
+    freq: term.percent/100
+  }));
+}
+)})
+    },
+    {
+      name: "nwords",
+      inputs: ["normalVerbs","normalNouns"],
+      value: (function(normalVerbs,normalNouns){return(
+normalVerbs.length + normalNouns.length
+)})
+    },
+    {
+      name: "cloudConfig",
+      inputs: ["width"],
+      value: (function(width){return(
+{
+  minFontSize: 10,
+  maxFontSize: 80,
+  height: width/2,
+  padding: 1,
+}
+)})
+    },
+    {
       name: "doc",
       inputs: ["nlp","lyrics"],
       value: (function(nlp,lyrics){return(
@@ -196,6 +274,12 @@ printHtml(normalDoc)
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Imports`
+)})
+    },
+    {
       name: "nlp",
       inputs: ["require"],
       value: (function(require){return(
@@ -211,6 +295,66 @@ require('compromise')
       from: "@spencermountain/nlp-compromise",
       name: "printHtml",
       remote: "printHtml"
+    },
+    {
+      name: "d3",
+      inputs: ["require"],
+      value: (function(require){return(
+require('d3')
+)})
+    },
+    {
+      name: "d3cloud",
+      inputs: ["require"],
+      value: (function(require){return(
+require('d3-cloud')
+)})
+    },
+    {
+      from: "@esperanc/wordle-like-clouds",
+      name: "fontFamilies",
+      remote: "fontFamilies"
+    },
+    {
+      from: "@esperanc/wordle-like-clouds",
+      name: "baseFont",
+      remote: "baseFont"
+    },
+    {
+      from: "@esperanc/wordle-like-clouds",
+      name: "fontSize",
+      remote: "fontSize"
+    },
+    {
+      from: "@esperanc/wordle-like-clouds",
+      name: "freqToSize",
+      remote: "freqToSize"
+    },
+    {
+      from: "@esperanc/wordle-like-clouds",
+      name: "rotation",
+      remote: "rotation"
+    },
+    {
+      from: "@esperanc/wordle-like-clouds",
+      name: "scale",
+      remote: "scale"
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Styles`
+)})
+    },
+    {
+      inputs: ["html"],
+      value: (function(html){return(
+html `
+<link href="https://fonts.googleapis.com/css?family=Pacifico|Corben" rel="stylesheet">
+<p style="font-family:Pacifico;">Pacifico</p>
+<p style="font-family:Corben;">Corben</p>
+`
+)})
     },
     {
       name: "nlpStyles",
@@ -256,6 +400,7 @@ md `## References
 
 - [Compromise NLP](https://beta.observablehq.com/@spencermountain/nlp-compromise)
 - [Compromise NLP Normalize](https://beta.observablehq.com/@spencermountain/compromise-normalization)
+- [Wordle Like Clouds](https://beta.observablehq.com/@esperanc/wordle-like-clouds)
 `
 )})
     }
@@ -316,9 +461,215 @@ function printHtml(doc){
   ]
 };
 
+const m2 = {
+  id: "@esperanc/wordle-like-clouds",
+  variables: [
+    {
+      name: "fontFamilies",
+      value: (function(){return(
+["Corben","Pacifico","impact"]
+)})
+    },
+    {
+      name: "baseFont",
+      inputs: ["fontFamilies"],
+      value: (function(fontFamilies){return(
+function(d) {
+  return fontFamilies[~~(Math.random()*fontFamilies.length)]
+}
+)})
+    },
+    {
+      name: "fontSize",
+      inputs: ["freqToSize","words","minFontSize","maxFontSize","padding","width","height","mutable scale"],
+      value: (function(freqToSize,words,minFontSize,maxFontSize,padding,width,height,$0)
+{
+  let totalArea = 0;
+  let minSize = freqToSize(words[words.length-1].freq);
+  let maxSize = freqToSize(words[0].freq);
+  for (let w of words) {
+    let size = freqToSize(w.freq);
+    let fontSize = minFontSize+(maxFontSize-minFontSize)*((size-minSize)/(maxSize-minSize));
+    totalArea += (w.text.length*0.6+padding*2)*fontSize*(fontSize+padding*2);
+  }
+  let s = Math.sqrt(width*height/totalArea);
+  $0.value = s;
+  return function(w) {
+    return  s*(minFontSize+(maxFontSize-minFontSize)*((freqToSize(w.freq)-minSize)/(maxSize-minSize)))
+  }
+}
+)
+    },
+    {
+      name: "freqToSize",
+      value: (function(){return(
+function(freq) {
+  return Math.sqrt(freq);
+}
+)})
+    },
+    {
+      name: "rotation",
+      value: (function(){return(
+function() { 
+  return ~~(Math.random() * 4) * 45-45; 
+}
+)})
+    },
+    {
+      name: "initial scale",
+      value: (function(){return(
+1
+)})
+    },
+    {
+      name: "mutable scale",
+      inputs: ["Mutable","initial scale"],
+      value: (M, _) => new M(_)
+    },
+    {
+      name: "scale",
+      inputs: ["mutable scale"],
+      value: _ => _.generator
+    },
+    {
+      name: "words",
+      inputs: ["year","totals","yearData","nwords"],
+      value: (function(year,totals,yearData,nwords)
+{
+  let field = "ate"+year;
+  let total = totals[field];
+  let words = yearData(year).map(w => ({text: w.Nome, freq: w[field]/total}) );
+  words.sort((a,b)=>b.freq-a.freq);
+  return words.slice(0,nwords);
+}
+)
+    },
+    {
+      name: "minFontSize",
+      value: (function(){return(
+10
+)})
+    },
+    {
+      name: "maxFontSize",
+      value: (function(){return(
+80
+)})
+    },
+    {
+      name: "padding",
+      value: (function(){return(
+1
+)})
+    },
+    {
+      name: "height",
+      inputs: ["width"],
+      value: (function(width){return(
+width*9/16
+)})
+    },
+    {
+      name: "year",
+      value: (function(){return(
+2010
+)})
+    },
+    {
+      from: "@esperanc/nomes-populares-no-brasil",
+      name: "totals",
+      remote: "totals"
+    },
+    {
+      from: "@esperanc/nomes-populares-no-brasil",
+      name: "yearData",
+      remote: "yearData"
+    },
+    {
+      name: "nwords",
+      value: (function(){return(
+299
+)})
+    }
+  ]
+};
+
+const m3 = {
+  id: "@esperanc/nomes-populares-no-brasil",
+  variables: [
+    {
+      name: "totals",
+      inputs: ["data"],
+      value: (function(data)
+{
+  let t = {ate1930: 0,
+           ate1940: 0, 
+           ate1950: 0,
+           ate1960: 0,
+           ate1970: 0,
+           ate1980: 0,
+           ate1990: 0,
+           ate2000: 0,
+           ate2010: 0 };
+  for (let d of data) {
+    for (let field in d) {
+      t[field]+=d[field];
+    }
+  }
+  return t;
+}
+)
+    },
+    {
+      name: "yearData",
+      inputs: ["data"],
+      value: (function(data){return(
+function (year) {
+  let tmp = [];
+  let yearKey = 'ate'+year;
+  for (let d of data) {
+    if (d [yearKey] > 0) tmp.push (d);
+  }
+  return tmp;
+}
+)})
+    },
+    {
+      name: "data",
+      inputs: ["d3"],
+      value: (function(d3)
+{
+
+  let data = d3.csv ( "https://gist.githubusercontent.com/esperanc/983d87a9eb084e93ac8f7f273e5d5f2f/raw/d77ae33450b116b3b65aa6dd6a8886599104c957/nomes-censo-ibge.csv", 
+       function(d) {
+    for (let field in d) {
+      if (field == "Nome") {
+        d[field] = d[field][0]+d[field].substring(1).toLowerCase(); // 
+      }
+      else {
+        d[field] = +d[field]; // Convert to number
+      }
+    }
+    return d;
+  });
+  return data;
+}
+)
+    },
+    {
+      name: "d3",
+      inputs: ["require"],
+      value: (function(require){return(
+require ('d3')
+)})
+    }
+  ]
+};
+
 const notebook = {
-  id: "c2ff228e09d0a4ae@128",
-  modules: [m0,m1]
+  id: "c2ff228e09d0a4ae@177",
+  modules: [m0,m1,m2,m3]
 };
 
 export default notebook;
