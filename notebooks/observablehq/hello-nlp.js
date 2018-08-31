@@ -1,18 +1,19 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 188
+// Version: 204
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@188",
+  id: "c2ff228e09d0a4ae@204",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md `# Hello, NLP!
 
-modest natural-language processing in javascript http://compromise.cool
+Visualizing music lyrics with modest natural language processing in javascript http://compromise.cool
+and [d3 Word Cloud Layout](https://github.com/jasondavies/d3-cloud)
 `
 )})
     },
@@ -134,25 +135,22 @@ Oblivion, yeah, yeah
     .on('word', draw);
 
   const svg = DOM.svg(layout.size()[0], layout.size()[1]);
-  const group = d3.select(svg)
-    .append('g')
+  const group = d3.select(svg).append('g')
     //.attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
   
   function draw(word) {
-    group
-      .append("text")
-      .style("font-size", "2px")
-      .style("font-family", word.font)
-      .attr("text-anchor", "middle")
-      .attr("transform", function(d) {
-        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-      } (word))
-      .text(function(d) { return d.text; } (word))
+    const text = group.append('text');
+    text.style('font-size', '2px')
+      .style('font-family', word.font)
+      .style('cursor', 'pointer')
+      .attr('text-anchor', 'middle')
+      .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
+      .text(word.text)
       .transition()
-      .duration(1000)
+      .duration(2000)
       .ease(d3.easeLinear)
-      .style("font-size", function(d) { return d.size + "px"; } (word))
-    ;
+      .style('font-size', `${word.size}px`);
+    text.append('title').text(`${word.text} (${word.count})`); // toolitp
   }
   
   layout.start();
@@ -173,6 +171,7 @@ toWords(normalVerbs).concat(toWords(normalNouns)).sort((a,b) => b.freq - a.freq)
 function toWords(terms) {
   return terms.map(term => ({
     text: term.normal,
+    count: term.count,
     freq: term.percent/100
   }));
 }
@@ -223,13 +222,16 @@ normalVerbs.length + normalNouns.length
   let maxSize = freqToSize(words[0].freq);
   for (let w of words) {
     let size = freqToSize(w.freq);
-    let fontSize = cloudConfig.minFontSize + (cloudConfig.maxFontSize - cloudConfig.minFontSize)*((size-minSize)/(maxSize-minSize));
+    let fontSize = cloudConfig.minFontSize + 
+      (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((size-minSize) / (maxSize-minSize));
     totalArea += (w.text.length * 0.6 + cloudConfig.padding * 2) * fontSize * (fontSize + cloudConfig.padding * 2);
   }
   let s = Math.sqrt(width * cloudConfig.height/totalArea);
   $0.value = s;
   return function(w) {
-    return s*(cloudConfig.minFontSize + (cloudConfig.maxFontSize - cloudConfig.minFontSize)*((freqToSize(w.freq)-minSize)/(maxSize-minSize)))
+    return s * (cloudConfig.minFontSize + 
+        (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((freqToSize(w.freq) - minSize) / (maxSize - minSize))
+      );
   }
 }
 )
@@ -526,7 +528,7 @@ function() {
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@188",
+  id: "c2ff228e09d0a4ae@204",
   modules: [m0,m1,m2]
 };
 
