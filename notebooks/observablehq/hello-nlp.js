@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 240
+// Version: 245
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@240",
+  id: "c2ff228e09d0a4ae@245",
   variables: [
     {
       inputs: ["md"],
@@ -128,8 +128,8 @@ md `## Lyrics Word Cloud`
     },
     {
       name: "cloud",
-      inputs: ["d3cloud","width","words","cloudConfig","scale","rotation","baseFont","fontSize","DOM","d3"],
-      value: (function*(d3cloud,width,words,cloudConfig,scale,rotation,baseFont,fontSize,DOM,d3)
+      inputs: ["d3cloud","width","words","cloudConfig","scale","rotation","baseFont","fontSize","DOM","d3","color"],
+      value: (function*(d3cloud,width,words,cloudConfig,scale,rotation,baseFont,fontSize,DOM,d3,color)
 {
   var layout = d3cloud()
     .size([width, width * 9/16]) 
@@ -148,6 +148,7 @@ md `## Lyrics Word Cloud`
     const text = group.append('text');
     text.style('font-size', '2px')
       .style('font-family', word.font)
+      .style('fill', color(Math.random()))
       .style('cursor', 'pointer')
       .attr('text-anchor', 'middle')
       .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
@@ -163,6 +164,13 @@ md `## Lyrics Word Cloud`
   yield svg;
 }
 )
+    },
+    {
+      name: "color",
+      inputs: ["d3"],
+      value: (function(d3){return(
+d3.scaleSequential(d3.interpolateRainbow)
+)})
     },
     {
       name: "words",
@@ -514,7 +522,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@240",
+  id: "c2ff228e09d0a4ae@245",
   modules: [m0,m1]
 };
 
