@@ -1,18 +1,18 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 204
+// Version: 240
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@204",
+  id: "c2ff228e09d0a4ae@240",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md `# Hello, NLP!
 
-Visualizing music lyrics with modest natural language processing in javascript http://compromise.cool
+Visualizing music lyrics with http://compromise.cool natural language processing (NLP) library
 and [d3 Word Cloud Layout](https://github.com/jasondavies/d3-cloud)
 `
 )})
@@ -121,6 +121,12 @@ Oblivion, yeah, yeah
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Lyrics Word Cloud`
+)})
+    },
+    {
       name: "cloud",
       inputs: ["d3cloud","width","words","cloudConfig","scale","rotation","baseFont","fontSize","DOM","d3"],
       value: (function*(d3cloud,width,words,cloudConfig,scale,rotation,baseFont,fontSize,DOM,d3)
@@ -147,7 +153,7 @@ Oblivion, yeah, yeah
       .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
       .text(word.text)
       .transition()
-      .duration(2000)
+      .duration(1500)
       .ease(d3.easeLinear)
       .style('font-size', `${word.size}px`);
     text.append('title').text(`${word.text} (${word.count})`); // toolitp
@@ -168,7 +174,7 @@ toWords(normalVerbs).concat(toWords(normalNouns)).sort((a,b) => b.freq - a.freq)
     {
       name: "toWords",
       value: (function(){return(
-function toWords(terms) {
+function toWords (terms) {
   return terms.map(term => ({
     text: term.normal,
     count: term.count,
@@ -213,15 +219,46 @@ normalVerbs.length + normalNouns.length
       value: _ => _.generator
     },
     {
+      name: "rotation",
+      value: (function(){return(
+function () { 
+  return ~~(Math.random() * 4) * 45 - 45; 
+}
+)})
+    },
+    {
+      name: "fontFamilies",
+      value: (function(){return(
+['Corben', 'Pacifico', 'impact']
+)})
+    },
+    {
+      name: "baseFont",
+      inputs: ["fontFamilies"],
+      value: (function(fontFamilies){return(
+function (d) {
+  return fontFamilies[~~(Math.random() * fontFamilies.length)]
+}
+)})
+    },
+    {
+      name: "frequencyToSize",
+      value: (function(){return(
+function (frequency) {
+  return Math.sqrt(frequency);
+}
+)})
+    },
+    {
       name: "fontSize",
-      inputs: ["freqToSize","words","cloudConfig","width","mutable scale"],
-      value: (function(freqToSize,words,cloudConfig,width,$0)
+      inputs: ["frequencyToSize","words","cloudConfig","width","mutable scale"],
+      value: (function(frequencyToSize,words,cloudConfig,width,$0)
 {
   let totalArea = 0;
-  let minSize = freqToSize(words[words.length-1].freq);
-  let maxSize = freqToSize(words[0].freq);
+  let minSize = frequencyToSize(words[words.length-1].freq);
+  let maxSize = frequencyToSize(words[0].freq);
   for (let w of words) {
-    let size = freqToSize(w.freq);
+    let size = frequencyToSize(w.freq);
     let fontSize = cloudConfig.minFontSize + 
       (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((size-minSize) / (maxSize-minSize));
     totalArea += (w.text.length * 0.6 + cloudConfig.padding * 2) * fontSize * (fontSize + cloudConfig.padding * 2);
@@ -230,11 +267,17 @@ normalVerbs.length + normalNouns.length
   $0.value = s;
   return function(w) {
     return s * (cloudConfig.minFontSize + 
-        (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((freqToSize(w.freq) - minSize) / (maxSize - minSize))
+        (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((frequencyToSize(w.freq) - minSize) / (maxSize - minSize))
       );
   }
 }
 )
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Lyrics NLP`
+)})
     },
     {
       name: "doc",
@@ -348,26 +391,6 @@ require('d3')
       value: (function(require){return(
 require('d3-cloud')
 )})
-    },
-    {
-      from: "@esperanc/wordle-like-clouds",
-      name: "fontFamilies",
-      remote: "fontFamilies"
-    },
-    {
-      from: "@esperanc/wordle-like-clouds",
-      name: "baseFont",
-      remote: "baseFont"
-    },
-    {
-      from: "@esperanc/wordle-like-clouds",
-      name: "freqToSize",
-      remote: "freqToSize"
-    },
-    {
-      from: "@esperanc/wordle-like-clouds",
-      name: "rotation",
-      remote: "rotation"
     },
     {
       inputs: ["md"],
@@ -490,46 +513,9 @@ function printHtml(doc){
   ]
 };
 
-const m2 = {
-  id: "@esperanc/wordle-like-clouds",
-  variables: [
-    {
-      name: "fontFamilies",
-      value: (function(){return(
-["Corben","Pacifico","impact"]
-)})
-    },
-    {
-      name: "baseFont",
-      inputs: ["fontFamilies"],
-      value: (function(fontFamilies){return(
-function(d) {
-  return fontFamilies[~~(Math.random()*fontFamilies.length)]
-}
-)})
-    },
-    {
-      name: "freqToSize",
-      value: (function(){return(
-function(freq) {
-  return Math.sqrt(freq);
-}
-)})
-    },
-    {
-      name: "rotation",
-      value: (function(){return(
-function() { 
-  return ~~(Math.random() * 4) * 45-45; 
-}
-)})
-    }
-  ]
-};
-
 const notebook = {
-  id: "c2ff228e09d0a4ae@204",
-  modules: [m0,m1,m2]
+  id: "c2ff228e09d0a4ae@240",
+  modules: [m0,m1]
 };
 
 export default notebook;
