@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 424
+// Version: 438
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@424",
+  id: "c2ff228e09d0a4ae@438",
   variables: [
     {
       inputs: ["md"],
@@ -290,46 +290,6 @@ data => {
 )})
     },
     {
-      name: "nounList",
-      inputs: ["html","printList","nounsInfo"],
-      value: (function(html,printList,nounsInfo){return(
-html `
-<div class="scrollable-container short-list">
-${printList(nounsInfo)}
-</div>`
-)})
-    },
-    {
-      name: "verbList",
-      inputs: ["html","printList","verbsInfo"],
-      value: (function(html,printList,verbsInfo){return(
-html `
-<div class="scrollable-container short-list">
-${printList(verbsInfo)}
-</div>`
-)})
-    },
-    {
-      name: "adverbList",
-      inputs: ["html","printList","adverbsInfo"],
-      value: (function(html,printList,adverbsInfo){return(
-html `
-<div class="scrollable-container short-list">
-${printList(adverbsInfo)}
-</div>`
-)})
-    },
-    {
-      name: "adjectiveList",
-      inputs: ["html","printList","adjectivesInfo"],
-      value: (function(html,printList,adjectivesInfo){return(
-html `
-<div class="scrollable-container short-list">
-${printList(adjectivesInfo)}
-</div>`
-)})
-    },
-    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Boring Code Parts`
@@ -537,6 +497,16 @@ normalizedDoc.adjectives().out('topk')
 )})
     },
     {
+      name: "adjectiveList",
+      inputs: ["html","printList","adjectivesInfo"],
+      value: (function(html,printList,adjectivesInfo){return(
+html `
+<div class="scrollable-container short-list">
+${printList(adjectivesInfo)}
+</div>`
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `### Adverbs`
@@ -554,6 +524,16 @@ doc.adverbs().data()
       inputs: ["doc"],
       value: (function(doc){return(
 doc.adverbs().out('topk')
+)})
+    },
+    {
+      name: "adverbList",
+      inputs: ["html","printList","adverbsInfo"],
+      value: (function(html,printList,adverbsInfo){return(
+html `
+<div class="scrollable-container short-list">
+${printList(adverbsInfo)}
+</div>`
 )})
     },
     {
@@ -577,6 +557,16 @@ normalizedDoc.nouns().out('topk')
 )})
     },
     {
+      name: "nounList",
+      inputs: ["html","printList","nounsInfo"],
+      value: (function(html,printList,nounsInfo){return(
+html `
+<div class="scrollable-container short-list">
+${printList(nounsInfo)}
+</div>`
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `### Verbs`
@@ -594,6 +584,16 @@ doc.verbs().out('array')
       inputs: ["normalizedDoc"],
       value: (function(normalizedDoc){return(
 normalizedDoc.verbs().out('topk')
+)})
+    },
+    {
+      name: "verbList",
+      inputs: ["html","printList","verbsInfo"],
+      value: (function(html,printList,verbsInfo){return(
+html `
+<div class="scrollable-container short-list">
+${printList(verbsInfo)}
+</div>`
 )})
     },
     {
@@ -761,7 +761,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@424",
+  id: "c2ff228e09d0a4ae@438",
   modules: [m0,m1]
 };
 
