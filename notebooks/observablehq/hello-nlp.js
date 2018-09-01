@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 423
+// Version: 424
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@423",
+  id: "c2ff228e09d0a4ae@424",
   variables: [
     {
       inputs: ["md"],
@@ -257,15 +257,15 @@ html `<p class="term">
     },
     {
       name: "lingo",
-      inputs: ["toTreeNodes","nounsInfo","verbsInfo"],
-      value: (function(toTreeNodes,nounsInfo,verbsInfo){return(
+      inputs: ["toTreeNodes","nounsInfo","verbsInfo","adverbsInfo","adjectivesInfo"],
+      value: (function(toTreeNodes,nounsInfo,verbsInfo,adverbsInfo,adjectivesInfo){return(
 {
   name: 'terms',
   children: [
     {name: 'nouns', children: toTreeNodes(nounsInfo)},
     {name: 'verbs', children: toTreeNodes(verbsInfo)},
-    {name: 'adverbs'},
-    {name: 'adjectives'},
+    {name: 'adverbs', children: toTreeNodes(adverbsInfo)},
+    {name: 'adjectives', children: toTreeNodes(adjectivesInfo)},
   ]}
 )})
     },
@@ -761,7 +761,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@423",
+  id: "c2ff228e09d0a4ae@424",
   modules: [m0,m1]
 };
 
