@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 357
+// Version: 389
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@357",
+  id: "c2ff228e09d0a4ae@389",
   variables: [
     {
       inputs: ["md"],
@@ -197,20 +197,38 @@ html `<p class="term">
 )})
     },
     {
-      name: "normalNounsList",
-      inputs: ["html","printList","normalNouns"],
-      value: (function(html,printList,normalNouns){return(
+      name: "nounList",
+      inputs: ["html","printList","nounsInfo"],
+      value: (function(html,printList,nounsInfo){return(
 html `<div class="scrollable-container">
-${printList(normalNouns)}
+${printList(nounsInfo)}
 </div>`
 )})
     },
     {
-      name: "normalVerbsList",
-      inputs: ["html","printList","normalVerbs"],
-      value: (function(html,printList,normalVerbs){return(
+      name: "verbList",
+      inputs: ["html","printList","verbsInfo"],
+      value: (function(html,printList,verbsInfo){return(
 html `<div class="scrollable-container">
-${printList(normalVerbs)}
+${printList(verbsInfo)}
+</div>`
+)})
+    },
+    {
+      name: "adverbList",
+      inputs: ["html","printList","adverbsInfo"],
+      value: (function(html,printList,adverbsInfo){return(
+html `<div class="scrollable-container">
+${printList(adverbsInfo)}
+</div>`
+)})
+    },
+    {
+      name: "adjectiveList",
+      inputs: ["html","printList","adjectivesInfo"],
+      value: (function(html,printList,adjectivesInfo){return(
+html `<div class="scrollable-container">
+${printList(adjectivesInfo)}
 </div>`
 )})
     },
@@ -235,9 +253,13 @@ d3.scaleSequential(d3.interpolateRainbow)
     },
     {
       name: "words",
-      inputs: ["toWords","normalVerbs","normalNouns"],
-      value: (function(toWords,normalVerbs,normalNouns){return(
-toWords(normalVerbs).concat(toWords(normalNouns)).sort((a,b) => b.freq - a.freq)
+      inputs: ["toWords","nounsInfo","verbsInfo","adverbsInfo","adjectivesInfo"],
+      value: (function(toWords,nounsInfo,verbsInfo,adverbsInfo,adjectivesInfo){return(
+toWords(nounsInfo)
+  .concat(toWords(verbsInfo))
+  .concat(toWords(adverbsInfo))
+  .concat(toWords(adjectivesInfo))
+  .sort((a,b) => b.freq - a.freq)
 )})
     },
     {
@@ -254,9 +276,9 @@ function toWords (terms) {
     },
     {
       name: "nwords",
-      inputs: ["normalVerbs","normalNouns"],
-      value: (function(normalVerbs,normalNouns){return(
-normalVerbs.length + normalNouns.length
+      inputs: ["nounsInfo","verbsInfo","adverbsInfo","adjectivesInfo"],
+      value: (function(nounsInfo,verbsInfo,adverbsInfo,adjectivesInfo){return(
+nounsInfo.length + verbsInfo.length + adverbsInfo.length + adjectivesInfo.length
 )})
     },
     {
@@ -398,6 +420,12 @@ doc.contractions().data()
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Adjectives`
+)})
+    },
+    {
       name: "adjectives",
       inputs: ["doc"],
       value: (function(doc){return(
@@ -405,10 +433,30 @@ doc.adjectives().data()
 )})
     },
     {
+      name: "adjectivesInfo",
+      inputs: ["normalizedDoc"],
+      value: (function(normalizedDoc){return(
+normalizedDoc.adjectives().out('topk')
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Adverbs`
+)})
+    },
+    {
       name: "adverbs",
       inputs: ["doc"],
       value: (function(doc){return(
 doc.adverbs().data()
+)})
+    },
+    {
+      name: "adverbsInfo",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.adverbs().out('topk')
 )})
     },
     {
@@ -425,7 +473,7 @@ doc.nouns().out('array')
 )})
     },
     {
-      name: "normalNouns",
+      name: "nounsInfo",
       inputs: ["normalizedDoc"],
       value: (function(normalizedDoc){return(
 normalizedDoc.nouns().out('topk')
@@ -445,7 +493,7 @@ doc.verbs().out('array')
 )})
     },
     {
-      name: "normalVerbs",
+      name: "verbsInfo",
       inputs: ["normalizedDoc"],
       value: (function(normalizedDoc){return(
 normalizedDoc.verbs().out('topk')
@@ -613,7 +661,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@357",
+  id: "c2ff228e09d0a4ae@389",
   modules: [m0,m1]
 };
 
