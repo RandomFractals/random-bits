@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 325
+// Version: 339
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@325",
+  id: "c2ff228e09d0a4ae@339",
   variables: [
     {
       inputs: ["md"],
@@ -166,6 +166,21 @@ Oblivion, yeah, yeah
 html `<div class="scrollable-container">
 ${printHtml(normalizedDoc)}
 </div>`
+)})
+    },
+    {
+      name: "legends",
+      inputs: ["html"],
+      value: (function(html){return(
+html `<p class="term">
+  <span class="nl-Expression">Expression</span>
+  <span class="nl-Noun">Noun</span>
+  <span class="nl-Verb">Verb</span>
+  <span class="nl-Adjective">Adjective</span>
+  <span class="nl-Adverb">Adverb</span>
+  <span class="nl-Conjunction">Conjunction</span>
+  <span class="nl-Determiner">Determiner</span>
+</p>`
 )})
     },
     {
@@ -579,7 +594,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@325",
+  id: "c2ff228e09d0a4ae@339",
   modules: [m0,m1]
 };
 
