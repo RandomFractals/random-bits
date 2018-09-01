@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 339
+// Version: 357
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@339",
+  id: "c2ff228e09d0a4ae@357",
   variables: [
     {
       inputs: ["md"],
@@ -61,6 +61,12 @@ md `## Mac Miller - [Self Care (video)](https://www.youtube.com/watch?v=SsKT0s5J
   yield svg;
 }
 )
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Lyrics`
+)})
     },
     {
       name: "lyrics",
@@ -160,6 +166,12 @@ Oblivion, yeah, yeah
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Tagged NLP Lyrics`
+)})
+    },
+    {
       name: "normalizedLyrics",
       inputs: ["html","printHtml","normalizedDoc"],
       value: (function(html,printHtml,normalizedDoc){return(
@@ -174,6 +186,7 @@ ${printHtml(normalizedDoc)}
       value: (function(html){return(
 html `<p class="term">
   <span class="nl-Expression">Expression</span>
+  <span class="nl-Pronoun">Pronoun</span>
   <span class="nl-Noun">Noun</span>
   <span class="nl-Verb">Verb</span>
   <span class="nl-Adjective">Adjective</span>
@@ -184,9 +197,33 @@ html `<p class="term">
 )})
     },
     {
+      name: "normalNounsList",
+      inputs: ["html","printList","normalNouns"],
+      value: (function(html,printList,normalNouns){return(
+html `<div class="scrollable-container">
+${printList(normalNouns)}
+</div>`
+)})
+    },
+    {
+      name: "normalVerbsList",
+      inputs: ["html","printList","normalVerbs"],
+      value: (function(html,printList,normalVerbs){return(
+html `<div class="scrollable-container">
+${printList(normalVerbs)}
+</div>`
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
-md `## Lyrics Word Cloud`
+md `## Boring Code Parts`
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Word Cloud`
 )})
     },
     {
@@ -308,7 +345,7 @@ function (frequency) {
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## Lyrics NLP`
+md `## NLP`
 )})
     },
     {
@@ -395,15 +432,6 @@ normalizedDoc.nouns().out('topk')
 )})
     },
     {
-      name: "normalNounsList",
-      inputs: ["html","printList","normalNouns"],
-      value: (function(html,printList,normalNouns){return(
-html `<div class="scrollable-container">
-${printList(normalNouns)}
-</div>`
-)})
-    },
-    {
       inputs: ["md"],
       value: (function(md){return(
 md `### Verbs`
@@ -421,15 +449,6 @@ doc.verbs().out('array')
       inputs: ["normalizedDoc"],
       value: (function(normalizedDoc){return(
 normalizedDoc.verbs().out('topk')
-)})
-    },
-    {
-      name: "normalVerbsList",
-      inputs: ["html","printList","normalVerbs"],
-      value: (function(html,printList,normalVerbs){return(
-html `<div class="scrollable-container">
-${printList(normalVerbs)}
-</div>`
 )})
     },
     {
@@ -594,7 +613,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@339",
+  id: "c2ff228e09d0a4ae@357",
   modules: [m0,m1]
 };
 
