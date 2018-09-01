@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 399
+// Version: 423
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@399",
+  id: "c2ff228e09d0a4ae@423",
   variables: [
     {
       inputs: ["md"],
@@ -194,6 +194,99 @@ html `<p class="term">
   <span class="nl-Conjunction">Conjunction</span>
   <span class="nl-Determiner">Determiner</span>
 </p>`
+)})
+    },
+    {
+      name: "lingoTree",
+      inputs: ["tree","lingo","d3","DOM","width"],
+      value: (function(tree,lingo,d3,DOM,width)
+{
+  const root = tree(lingo);
+
+  let x0 = Infinity;
+  let x1 = -x0;
+  root.each(d => {
+    if (d.x > x1) x1 = d.x;
+    if (d.x < x0) x0 = d.x;
+  });
+
+  const svg = d3.select(DOM.svg(width, x1 - x0 + root.dx * 2))
+      .style("width", "100%")
+      .style("height", "auto");
+  
+  const g = svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("transform", `translate(${root.dy / 3},${root.dx - x0})`);
+    
+  const link = g.append("g")
+    .attr("fill", "none")
+    .attr("stroke", "#555")
+    .attr("stroke-opacity", 0.4)
+    .attr("stroke-width", 1.5)
+  .selectAll("path")
+    .data(root.links())
+    .enter().append("path")
+      .attr("d", d3.linkHorizontal()
+          .x(d => d.y)
+          .y(d => d.x));
+  
+  const node = g.append("g")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-width", 3)
+    .selectAll("g")
+    .data(root.descendants().reverse())
+    .enter().append("g")
+      .attr("transform", d => `translate(${d.y},${d.x})`);
+
+  node.append("circle")
+      .attr("fill", d => d.children ? "#555" : "#999")
+      .attr("r", 2.5);
+
+  node.append("text")
+      .attr("dy", "0.31em")
+      .attr("x", d => d.children ? -6 : 6)
+      .attr("text-anchor", d => d.children ? "end" : "start")
+      .text(d => d.data.name)
+    .clone(true).lower()
+      .attr("stroke", "white");
+  
+  return svg.node();
+}
+)
+    },
+    {
+      name: "lingo",
+      inputs: ["toTreeNodes","nounsInfo","verbsInfo"],
+      value: (function(toTreeNodes,nounsInfo,verbsInfo){return(
+{
+  name: 'terms',
+  children: [
+    {name: 'nouns', children: toTreeNodes(nounsInfo)},
+    {name: 'verbs', children: toTreeNodes(verbsInfo)},
+    {name: 'adverbs'},
+    {name: 'adjectives'},
+  ]}
+)})
+    },
+    {
+      name: "toTreeNodes",
+      value: (function(){return(
+function toTreeNodes(terms) {
+  return terms.map(term => ({name: `${term.normal} (${term.count})`}));
+}
+)})
+    },
+    {
+      name: "tree",
+      inputs: ["d3","lingo","width"],
+      value: (function(d3,lingo,width){return(
+data => {
+  const root = d3.hierarchy(lingo);
+  root.dx = 10;
+  root.dy = width / (root.height + 1);
+  return d3.tree().nodeSize([root.dx, root.dy])(root);
+}
 )})
     },
     {
@@ -668,7 +761,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@399",
+  id: "c2ff228e09d0a4ae@423",
   modules: [m0,m1]
 };
 
