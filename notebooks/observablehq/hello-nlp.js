@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 245
+// Version: 282
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@245",
+  id: "c2ff228e09d0a4ae@282",
   variables: [
     {
       inputs: ["md"],
@@ -22,6 +22,45 @@ and [d3 Word Cloud Layout](https://github.com/jasondavies/d3-cloud)
       value: (function(md){return(
 md `## Mac Miller - [Self Care (video)](https://www.youtube.com/watch?v=SsKT0s5J8ko)`
 )})
+    },
+    {
+      name: "cloud",
+      inputs: ["d3cloud","width","words","cloudConfig","scale","rotation","baseFont","fontSize","DOM","d3","color"],
+      value: (function*(d3cloud,width,words,cloudConfig,scale,rotation,baseFont,fontSize,DOM,d3,color)
+{
+  var layout = d3cloud()
+    .size([width, width * 9/16]) 
+    .words(words)
+    .padding(cloudConfig.padding * scale)
+    .rotate(rotation)
+    .font(baseFont)
+    .fontSize(fontSize)
+    .on('word', addWord);
+
+  const svg = DOM.svg(layout.size()[0], layout.size()[1]); // width, height
+  const group = d3.select(svg).append('g')
+    //.attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+  
+  function addWord (word) {
+    const text = group.append('text');
+    text.style('font-size', '2px')
+      .style('font-family', word.font)
+      .style('fill', color(Math.random()))
+      .style('cursor', 'pointer')
+      .attr('text-anchor', 'middle')
+      .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
+      .text(word.text)
+      .transition()
+      .duration(1500)
+      .ease(d3.easeLinear)
+      .style('font-size', `${word.size}px`);
+    text.append('title').text(`${word.text} (${word.count})`); // toolitp
+  }
+  
+  layout.start();
+  yield svg;
+}
+)
     },
     {
       name: "lyrics",
@@ -125,45 +164,6 @@ Oblivion, yeah, yeah
       value: (function(md){return(
 md `## Lyrics Word Cloud`
 )})
-    },
-    {
-      name: "cloud",
-      inputs: ["d3cloud","width","words","cloudConfig","scale","rotation","baseFont","fontSize","DOM","d3","color"],
-      value: (function*(d3cloud,width,words,cloudConfig,scale,rotation,baseFont,fontSize,DOM,d3,color)
-{
-  var layout = d3cloud()
-    .size([width, width * 9/16]) 
-    .words(words)
-    .padding(cloudConfig.padding * scale)
-    .rotate(rotation)
-    .font(baseFont)
-    .fontSize(fontSize)
-    .on('word', draw);
-
-  const svg = DOM.svg(layout.size()[0], layout.size()[1]);
-  const group = d3.select(svg).append('g')
-    //.attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-  
-  function draw(word) {
-    const text = group.append('text');
-    text.style('font-size', '2px')
-      .style('font-family', word.font)
-      .style('fill', color(Math.random()))
-      .style('cursor', 'pointer')
-      .attr('text-anchor', 'middle')
-      .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
-      .text(word.text)
-      .transition()
-      .duration(1500)
-      .ease(d3.easeLinear)
-      .style('font-size', `${word.size}px`);
-    text.append('title').text(`${word.text} (${word.count})`); // toolitp
-  }
-  
-  layout.start();
-  yield svg;
-}
-)
     },
     {
       name: "color",
@@ -273,7 +273,7 @@ function (frequency) {
   }
   let s = Math.sqrt(width * cloudConfig.height/totalArea);
   $0.value = s;
-  return function(w) {
+  return function (w) {
     return s * (cloudConfig.minFontSize + 
         (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((frequencyToSize(w.freq) - minSize) / (maxSize - minSize))
       );
@@ -295,10 +295,45 @@ nlp(lyrics)
 )})
     },
     {
+      name: "sentences",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.sentences().data()
+)})
+    },
+    {
       name: "tags",
       inputs: ["doc"],
       value: (function(doc){return(
 doc.out('tags')
+)})
+    },
+    {
+      name: "ngrams",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.ngrams().data()
+)})
+    },
+    {
+      name: "contractions",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.contractions().data()
+)})
+    },
+    {
+      name: "adjectives",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.adjectives().data()
+)})
+    },
+    {
+      name: "adverbs",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.adverbs().data()
 )})
     },
     {
@@ -310,9 +345,9 @@ doc.verbs().out('array')
     },
     {
       name: "normalVerbs",
-      inputs: ["normalDoc"],
-      value: (function(normalDoc){return(
-normalDoc.verbs().out('topk')
+      inputs: ["normalizedDoc"],
+      value: (function(normalizedDoc){return(
+normalizedDoc.verbs().out('topk')
 )})
     },
     {
@@ -324,9 +359,9 @@ doc.nouns().out('array')
     },
     {
       name: "normalNouns",
-      inputs: ["normalDoc"],
-      value: (function(normalDoc){return(
-normalDoc.nouns().out('topk')
+      inputs: ["normalizedDoc"],
+      value: (function(normalizedDoc){return(
+normalizedDoc.nouns().out('topk')
 )})
     },
     {
@@ -344,7 +379,7 @@ printList(normalVerbs)
 )})
     },
     {
-      name: "normalDoc",
+      name: "normalizedDoc",
       inputs: ["doc"],
       value: (function(doc){return(
 doc.normalize({
@@ -358,9 +393,9 @@ doc.normalize({
 )})
     },
     {
-      inputs: ["printHtml","normalDoc"],
-      value: (function(printHtml,normalDoc){return(
-printHtml(normalDoc)
+      inputs: ["printHtml","normalizedDoc"],
+      value: (function(printHtml,normalizedDoc){return(
+printHtml(normalizedDoc)
 )})
     },
     {
@@ -522,7 +557,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@245",
+  id: "c2ff228e09d0a4ae@282",
   modules: [m0,m1]
 };
 
