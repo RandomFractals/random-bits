@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 389
+// Version: 399
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@389",
+  id: "c2ff228e09d0a4ae@399",
   variables: [
     {
       inputs: ["md"],
@@ -65,7 +65,7 @@ md `## Mac Miller - [Self Care (video)](https://www.youtube.com/watch?v=SsKT0s5J
     {
       inputs: ["md"],
       value: (function(md){return(
-md `### Lyrics`
+md `## Lyrics`
 )})
     },
     {
@@ -168,7 +168,7 @@ Oblivion, yeah, yeah
     {
       inputs: ["md"],
       value: (function(md){return(
-md `### Tagged NLP Lyrics`
+md `## Tagged NLP Lyrics`
 )})
     },
     {
@@ -200,7 +200,8 @@ html `<p class="term">
       name: "nounList",
       inputs: ["html","printList","nounsInfo"],
       value: (function(html,printList,nounsInfo){return(
-html `<div class="scrollable-container">
+html `
+<div class="scrollable-container short-list">
 ${printList(nounsInfo)}
 </div>`
 )})
@@ -209,7 +210,8 @@ ${printList(nounsInfo)}
       name: "verbList",
       inputs: ["html","printList","verbsInfo"],
       value: (function(html,printList,verbsInfo){return(
-html `<div class="scrollable-container">
+html `
+<div class="scrollable-container short-list">
 ${printList(verbsInfo)}
 </div>`
 )})
@@ -218,7 +220,8 @@ ${printList(verbsInfo)}
       name: "adverbList",
       inputs: ["html","printList","adverbsInfo"],
       value: (function(html,printList,adverbsInfo){return(
-html `<div class="scrollable-container">
+html `
+<div class="scrollable-container short-list">
 ${printList(adverbsInfo)}
 </div>`
 )})
@@ -227,7 +230,8 @@ ${printList(adverbsInfo)}
       name: "adjectiveList",
       inputs: ["html","printList","adjectivesInfo"],
       value: (function(html,printList,adjectivesInfo){return(
-html `<div class="scrollable-container">
+html `
+<div class="scrollable-container short-list">
 ${printList(adjectivesInfo)}
 </div>`
 )})
@@ -276,9 +280,9 @@ function toWords (terms) {
     },
     {
       name: "nwords",
-      inputs: ["nounsInfo","verbsInfo","adverbsInfo","adjectivesInfo"],
-      value: (function(nounsInfo,verbsInfo,adverbsInfo,adjectivesInfo){return(
-nounsInfo.length + verbsInfo.length + adverbsInfo.length + adjectivesInfo.length
+      inputs: ["words"],
+      value: (function(words){return(
+words.length
 )})
     },
     {
@@ -559,8 +563,11 @@ html `
 html `
 <style>
 .scrollable-container {
- max-height: 400px;
+  max-height: 400px;
   overflow: auto;
+}
+.short-list {
+  max-height: 200px;
 }
 .big{
   font-size:1.5rem;
@@ -661,7 +668,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@389",
+  id: "c2ff228e09d0a4ae@399",
   modules: [m0,m1]
 };
 
