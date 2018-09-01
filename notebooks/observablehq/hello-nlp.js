@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 282
+// Version: 325
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@282",
+  id: "c2ff228e09d0a4ae@325",
   variables: [
     {
       inputs: ["md"],
@@ -160,6 +160,15 @@ Oblivion, yeah, yeah
 )})
     },
     {
+      name: "normalizedLyrics",
+      inputs: ["html","printHtml","normalizedDoc"],
+      value: (function(html,printHtml,normalizedDoc){return(
+html `<div class="scrollable-container">
+${printHtml(normalizedDoc)}
+</div>`
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Lyrics Word Cloud`
@@ -295,6 +304,20 @@ nlp(lyrics)
 )})
     },
     {
+      name: "normalizedDoc",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.normalize({
+  whitespace: true, // remove hyphens, newlines, and force one space between words
+  punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
+  case: true, // keep only first-word, and 'entity' titlecasing
+  numbers: true, // 'one'  →  '1'
+  plurals: true, // 'eyes'  →  'eye'  
+  verbs: true, // 'swtiched' → 'switch'
+})
+)})
+    },
+    {
       name: "sentences",
       inputs: ["doc"],
       value: (function(doc){return(
@@ -337,17 +360,9 @@ doc.adverbs().data()
 )})
     },
     {
-      name: "verbs",
-      inputs: ["doc"],
-      value: (function(doc){return(
-doc.verbs().out('array')
-)})
-    },
-    {
-      name: "normalVerbs",
-      inputs: ["normalizedDoc"],
-      value: (function(normalizedDoc){return(
-normalizedDoc.verbs().out('topk')
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Nouns`
 )})
     },
     {
@@ -366,36 +381,40 @@ normalizedDoc.nouns().out('topk')
     },
     {
       name: "normalNounsList",
-      inputs: ["printList","normalNouns"],
-      value: (function(printList,normalNouns){return(
-printList(normalNouns)
+      inputs: ["html","printList","normalNouns"],
+      value: (function(html,printList,normalNouns){return(
+html `<div class="scrollable-container">
+${printList(normalNouns)}
+</div>`
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Verbs`
+)})
+    },
+    {
+      name: "verbs",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.verbs().out('array')
+)})
+    },
+    {
+      name: "normalVerbs",
+      inputs: ["normalizedDoc"],
+      value: (function(normalizedDoc){return(
+normalizedDoc.verbs().out('topk')
 )})
     },
     {
       name: "normalVerbsList",
-      inputs: ["printList","normalVerbs"],
-      value: (function(printList,normalVerbs){return(
-printList(normalVerbs)
-)})
-    },
-    {
-      name: "normalizedDoc",
-      inputs: ["doc"],
-      value: (function(doc){return(
-doc.normalize({
-  whitespace: true, // remove hyphens, newlines, and force one space between words
-  punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
-  case: true, // keep only first-word, and 'entity' titlecasing
-  numbers: true, // 'one'  →  '1'
-  plurals: true, // 'eyes'  →  'eye'  
-  verbs: true, // 'swtiched' → 'switch'
-})
-)})
-    },
-    {
-      inputs: ["printHtml","normalizedDoc"],
-      value: (function(printHtml,normalizedDoc){return(
-printHtml(normalizedDoc)
+      inputs: ["html","printList","normalVerbs"],
+      value: (function(html,printList,normalVerbs){return(
+html `<div class="scrollable-container">
+${printList(normalVerbs)}
+</div>`
 )})
     },
     {
@@ -457,6 +476,10 @@ html `
       value: (function(html){return(
 html `
 <style>
+.scrollable-container {
+ max-height: 400px;
+  overflow: auto;
+}
 .big{
   font-size:1.5rem;
   color:cornflowerblue;
@@ -465,7 +488,6 @@ html `
   color:grey;
   margin-top:30px;
 }
-
 .term { color:grey; cursor:pointer;}
 .nl-Person { border-bottom:2px solid #6393b9; }
 .nl-Pronoun { border-bottom:2px solid #81acce; }
@@ -557,7 +579,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@282",
+  id: "c2ff228e09d0a4ae@325",
   modules: [m0,m1]
 };
 
