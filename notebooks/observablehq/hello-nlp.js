@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 438
+// Version: 477
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@438",
+  id: "c2ff228e09d0a4ae@477",
   variables: [
     {
       inputs: ["md"],
@@ -182,17 +182,11 @@ ${printHtml(normalizedDoc)}
     },
     {
       name: "legends",
-      inputs: ["html"],
-      value: (function(html){return(
+      inputs: ["html","tagTypes"],
+      value: (function(html,tagTypes){return(
 html `<p class="term">
-  <span class="nl-Expression">Expression</span>
-  <span class="nl-Pronoun">Pronoun</span>
-  <span class="nl-Noun">Noun</span>
-  <span class="nl-Verb">Verb</span>
-  <span class="nl-Adjective">Adjective</span>
-  <span class="nl-Adverb">Adverb</span>
-  <span class="nl-Conjunction">Conjunction</span>
-  <span class="nl-Determiner">Determiner</span>
+  ${tagTypes.map(type => `<span class="nl-${type}" title="${type}">${type}</span> `)
+    .reduce((html, tag) => html + tag)}
 </p>`
 )})
     },
@@ -436,9 +430,9 @@ nlp(lyrics)
     },
     {
       name: "normalizedDoc",
-      inputs: ["doc"],
-      value: (function(doc){return(
-doc.normalize({
+      inputs: ["nlp","lyrics"],
+      value: (function(nlp,lyrics){return(
+nlp(lyrics).normalize({
   whitespace: true, // remove hyphens, newlines, and force one space between words
   punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
   case: true, // keep only first-word, and 'entity' titlecasing
@@ -456,10 +450,10 @@ doc.sentences().data()
 )})
     },
     {
-      name: "tags",
+      name: "terms",
       inputs: ["doc"],
       value: (function(doc){return(
-doc.out('tags')
+doc.terms().data()
 )})
     },
     {
@@ -477,6 +471,49 @@ doc.contractions().data()
 )})
     },
     {
+      name: "tagTypes",
+      value: (function(){return(
+[
+  'Expression',
+  'Pronoun',
+  'Noun',
+  'Verb',
+  'Adjective',
+  'Adverb',
+  'Conjunction',
+  'Preposition',
+  'Determiner',
+  'QuestionWord',
+]
+)})
+    },
+    {
+      name: "tags",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.out('tags')
+)})
+    },
+    {
+      name: "uniqueTags",
+      inputs: ["tags"],
+      value: (function(tags)
+{
+  const map = new Map();
+  for (const tag of tags) {
+    let group = map.get(tag.normal);
+    if (!group) {
+      group = {name: tag.normal, children: []};
+      map.set(tag.normal, group);
+    }
+    group.children.push(tag);
+    tag.targets = [];
+  }
+  return {name: 'tags', children: [...map.values()]};
+}
+)
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `### Adjectives`
@@ -491,9 +528,9 @@ doc.adjectives().data()
     },
     {
       name: "adjectivesInfo",
-      inputs: ["normalizedDoc"],
-      value: (function(normalizedDoc){return(
-normalizedDoc.adjectives().out('topk')
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.adjectives().out('topk')
 )})
     },
     {
@@ -700,6 +737,7 @@ md `## References
 - [Compromise NLP](https://beta.observablehq.com/@spencermountain/nlp-compromise)
 - [Compromise NLP Normalize](https://beta.observablehq.com/@spencermountain/compromise-normalization)
 - [Wordle Like Clouds](https://beta.observablehq.com/@esperanc/wordle-like-clouds)
+- [d3 Tidy Tree](https://beta.observablehq.com/@mbostock/d3-tidy-tree)
 `
 )})
     }
@@ -761,7 +799,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@438",
+  id: "c2ff228e09d0a4ae@477",
   modules: [m0,m1]
 };
 
