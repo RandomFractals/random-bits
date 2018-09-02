@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 492
+// Version: 498
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@492",
+  id: "c2ff228e09d0a4ae@498",
   variables: [
     {
       inputs: ["md"],
@@ -245,7 +245,7 @@ md `## Lingo Parts`
     .attr("dy", "0.31em")
     .attr("x", d => d.children ? -6 : 6)
     .attr("text-anchor", d => d.children ? "end" : "start")
-    .text(d => d.data.name)
+    .text(d => d.data.count ? `${d.data.count} ${d.data.name}`: d.data.name)
     .clone(true).lower()
     .attr("stroke", "white");
   
@@ -516,7 +516,7 @@ doc.out('tags')
     for (const tagType of tagTypes) {
       const type = map.get(tagType);
       if (type) {
-        type.children.push({name: tag.name, size: tag.children.length});
+        type.children.push({name: tag.name, count: tag.children.length});
         break;
       }
     }
@@ -811,7 +811,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@492",
+  id: "c2ff228e09d0a4ae@498",
   modules: [m0,m1]
 };
 
