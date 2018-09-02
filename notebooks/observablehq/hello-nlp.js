@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 501
+// Version: 514
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@501",
+  id: "c2ff228e09d0a4ae@514",
   variables: [
     {
       inputs: ["md"],
@@ -238,13 +238,14 @@ md `## Lingo Parts`
       .attr("transform", d => `translate(${d.y},${d.x})`);
 
   node.append("circle")
-    .attr("fill", d => d.children ? "#555" : "#999")
+    .attr("fill", d => d.children ? "#555" : d.data.color) //"#999")
     .attr("r", 2.5);
 
   node.append("text")
     .attr("dy", "0.31em")
     .attr("x", d => d.children ? -6 : 6)
     .attr("text-anchor", d => d.children ? "end" : "start")
+    .attr("fill", d => d.data.color)
     .text(d => d.data.count ? `${d.data.count} ${d.data.name}`: `${d.data.children.length} ${d.data.name}s`)
     .clone(true).lower()
     .attr("stroke", "white");
@@ -477,6 +478,23 @@ doc.contractions().data()
 )})
     },
     {
+      name: "tagColors",
+      value: (function(){return(
+{
+  Pronoun: '#81acce',
+  Verb: 'palevioletred',
+  Adverb: '#f39c73',
+  Adjective: '#b3d3c6',
+  Determiner: '#d3c0b3',
+  Preposition: '#9794a8',
+  Conjunction: '#c8c9cf',
+  QuestionWord: 'lavender',
+  Noun: '#7990d6',
+  Expression: '#b3d3c6',
+}
+)})
+    },
+    {
       name: "tags",
       inputs: ["doc"],
       value: (function(doc){return(
@@ -504,8 +522,8 @@ doc.out('tags')
     },
     {
       name: "tagTree",
-      inputs: ["tagTypes","uniqueTags"],
-      value: (function(tagTypes,uniqueTags)
+      inputs: ["tagTypes","uniqueTags","tagColors"],
+      value: (function(tagTypes,uniqueTags,tagColors)
 {
   const map = new Map();
   for (const tagType of tagTypes) {
@@ -516,7 +534,8 @@ doc.out('tags')
     for (const tagType of tagTypes) {
       const type = map.get(tagType);
       if (type) {
-        type.children.push({name: tag.name, count: tag.children.length});
+        type.children.push({name: tag.name, count: tag.children.length, color: tagColors[tagType]});
+        type.color = tagColors[tagType];
         break;
       }
     }
@@ -811,7 +830,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@501",
+  id: "c2ff228e09d0a4ae@514",
   modules: [m0,m1]
 };
 
