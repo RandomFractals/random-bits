@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 555
+// Version: 557
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@555",
+  id: "5c54ccd4ac62f235@557",
   variables: [
     {
       inputs: ["md"],
@@ -150,7 +150,7 @@ digraph "${userName}" {
   rankdir = ${orient};
   ${notebookAuthors
     .map(author => 
-         `"@${author.login}" [shape = rectangle, style = filled, fillcolor = "#b3e6cc",
+         `"@${author.login}" [shape = oval, style = filled, fillcolor = "#b3e6cc",
             href = "https://beta.observablehq.com/@${author.login}", target = _blank]`)
     .join('\n')}
   ${notebooks
@@ -494,7 +494,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@555",
+  id: "5c54ccd4ac62f235@557",
   modules: [m0,m1,m2]
 };
 
