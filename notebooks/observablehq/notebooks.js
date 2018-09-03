@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 486
+// Version: 531
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@486",
+  id: "5c54ccd4ac62f235@531",
   variables: [
     {
       inputs: ["md"],
@@ -120,7 +120,54 @@ function getUserInfo(userName) {
     {
       inputs: ["md","userName"],
       value: (function(md,userName){return(
-md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
+md `--- 
+## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
+)})
+    },
+    {
+      name: "viewof orient",
+      inputs: ["html"],
+      value: (function(html){return(
+html`<select>
+<option value=LR selected>left-to-right
+<option value=RL>right-to-left
+<option value=TB>top-to-bottom
+<option value=BT>bottom-to-top
+</select>`
+)})
+    },
+    {
+      name: "orient",
+      inputs: ["Generators","viewof orient"],
+      value: (G, _) => G.input(_)
+    },
+    {
+      name: "includeForks",
+      value: (function(){return(
+true
+)})
+    },
+    {
+      name: "notebooksGraph",
+      inputs: ["dot","userName","orient","notebooks"],
+      value: (function(dot,userName,orient,notebooks){return(
+dot `
+digraph "${userName}" {
+  rankdir = ${orient};
+  ${notebooks.map(notebook => 
+    `"/${notebook.slug}" [shape = rectangle, style = filled, fillcolor = "#b3e0ff",
+        href = "https://beta.observablehq.com/@${userName}/${notebook.slug}", target = _blank]`
+  ).join('\n')}
+}`
+)})
+    },
+    {
+      inputs: ["html","DOM","rasterize","notebooksGraph","userName","serialize"],
+      value: (async function(html,DOM,rasterize,notebooksGraph,userName,serialize){return(
+html`
+${DOM.download(await rasterize(notebooksGraph), `${userName}-notebooks.png`, "Download as PNG")}
+${DOM.download(await serialize(notebooksGraph), `${userName}-notebooks.svg`, "Download as SVG")}
+`
 )})
     },
     {
@@ -152,6 +199,16 @@ html `
   } while (documentsCount && documents.length < MAX_DOCS)
 }
 )
+    },
+    {
+      name: "forkedNotebooks",
+      inputs: ["notebooks","getNotebookById"],
+      value: (function(notebooks,getNotebookById){return(
+Promise.all(
+  notebooks.filter(notebook => notebook.fork_of)
+    .map(notebook => getNotebookById(notebook.fork_of.id))
+)
+)})
     },
     {
       name: "MAX_DOCS",
@@ -260,6 +317,15 @@ getNotebookInfo(notebooks[0])
       value: (function(apiUrl,userName){return(
 function getNotebookInfo(notebook) {
   return fetch(`${apiUrl}/document/@${userName}/${notebook.slug}`).then(d => d.json())
+}
+)})
+    },
+    {
+      name: "getNotebookById",
+      inputs: ["apiUrl"],
+      value: (function(apiUrl){return(
+function getNotebookById(notebookId) {
+  return fetch(`${apiUrl}/document/${notebookId}`).then(d => d.json())
 }
 )})
     },
@@ -387,7 +453,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@486",
+  id: "5c54ccd4ac62f235@531",
   modules: [m0,m1,m2]
 };
 
