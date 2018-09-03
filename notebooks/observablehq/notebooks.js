@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 446
+// Version: 458
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@446",
+  id: "5c54ccd4ac62f235@458",
   variables: [
     {
       inputs: ["md"],
@@ -21,10 +21,17 @@ md `## User Info`
 )})
     },
     {
+      name: "userNameParam",
+      inputs: ["URLSearchParams","html"],
+      value: (function(URLSearchParams,html){return(
+new URLSearchParams(html`<a href>`.search).get('userName')
+)})
+    },
+    {
       name: "viewof userName",
-      inputs: ["md"],
-      value: (function(md){return(
-md `<input value=randomfractals>`
+      inputs: ["md","userNameParam"],
+      value: (function(md,userNameParam){return(
+md `<input value="${userNameParam ? userNameParam : 'randomfractals'}">`
 )})
     },
     {
@@ -263,7 +270,7 @@ require('@observablehq/vega-lite')
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@446",
+  id: "5c54ccd4ac62f235@458",
   modules: [m0]
 };
 
