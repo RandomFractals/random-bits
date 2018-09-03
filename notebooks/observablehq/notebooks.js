@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 542
+// Version: 555
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@542",
+  id: "5c54ccd4ac62f235@555",
   variables: [
     {
       inputs: ["md"],
@@ -142,18 +142,17 @@ html`<select>
       value: (G, _) => G.input(_)
     },
     {
-      name: "includeForks",
-      value: (function(){return(
-true
-)})
-    },
-    {
       name: "notebooksGraph",
-      inputs: ["dot","userName","orient","notebooks","forkedNotebooks","notebookMap"],
-      value: (function(dot,userName,orient,notebooks,forkedNotebooks,notebookMap){return(
+      inputs: ["dot","userName","orient","notebookAuthors","notebooks","forkedNotebooks","notebookMap"],
+      value: (function(dot,userName,orient,notebookAuthors,notebooks,forkedNotebooks,notebookMap){return(
 dot `
 digraph "${userName}" {
   rankdir = ${orient};
+  ${notebookAuthors
+    .map(author => 
+         `"@${author.login}" [shape = rectangle, style = filled, fillcolor = "#b3e6cc",
+            href = "https://beta.observablehq.com/@${author.login}", target = _blank]`)
+    .join('\n')}
   ${notebooks
     .map(notebook => 
          `"/${notebook.slug}" [shape = rectangle, style = filled, fillcolor = "#b3e0ff",
@@ -168,6 +167,14 @@ digraph "${userName}" {
   ${notebooks.filter(notebook => notebook.fork_of)
     .map(notebook => 
          `"/${notebookMap.get(notebook.fork_of.id).slug}" -> "/${notebook.slug}" [color = "black"]`)
+    .join('\n')}
+  ${notebooks.filter(notebook => !notebook.fork_of)
+    .map(notebook => 
+         `"@${userName}" -> "/${notebook.slug}" [color = "black"]`)
+    .join('\n')}
+  ${forkedNotebooks.filter(notebook => (!notebook.fork_of || notebook.creator.login != userName))
+    .map(notebook => 
+         `"@${notebook.creator.login}" -> "/${notebook.slug}" [color = "black"]`)
     .join('\n')}
 }`
 )})
@@ -230,6 +237,17 @@ Promise.all(
   const allNotebooks = notebooks.concat(forkedNotebooks);
   allNotebooks.map(notebook => map.set(notebook.id, notebook));
   return map;
+}
+)
+    },
+    {
+      name: "notebookAuthors",
+      inputs: ["forkedNotebooks"],
+      value: (function(forkedNotebooks)
+{
+  const map = new Map();
+  forkedNotebooks.map(notebook => map.set(notebook.creator.login, notebook.creator));
+  return [...map.values()];
 }
 )
     },
@@ -476,7 +494,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@542",
+  id: "5c54ccd4ac62f235@555",
   modules: [m0,m1,m2]
 };
 
