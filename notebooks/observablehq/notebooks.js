@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 531
+// Version: 542
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@531",
+  id: "5c54ccd4ac62f235@542",
   variables: [
     {
       inputs: ["md"],
@@ -149,15 +149,26 @@ true
     },
     {
       name: "notebooksGraph",
-      inputs: ["dot","userName","orient","notebooks"],
-      value: (function(dot,userName,orient,notebooks){return(
+      inputs: ["dot","userName","orient","notebooks","forkedNotebooks","notebookMap"],
+      value: (function(dot,userName,orient,notebooks,forkedNotebooks,notebookMap){return(
 dot `
 digraph "${userName}" {
   rankdir = ${orient};
-  ${notebooks.map(notebook => 
-    `"/${notebook.slug}" [shape = rectangle, style = filled, fillcolor = "#b3e0ff",
-        href = "https://beta.observablehq.com/@${userName}/${notebook.slug}", target = _blank]`
-  ).join('\n')}
+  ${notebooks
+    .map(notebook => 
+         `"/${notebook.slug}" [shape = rectangle, style = filled, fillcolor = "#b3e0ff",
+            href = "https://beta.observablehq.com/@${userName}/${notebook.slug}", target = _blank]`)
+    .join('\n')}
+  ${forkedNotebooks
+    .filter(notebook => (notebook.creator.login != userName))
+    .map(notebook => 
+         `"/${notebook.slug}" [shape = rectangle, style = filled, fillcolor = "#f6f6f6",
+            href = "https://beta.observablehq.com/@${notebook.creator.login}/${notebook.slug}", target = _blank]`)
+    .join('\n')}
+  ${notebooks.filter(notebook => notebook.fork_of)
+    .map(notebook => 
+         `"/${notebookMap.get(notebook.fork_of.id).slug}" -> "/${notebook.slug}" [color = "black"]`)
+    .join('\n')}
 }`
 )})
     },
@@ -209,6 +220,18 @@ Promise.all(
     .map(notebook => getNotebookById(notebook.fork_of.id))
 )
 )})
+    },
+    {
+      name: "notebookMap",
+      inputs: ["notebooks","forkedNotebooks"],
+      value: (function(notebooks,forkedNotebooks)
+{
+  const map = new Map();
+  const allNotebooks = notebooks.concat(forkedNotebooks);
+  allNotebooks.map(notebook => map.set(notebook.id, notebook));
+  return map;
+}
+)
     },
     {
       name: "MAX_DOCS",
@@ -453,7 +476,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@531",
+  id: "5c54ccd4ac62f235@542",
   modules: [m0,m1,m2]
 };
 
