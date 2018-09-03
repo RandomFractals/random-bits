@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 462
+// Version: 486
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@462",
+  id: "5c54ccd4ac62f235@486",
   variables: [
     {
       inputs: ["md"],
@@ -40,6 +40,7 @@ md `<input value="${userNameParam ? userNameParam : 'randomfractals'}">`
       value: (G, _) => G.input(_)
     },
     {
+      name: "shareLink",
       inputs: ["md","userName"],
       value: (function(md,userName){return(
 md `Share a link to your user info and notebooks stats: [@${userName}](?userName=${userName})`
@@ -120,6 +121,16 @@ function getUserInfo(userName) {
       inputs: ["md","userName"],
       value: (function(md,userName){return(
 md `## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
+)})
+    },
+    {
+      name: "notebookList",
+      inputs: ["html","getLinksHtml","notebooks"],
+      value: (function(html,getLinksHtml,notebooks){return(
+html `
+<div class="scrollable-container">
+  ${getLinksHtml(notebooks)}
+</div>`
 )})
     },
     {
@@ -208,6 +219,17 @@ function getLinksMarkdown(notebooks) {
 )})
     },
     {
+      name: "getLinksHtml",
+      inputs: ["userName"],
+      value: (function(userName){return(
+function getLinksHtml(notebooks) {
+  return notebooks.map(notebook => 
+    `<a href="https://beta.observablehq.com/@${userName}/${notebook.slug}">${notebook.title}<br />`)
+    .reduce((html, link) => html + link);
+}
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `**TODO: add notebooks grid view display with thumbnails for creating custom user notebooks collections**`
@@ -266,18 +288,107 @@ function color(i) {
 )})
     },
     {
+      name: "notebookStyles",
+      inputs: ["html"],
+      value: (function(html){return(
+html `
+<style>
+.scrollable-container {
+  max-height: 400px;
+  overflow: auto;
+}
+.short-list {
+  max-height: 200px;
+}
+</style>
+`
+)})
+    },
+    {
       name: "vegalite",
       inputs: ["require"],
       value: (function(require){return(
 require('@observablehq/vega-lite')
 )})
+    },
+    {
+      from: "@mbostock/graphviz",
+      name: "dot",
+      remote: "dot"
+    },
+    {
+      from: "@mbostock/saving-svg",
+      name: "rasterize",
+      remote: "rasterize"
+    },
+    {
+      from: "@mbostock/saving-svg",
+      name: "serialize",
+      remote: "serialize"
+    }
+  ]
+};
+
+const m1 = {
+  id: "@mbostock/graphviz",
+  variables: [
+    {
+      name: "dot",
+      inputs: ["require"],
+      value: (function(require){return(
+require("@observablehq/graphviz@0.0.2/dist/graphviz.min.js")
+)})
+    }
+  ]
+};
+
+const m2 = {
+  id: "@mbostock/saving-svg",
+  variables: [
+    {
+      name: "rasterize",
+      inputs: ["DOM","serialize"],
+      value: (function(DOM,serialize){return(
+function rasterize(svg) {
+  let resolve, reject;
+  const promise = new Promise((y, n) => (resolve = y, reject = n));
+  const image = new Image;
+  image.onerror = reject;
+  image.onload = () => {
+    const rect = svg.getBoundingClientRect();
+    const context = DOM.context2d(rect.width, rect.height);
+    context.drawImage(image, 0, 0, rect.width, rect.height);
+    context.canvas.toBlob(resolve);
+  };
+  image.src = URL.createObjectURL(serialize(svg));
+  return promise;
+}
+)})
+    },
+    {
+      name: "serialize",
+      value: (function()
+{
+  const xmlns = "http://www.w3.org/2000/xmlns/";
+  const xlinkns = "http://www.w3.org/1999/xlink";
+  const svgns = "http://www.w3.org/2000/svg";
+  return function serialize(svg) {
+    svg = svg.cloneNode(true);
+    svg.setAttributeNS(xmlns, "xmlns", svgns);
+    svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
+    const serializer = new window.XMLSerializer;
+    const string = serializer.serializeToString(svg);
+    return new Blob([string], {type: "image/svg+xml"});
+  };
+}
+)
     }
   ]
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@462",
-  modules: [m0]
+  id: "5c54ccd4ac62f235@486",
+  modules: [m0,m1,m2]
 };
 
 export default notebook;
