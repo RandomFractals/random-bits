@@ -1,18 +1,18 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-taste
 // Title: NLP Taste ;)
 // Author: Taras Novak (@randomfractals)
-// Version: 578
+// Version: 589
 // Runtime version: 1
 
 const m0 = {
-  id: "8bb41180f1927ba6@578",
+  id: "8bb41180f1927ba6@589",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md `# NLP Taste ;)
 
-Visualizing music lyrics, names, numbers, and places with http://compromise.cool natural language processing (NLP) library
+Visualizing music lyrics, names, places and numbers with http://compromise.cool natural language processing (NLP) library
 and [#other dataViz libs](https://beta.observablehq.com/@randomfractals/nlp-taste#imports)
 `
 )})
@@ -23,7 +23,8 @@ and [#other dataViz libs](https://beta.observablehq.com/@randomfractals/nlp-tast
 md `## Tyga - [Taste (explicit video) ft. Offset](https://www.youtube.com/watch?v=LjxulQ1bEWg)
 
 ... b/c Tyga is huge on [#names](https://beta.observablehq.com/@randomfractals/nlp-taste#people), 
-[#places](https://beta.observablehq.com/@randomfractals/nlp-taste#places), and numbers drops :) 
+[#places](https://beta.observablehq.com/@randomfractals/nlp-taste#places) 
+and [#numbers](https://beta.observablehq.com/@randomfractals/nlp-taste#numbers) drops :) 
 see [#lingo parts tree](https://beta.observablehq.com/@randomfractals/nlp-taste#legends) ...`
 )})
     },
@@ -690,6 +691,20 @@ toShortList(printList(doc.places().out('topk')))
 )})
     },
     {
+      name: "numbers",
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Numbers`
+)})
+    },
+    {
+      name: "numberList",
+      inputs: ["toShortList","printList","doc"],
+      value: (function(toShortList,printList,doc){return(
+toShortList(printList(doc.values().out('topk')))
+)})
+    },
+    {
       name: "toShortList",
       inputs: ["html"],
       value: (function(html){return(
@@ -868,7 +883,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "8bb41180f1927ba6@578",
+  id: "8bb41180f1927ba6@589",
   modules: [m0,m1]
 };
 
