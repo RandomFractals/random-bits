@@ -1,16 +1,18 @@
 // URL: https://beta.observablehq.com/@randomfractals/testing-tippy
 // Title: Testing Tippy
 // Author: Taras Novak (@randomfractals)
-// Version: 69
+// Version: 70
 // Runtime version: 1
 
 const m0 = {
-  id: "9028e29ba58524fe@69",
+  id: "9028e29ba58524fe@70",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
-md`# Testing Tippy`
+md`# Testing Tippy
+
+Fix for [no tippy.js needed! :)](https://talk.observablehq.com/t/tippy-js-tooltip-does-not-display-on-observable-with-examples/1178/4?u=randomfractals)`
 )})
     },
     {
@@ -50,7 +52,7 @@ require("d3")
 };
 
 const notebook = {
-  id: "9028e29ba58524fe@69",
+  id: "9028e29ba58524fe@70",
   modules: [m0]
 };
 
