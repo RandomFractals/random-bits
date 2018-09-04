@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 557
+// Version: 566
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@557",
+  id: "5c54ccd4ac62f235@566",
   variables: [
     {
       inputs: ["md"],
@@ -146,7 +146,7 @@ html`<select>
       inputs: ["dot","userName","orient","notebookAuthors","notebooks","forkedNotebooks","notebookMap"],
       value: (function(dot,userName,orient,notebookAuthors,notebooks,forkedNotebooks,notebookMap){return(
 dot `
-digraph "${userName}" {
+digraph "@${userName}'s notebooks" {
   rankdir = ${orient};
   ${notebookAuthors
     .map(author => 
@@ -164,7 +164,7 @@ digraph "${userName}" {
          `"/${notebook.slug}" [shape = rectangle, style = filled, fillcolor = "#f6f6f6",
             href = "https://beta.observablehq.com/@${notebook.creator.login}/${notebook.slug}", target = _blank]`)
     .join('\n')}
-  ${notebooks.filter(notebook => notebook.fork_of)
+  ${notebooks.filter(notebook => (notebook.fork_of && notebookMap.get(notebook.fork_of.id)))
     .map(notebook => 
          `"/${notebookMap.get(notebook.fork_of.id).slug}" -> "/${notebook.slug}" [color = "black"]`)
     .join('\n')}
@@ -220,21 +220,17 @@ html `
     },
     {
       name: "forkedNotebooks",
-      inputs: ["notebooks","getNotebookById"],
-      value: (function(notebooks,getNotebookById){return(
-Promise.all(
-  notebooks.filter(notebook => notebook.fork_of)
-    .map(notebook => getNotebookById(notebook.fork_of.id))
-)
+      value: (function(){return(
+[]
 )})
     },
     {
       name: "notebookMap",
-      inputs: ["notebooks","forkedNotebooks"],
-      value: (function(notebooks,forkedNotebooks)
+      inputs: ["notebooks"],
+      value: (function(notebooks)
 {
   const map = new Map();
-  const allNotebooks = notebooks.concat(forkedNotebooks);
+  const allNotebooks = notebooks; //.concat(forkedNotebooks);
   allNotebooks.map(notebook => map.set(notebook.id, notebook));
   return map;
 }
@@ -322,7 +318,7 @@ function getLinksMarkdown(notebooks) {
       value: (function(userName){return(
 function getLinksHtml(notebooks) {
   return notebooks.map(notebook => 
-    `<a href="https://beta.observablehq.com/@${userName}/${notebook.slug}">${notebook.title}<br />`)
+    `<a href="https://beta.observablehq.com/@${userName}/${notebook.slug}" target="_blank">${notebook.title}<br />`)
     .reduce((html, link) => html + link);
 }
 )})
@@ -494,7 +490,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@557",
+  id: "5c54ccd4ac62f235@566",
   modules: [m0,m1,m2]
 };
 
