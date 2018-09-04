@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 624
+// Version: 628
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@624",
+  id: "5c54ccd4ac62f235@628",
   variables: [
     {
       inputs: ["md"],
@@ -306,20 +306,6 @@ function getStats(notebooks) {
 )})
     },
     {
-      name: "searchByTitle",
-      value: (function(){return(
-function searchByTitle(notebooks, title) {
-  const matchingNotebooks = [];
-  notebooks.map(notebook => {
-    if( notebook.title.toLowerCase().indexOf(title) >= 0) {
-      matchingNotebooks.push(notebook); 
-    }
-  });
-  return matchingNotebooks;
-}
-)})
-    },
-    {
       name: "getLinksMarkdown",
       inputs: ["userName"],
       value: (function(userName){return(
@@ -357,6 +343,20 @@ searchByTitle(notebooks, 'chicago crimes')
       inputs: ["md"],
       value: (function(md){return(
 md `see [Chicago Crimes EDA](https://beta.observablehq.com/@randomfractals/chicagocrimes) for search and links markdown api usage example`
+)})
+    },
+    {
+      name: "searchByTitle",
+      value: (function(){return(
+function searchByTitle(notebooks, title) {
+  const matchingNotebooks = [];
+  notebooks.map(notebook => {
+    if( notebook.title.toLowerCase().indexOf(title) >= 0) {
+      matchingNotebooks.push(notebook); 
+    }
+  });
+  return matchingNotebooks;
+}
 )})
     },
     {
@@ -614,7 +614,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@624",
+  id: "5c54ccd4ac62f235@628",
   modules: [m0,m1,m2,m3]
 };
 
