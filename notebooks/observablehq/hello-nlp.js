@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 514
+// Version: 524
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@514",
+  id: "c2ff228e09d0a4ae@524",
   variables: [
     {
       inputs: ["md"],
@@ -566,12 +566,9 @@ doc.adjectives().out('topk')
     },
     {
       name: "adjectiveList",
-      inputs: ["html","printList","adjectivesInfo"],
-      value: (function(html,printList,adjectivesInfo){return(
-html `
-<div class="scrollable-container short-list">
-${printList(adjectivesInfo)}
-</div>`
+      inputs: ["toShortList","printList","adjectivesInfo"],
+      value: (function(toShortList,printList,adjectivesInfo){return(
+toShortList(printList(adjectivesInfo))
 )})
     },
     {
@@ -596,12 +593,9 @@ doc.adverbs().out('topk')
     },
     {
       name: "adverbList",
-      inputs: ["html","printList","adverbsInfo"],
-      value: (function(html,printList,adverbsInfo){return(
-html `
-<div class="scrollable-container short-list">
-${printList(adverbsInfo)}
-</div>`
+      inputs: ["toShortList","printList","adverbsInfo"],
+      value: (function(toShortList,printList,adverbsInfo){return(
+toShortList(printList(adverbsInfo))
 )})
     },
     {
@@ -626,12 +620,9 @@ normalizedDoc.nouns().out('topk')
     },
     {
       name: "nounList",
-      inputs: ["html","printList","nounsInfo"],
-      value: (function(html,printList,nounsInfo){return(
-html `
-<div class="scrollable-container short-list">
-${printList(nounsInfo)}
-</div>`
+      inputs: ["toShortList","printList","nounsInfo"],
+      value: (function(toShortList,printList,nounsInfo){return(
+toShortList(printList(nounsInfo))
 )})
     },
     {
@@ -656,12 +647,18 @@ normalizedDoc.verbs().out('topk')
     },
     {
       name: "verbList",
-      inputs: ["html","printList","verbsInfo"],
-      value: (function(html,printList,verbsInfo){return(
-html `
-<div class="scrollable-container short-list">
-${printList(verbsInfo)}
-</div>`
+      inputs: ["toShortList","printList","verbsInfo"],
+      value: (function(toShortList,printList,verbsInfo){return(
+toShortList(printList(verbsInfo))
+)})
+    },
+    {
+      name: "toShortList",
+      inputs: ["html"],
+      value: (function(html){return(
+function toShortList(list) {
+  return html `<div class="scrollable-container short-list">${list}</div>`;
+}
 )})
     },
     {
@@ -830,7 +827,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@514",
+  id: "c2ff228e09d0a4ae@524",
   modules: [m0,m1]
 };
 
