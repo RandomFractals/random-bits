@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 524
+// Version: 528
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@524",
+  id: "c2ff228e09d0a4ae@528",
   variables: [
     {
       inputs: ["md"],
@@ -13,7 +13,7 @@ const m0 = {
 md `# Hello, NLP!
 
 Visualizing music lyrics with http://compromise.cool natural language processing (NLP) library
-and [d3 Word Cloud Layout](https://github.com/jasondavies/d3-cloud)
+and [#other dataViz libs](https://beta.observablehq.com/@randomfractals/hello-nlp#imports)
 `
 )})
     },
@@ -662,6 +662,7 @@ function toShortList(list) {
 )})
     },
     {
+      name: "imports",
       inputs: ["md"],
       value: (function(md){return(
 md `## Imports`
@@ -762,9 +763,9 @@ html `
       value: (function(md){return(
 md `## References
 
-- [Compromise NLP](https://beta.observablehq.com/@spencermountain/nlp-compromise)
+- [Compromise NLP Ingro](https://beta.observablehq.com/@spencermountain/nlp-compromise)
 - [Compromise NLP Normalize](https://beta.observablehq.com/@spencermountain/compromise-normalization)
-- [Wordle Like Clouds](https://beta.observablehq.com/@esperanc/wordle-like-clouds)
+- [d3 Word Cloud Layout](https://github.com/jasondavies/d3-cloud)
 - [d3 Tidy Tree](https://beta.observablehq.com/@mbostock/d3-tidy-tree)
 `
 )})
@@ -827,7 +828,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@524",
+  id: "c2ff228e09d0a4ae@528",
   modules: [m0,m1]
 };
 

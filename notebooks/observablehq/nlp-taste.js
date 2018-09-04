@@ -1,16 +1,16 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-taste
-// Title: NLP Taste :)
+// Title: NLP Taste ;)
 // Author: Taras Novak (@randomfractals)
-// Version: 574
+// Version: 578
 // Runtime version: 1
 
 const m0 = {
-  id: "8bb41180f1927ba6@574",
+  id: "8bb41180f1927ba6@578",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
-md `# NLP Taste :)
+md `# NLP Taste ;)
 
 Visualizing music lyrics, names, numbers, and places with http://compromise.cool natural language processing (NLP) library
 and [#other dataViz libs](https://beta.observablehq.com/@randomfractals/nlp-taste#imports)
@@ -802,9 +802,10 @@ html `
       value: (function(md){return(
 md `## References
 
-- [Compromise NLP](https://beta.observablehq.com/@spencermountain/nlp-compromise)
+- [Compromise NLP Intro](https://beta.observablehq.com/@spencermountain/nlp-compromise)
 - [Compromise NLP Normalize](https://beta.observablehq.com/@spencermountain/compromise-normalization)
-- [Wordle Like Clouds](https://beta.observablehq.com/@esperanc/wordle-like-clouds)
+- [Compromise NLP Topics](https://beta.observablehq.com/@spencermountain/topics-named-entity-recognition)
+- [d3 Word Cloud Layout](https://github.com/jasondavies/d3-cloud)
 - [d3 Tidy Tree](https://beta.observablehq.com/@mbostock/d3-tidy-tree)
 `
 )})
@@ -867,7 +868,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "8bb41180f1927ba6@574",
+  id: "8bb41180f1927ba6@578",
   modules: [m0,m1]
 };
 
