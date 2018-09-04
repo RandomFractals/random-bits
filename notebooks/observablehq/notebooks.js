@@ -1,16 +1,16 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
-// Title: Notebooks
+// Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 566
+// Version: 624
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@566",
+  id: "5c54ccd4ac62f235@624",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## Notebooks
+md `# Notebooks Visualizer
 This notebook uses actual https://api.observablehq.com to display user stats and notebooks info`
 )})
     },
@@ -96,12 +96,6 @@ vegalite({
 )})
     },
     {
-      name: "apiUrl",
-      value: (function(){return(
-'https://cors-anywhere.herokuapp.com/https://api.observablehq.com'
-)})
-    },
-    {
       name: "user",
       inputs: ["getUserInfo","userName"],
       value: (function(getUserInfo,userName){return(
@@ -109,12 +103,10 @@ getUserInfo(userName)
 )})
     },
     {
-      name: "getUserInfo",
-      inputs: ["apiUrl"],
-      value: (function(apiUrl){return(
-function getUserInfo(userName) {
-  return fetch(`${apiUrl}/user/@${userName}`).then(d => d.json())
-}
+      name: "stats",
+      inputs: ["getStats","notebooks"],
+      value: (function(getStats,notebooks){return(
+getStats(notebooks)
 )})
     },
     {
@@ -248,23 +240,48 @@ html `
 )
     },
     {
+      name: "notebookTags",
+      inputs: ["notebooks","nlp"],
+      value: (function(notebooks,nlp)
+{
+  const titles = notebooks.map((titles, notebook) => titles + ' ' + notebook.title);
+  const tagsDoc = nlp(titles).normalize({
+    whitespace: true, // remove hyphens, newlines, and force one space between words
+    punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
+    case: true, // keep only first-word, and 'entity' titlecasing
+    numbers: true, // 'one'  →  '1'
+    plurals: true, // 'eyes'  →  'eye'  
+    verbs: true, // 'swtiched' → 'switch'
+  });
+  return tagsDoc.out('tags');
+}
+)
+    },
+    {
       name: "MAX_DOCS",
       value: (function(){return(
 360
 )})
     },
     {
-      name: "stats",
-      inputs: ["getStats","notebooks"],
-      value: (function(getStats,notebooks){return(
-getStats(notebooks)
+      inputs: ["md"],
+      value: (function(md){return(
+md `# Notebooks API`
 )})
     },
     {
-      name: "searchNotebooks",
-      inputs: ["searchByTitle","notebooks"],
-      value: (function(searchByTitle,notebooks){return(
-searchByTitle(notebooks, 'chicago crimes')
+      name: "apiUrl",
+      value: (function(){return(
+'https://cors-anywhere.herokuapp.com/https://api.observablehq.com'
+)})
+    },
+    {
+      name: "getUserInfo",
+      inputs: ["apiUrl"],
+      value: (function(apiUrl){return(
+function getUserInfo(userName) {
+  return fetch(`${apiUrl}/user/@${userName}`).then(d => d.json())
+}
 )})
     },
     {
@@ -330,9 +347,16 @@ md `**TODO: add notebooks grid view display with thumbnails for creating custom 
 )})
     },
     {
+      name: "searchNotebooks",
+      inputs: ["searchByTitle","notebooks"],
+      value: (function(searchByTitle,notebooks){return(
+searchByTitle(notebooks, 'chicago crimes')
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
-md `see [Chicago Crimes EDA](https://beta.observablehq.com/@randomfractals/chicagocrimes) for search and links markdown api usage example.`
+md `see [Chicago Crimes EDA](https://beta.observablehq.com/@randomfractals/chicagocrimes) for search and links markdown api usage example`
 )})
     },
     {
@@ -373,21 +397,37 @@ md `## Displaying Notebook Cells Code`
 )})
     },
     {
-      inputs: ["html","notebook","color"],
-      value: (function(html,notebook,color){return(
+      inputs: ["html","notebook","cellCodeColor"],
+      value: (function(html,notebook,cellCodeColor){return(
 html`${
   notebook.nodes
-    .map((d,i) => `<pre style="font-size:14px; color:${color(i)}">${d.value.replace(/</g, "&lt;")}</pre>`)
+    .map((d,i) => `<pre style="font-size:14px; color:${cellCodeColor(i)}">${d.value.replace(/</g, "&lt;")}</pre>`)
     .join("<hr style='margin:0;padding:0'>")
 }`
 )})
     },
     {
-      name: "color",
+      name: "cellCodeColor",
       value: (function(){return(
-function color(i) {
+function cellCodeColor(i) {
   return "#" + ("4b9ec1-b5a636-495e1d-e55934-fa7921".split("-")[i%5])
 }
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Styles`
+)})
+    },
+    {
+      inputs: ["html"],
+      value: (function(html){return(
+html `
+<link href="https://fonts.googleapis.com/css?family=Pacifico|Corben" rel="stylesheet">
+<p style="font-family:Pacifico;">Pacifico</p>
+<p style="font-family:Corben;">Corben</p>
+`
 )})
     },
     {
@@ -408,10 +448,40 @@ html `
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Imports`
+)})
+    },
+    {
       name: "vegalite",
       inputs: ["require"],
       value: (function(require){return(
 require('@observablehq/vega-lite')
+)})
+    },
+    {
+      name: "nlp",
+      inputs: ["require"],
+      value: (function(require){return(
+require('compromise')
+)})
+    },
+    {
+      from: "@spencermountain/nlp-compromise",
+      name: "printList",
+      remote: "printList"
+    },
+    {
+      from: "@spencermountain/nlp-compromise",
+      name: "printHtml",
+      remote: "printHtml"
+    },
+    {
+      name: "d3cloud",
+      inputs: ["require"],
+      value: (function(require){return(
+require('d3-cloud')
 )})
     },
     {
@@ -433,6 +503,60 @@ require('@observablehq/vega-lite')
 };
 
 const m1 = {
+  id: "@spencermountain/nlp-compromise",
+  variables: [
+    {
+      name: "printList",
+      value: (function()
+{ 
+  const max = 35
+  return (list) => {
+     let len=list.length
+     list=list.slice(0, max)
+     let el = document.createElement("table");
+     el.innerHTML = list.reduce((str, o)=>{
+       str += '<tr>'
+       str += `<td style="color:#46468B;">${o.normal || o.text || ''}</td>`
+       str += `<td style="color:#7A7A8B;">${o.count || ''}</td>`
+       str += `<td style="color:#B7B7D1;">${o.percent+ '%'}</td>`
+        str += '</tr>'
+       return str
+     },'')
+     if(len>list.length){
+       el.innerHTML+='<b>(of '+len+' results)<b>'
+     }
+     return el
+   } 
+}
+)
+    },
+    {
+      name: "printHtml",
+      inputs: ["DOM"],
+      value: (function(DOM){return(
+function printHtml(doc){
+  let el = DOM.element()
+  let html = doc.out('html')
+  el.innerHTML = html
+  //add a hover 'title'
+  let sentences= el.children[0].children
+  for (var i = 0; i < sentences.length; i++) {
+    sentences[i].style='display:block;'
+    for (var o = 0; o < sentences[i].children.length; o++) {
+      let e=sentences[i].children[o]
+      var tags = e.getAttribute('class').split(' ').map(c=>c.replace(/^nl-/,' '))
+      e.classList.add('term')
+      e.setAttribute('title', tags)
+    }
+  }
+  return el
+}
+)})
+    }
+  ]
+};
+
+const m2 = {
   id: "@mbostock/graphviz",
   variables: [
     {
@@ -445,7 +569,7 @@ require("@observablehq/graphviz@0.0.2/dist/graphviz.min.js")
   ]
 };
 
-const m2 = {
+const m3 = {
   id: "@mbostock/saving-svg",
   variables: [
     {
@@ -490,8 +614,8 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@566",
-  modules: [m0,m1,m2]
+  id: "5c54ccd4ac62f235@624",
+  modules: [m0,m1,m2,m3]
 };
 
 export default notebook;
