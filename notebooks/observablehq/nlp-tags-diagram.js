@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tags-diagram
 // Title: NLP Tags Diagram
 // Author: Taras Novak (@randomfractals)
-// Version: 53
+// Version: 64
 // Runtime version: 1
 
 const m0 = {
-  id: "e92eff14ab092b9d@53",
+  id: "e92eff14ab092b9d@64",
   variables: [
     {
       inputs: ["md"],
@@ -30,8 +30,10 @@ md `## [RTJ!](https://www.youtube.com/watch?v=vWaljXUiCaE&index=3&list=RDBEOximW
     },
     {
       name: "text",
-      value: (function(){return(
-`[Verse 1: Killer Mike]
+      inputs: ["html"],
+      value: (function(html){return(
+html `<textarea rows="10" cols="60">
+[Verse 1: Killer Mike]
 Hear what I say, we are the business today
 Fuck shit is finished today (what)
 RT and J—we the new PB & J
@@ -152,7 +154,7 @@ And that's from the crew you can trust
 Warranty plus for fuckin' shit up
 We are the no-gooders, do-gooders
 Known to the dancers and dealers and doers of dust
-`
+</textarea>`
 )})
     },
     {
@@ -195,7 +197,7 @@ tagColors
       name: "normalizedDoc",
       inputs: ["nlp","text"],
       value: (function(nlp,text){return(
-nlp(text).normalize({
+nlp(text.value).normalize({
   whitespace: true, // remove hyphens, newlines, and force one space between words
   punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
   case: true, // keep only first-word, and 'entity' titlecasing
@@ -253,6 +255,11 @@ require('compromise')
       from: "@randomfractals/hello-nlp",
       name: "toShortList",
       remote: "toShortList"
+    },
+    {
+      from: "@jashkenas/inputs",
+      name: "textarea",
+      remote: "textarea"
     },
     {
       name: "styles",
@@ -447,9 +454,80 @@ function toShortList(list) {
   ]
 };
 
+const m3 = {
+  id: "@jashkenas/inputs",
+  variables: [
+    {
+      name: "textarea",
+      inputs: ["input","html"],
+      value: (function(input,html){return(
+function textarea(config = {}) {
+  let {value, title, description, autocomplete, cols = 45, rows = 3, maxlength, placeholder, spellcheck, wrap, submit} = config;
+  if (typeof config == "string") value = config;
+  if (value == null) value = "";
+  const form = input({
+    form: html`<form><textarea style="display: block; font-size: 0.8em;" name=input>${value}</textarea></form>`, 
+    title, description, submit,
+    attributes: {autocomplete, cols, rows, maxlength, placeholder, spellcheck, wrap}
+  });
+  form.output.remove();
+  if (submit) form.submit.style.margin = "0";
+  if (title || description) form.input.style.margin = "3px 0";
+  return form;
+}
+)})
+    },
+    {
+      name: "input",
+      inputs: ["html","d3format"],
+      value: (function(html,d3format){return(
+function input(config) {
+  let {form, type = "text", attributes = {}, action, getValue, title, description, format, submit, options} = config;
+  if (!form) form = html`<form>
+	<input name=input type=${type} />
+  </form>`;
+  const input = form.input;
+  Object.keys(attributes).forEach(key => {
+    const val = attributes[key];
+    if (val != null) input.setAttribute(key, val);
+  });
+  if (submit) form.append(html`<input name=submit type=submit style="margin: 0 0.75em" value="${typeof submit == 'string' ? submit : 'Submit'}" />`);
+  form.append(html`<output name=output style="font: 14px Menlo, Consolas, monospace; margin-left: 0.5em;"></output>`);
+  if (title) form.prepend(html`<div style="font: 700 0.9rem sans-serif;">${title}</div>`);
+  if (description) form.append(html`<div style="font-size: 0.85rem; font-style: italic;">${description}</div>`);
+  if (format) format = d3format.format(format);
+  if (action) {
+    action(form);
+  } else {
+    const verb = submit ? "onsubmit" : type == "button" ? "onclick" : type == "checkbox" || type == "radio" ? "onchange" : "oninput";
+    form[verb] = (e) => {
+      e && e.preventDefault();
+      const value = getValue ? getValue(input) : input.value;
+      if (form.output) form.output.value = format ? format(value) : value;
+      form.value = value;
+      if (verb !== "oninput") form.dispatchEvent(new CustomEvent("input"));
+    };
+    if (verb !== "oninput") input.oninput = e => e && e.stopPropagation() && e.preventDefault();
+    if (verb !== "onsubmit") form.onsubmit = (e) => e && e.preventDefault();
+    form[verb]();
+  }
+  return form;
+}
+)})
+    },
+    {
+      name: "d3format",
+      inputs: ["require"],
+      value: (function(require){return(
+require("d3-format")
+)})
+    }
+  ]
+};
+
 const notebook = {
-  id: "e92eff14ab092b9d@53",
-  modules: [m0,m1,m2]
+  id: "e92eff14ab092b9d@64",
+  modules: [m0,m1,m2,m3]
 };
 
 export default notebook;
