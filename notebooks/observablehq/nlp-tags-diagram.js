@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tags-diagram
 // Title: NLP Tags Diagram
 // Author: Taras Novak (@randomfractals)
-// Version: 64
+// Version: 81
 // Runtime version: 1
 
 const m0 = {
-  id: "e92eff14ab092b9d@64",
+  id: "e92eff14ab092b9d@81",
   variables: [
     {
       inputs: ["md"],
@@ -20,6 +20,15 @@ md `Notebook for displaying NLP tags from
 [Compromise Tags](https://beta.observablehq.com/@spencermountain/compromise-tags)
 
 ...`
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `# TODO: 
+add tags diagram using this code bit: 
+https://beta.observablehq.com/@randomfractals/notebooks#notebooksGraph
+`
 )})
     },
     {
@@ -173,15 +182,6 @@ legends
 )})
     },
     {
-      inputs: ["md"],
-      value: (function(md){return(
-md `# TODO: 
-add tags diagram, using this code bit: 
-https://beta.observablehq.com/@randomfractals/notebooks#notebooksGraph
-`
-)})
-    },
-    {
       inputs: ["tagTypes"],
       value: (function(tagTypes){return(
 tagTypes
@@ -206,6 +206,56 @@ nlp(text.value).normalize({
   verbs: true, // 'swtiched' → 'switch'
 })
 )})
+    },
+    {
+      name: "tags",
+      inputs: ["normalizedDoc"],
+      value: (function(normalizedDoc){return(
+normalizedDoc.out('tags')
+)})
+    },
+    {
+      name: "uniqueTags",
+      inputs: ["tags"],
+      value: (function(tags)
+{
+  const map = new Map();
+  for (const tag of tags) {
+    let group = map.get(tag.normal);
+    if (!group) {
+      group = {name: tag.normal, children: []};
+      map.set(tag.normal, group);
+    }
+    group.children.push(tag);
+    tag.targets = [];
+  }
+  return {name: 'tags', children: [...map.values()]};
+}
+)
+    },
+    {
+      name: "tagTree",
+      inputs: ["tagTypes","uniqueTags","tagColors"],
+      value: (function(tagTypes,uniqueTags,tagColors)
+{
+  const map = new Map();
+  for (const tagType of tagTypes) {
+    map.set(tagType, {name: tagType, children: []});
+  }
+  for (const tag of uniqueTags.children) {
+    const tagTypes = tag.children[0].tags;
+    for (const tagType of tagTypes) {
+      const type = map.get(tagType);
+      if (type) {
+        type.children.push({name: tag.name, count: tag.children.length, color: tagColors[tagType]});
+        type.color = tagColors[tagType];
+        break;
+      }
+    }
+  }
+  return {name: 'term', children: [...map.values()]};
+}
+)
     },
     {
       name: "imports",
@@ -255,11 +305,6 @@ require('compromise')
       from: "@randomfractals/hello-nlp",
       name: "toShortList",
       remote: "toShortList"
-    },
-    {
-      from: "@jashkenas/inputs",
-      name: "textarea",
-      remote: "textarea"
     },
     {
       name: "styles",
@@ -454,80 +499,9 @@ function toShortList(list) {
   ]
 };
 
-const m3 = {
-  id: "@jashkenas/inputs",
-  variables: [
-    {
-      name: "textarea",
-      inputs: ["input","html"],
-      value: (function(input,html){return(
-function textarea(config = {}) {
-  let {value, title, description, autocomplete, cols = 45, rows = 3, maxlength, placeholder, spellcheck, wrap, submit} = config;
-  if (typeof config == "string") value = config;
-  if (value == null) value = "";
-  const form = input({
-    form: html`<form><textarea style="display: block; font-size: 0.8em;" name=input>${value}</textarea></form>`, 
-    title, description, submit,
-    attributes: {autocomplete, cols, rows, maxlength, placeholder, spellcheck, wrap}
-  });
-  form.output.remove();
-  if (submit) form.submit.style.margin = "0";
-  if (title || description) form.input.style.margin = "3px 0";
-  return form;
-}
-)})
-    },
-    {
-      name: "input",
-      inputs: ["html","d3format"],
-      value: (function(html,d3format){return(
-function input(config) {
-  let {form, type = "text", attributes = {}, action, getValue, title, description, format, submit, options} = config;
-  if (!form) form = html`<form>
-	<input name=input type=${type} />
-  </form>`;
-  const input = form.input;
-  Object.keys(attributes).forEach(key => {
-    const val = attributes[key];
-    if (val != null) input.setAttribute(key, val);
-  });
-  if (submit) form.append(html`<input name=submit type=submit style="margin: 0 0.75em" value="${typeof submit == 'string' ? submit : 'Submit'}" />`);
-  form.append(html`<output name=output style="font: 14px Menlo, Consolas, monospace; margin-left: 0.5em;"></output>`);
-  if (title) form.prepend(html`<div style="font: 700 0.9rem sans-serif;">${title}</div>`);
-  if (description) form.append(html`<div style="font-size: 0.85rem; font-style: italic;">${description}</div>`);
-  if (format) format = d3format.format(format);
-  if (action) {
-    action(form);
-  } else {
-    const verb = submit ? "onsubmit" : type == "button" ? "onclick" : type == "checkbox" || type == "radio" ? "onchange" : "oninput";
-    form[verb] = (e) => {
-      e && e.preventDefault();
-      const value = getValue ? getValue(input) : input.value;
-      if (form.output) form.output.value = format ? format(value) : value;
-      form.value = value;
-      if (verb !== "oninput") form.dispatchEvent(new CustomEvent("input"));
-    };
-    if (verb !== "oninput") input.oninput = e => e && e.stopPropagation() && e.preventDefault();
-    if (verb !== "onsubmit") form.onsubmit = (e) => e && e.preventDefault();
-    form[verb]();
-  }
-  return form;
-}
-)})
-    },
-    {
-      name: "d3format",
-      inputs: ["require"],
-      value: (function(require){return(
-require("d3-format")
-)})
-    }
-  ]
-};
-
 const notebook = {
-  id: "e92eff14ab092b9d@64",
-  modules: [m0,m1,m2,m3]
+  id: "e92eff14ab092b9d@81",
+  modules: [m0,m1,m2]
 };
 
 export default notebook;
