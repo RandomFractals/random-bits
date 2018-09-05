@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 640
+// Version: 645
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@640",
+  id: "5c54ccd4ac62f235@645",
   variables: [
     {
       inputs: ["md"],
@@ -69,11 +69,11 @@ html `
 <i>${user.bio || "??"}</i>:
 <a href="${user.home_url}">${user.home_url}</a>
 <br />
-Total Notebooks: ${notebooks.length} |
-Original Notebooks: ${stats.original.length} |
-Forked Notebooks: ${stats.forked.length} |
-Total Likes: ${stats.liked.reduce((total, count) => total + count)} |
-Total Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()}
+Notebooks: ${notebooks.length} |
+Original: ${stats.original.length} |
+Forked: ${stats.forked.length} |
+Likes: ${stats.liked.reduce((total, count) => total + count)} |
+Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()}
 `
 )})
     },
@@ -615,7 +615,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@640",
+  id: "5c54ccd4ac62f235@645",
   modules: [m0,m1,m2,m3]
 };
 
