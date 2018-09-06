@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tag-tree
 // Title: NLP Tag Tree
 // Author: Taras Novak (@randomfractals)
-// Version: 73
+// Version: 76
 // Runtime version: 1
 
 const m0 = {
-  id: "b00ecf587a90e6f6@73",
+  id: "b00ecf587a90e6f6@76",
   variables: [
     {
       inputs: ["md"],
@@ -277,6 +277,13 @@ getUniqueTags(tags)
 )})
     },
     {
+      name: "tagTree",
+      inputs: ["createTagTree","uniqueTags"],
+      value: (function(createTagTree,uniqueTags){return(
+createTagTree(uniqueTags)
+)})
+    },
+    {
       name: "getUniqueTags",
       value: (function(){return(
 function getUniqueTags(tags) {
@@ -295,10 +302,10 @@ function getUniqueTags(tags) {
 )})
     },
     {
-      name: "tagTree",
-      inputs: ["tagTypes","uniqueTags","tagColors"],
-      value: (function(tagTypes,uniqueTags,tagColors)
-{
+      name: "createTagTree",
+      inputs: ["tagTypes","tagColors"],
+      value: (function(tagTypes,tagColors){return(
+function createTagTree(uniqueTags) {
   const map = new Map();
   for (const tagType of tagTypes) {
     map.set(tagType, {name: tagType, children: []});
@@ -316,7 +323,7 @@ function getUniqueTags(tags) {
   }
   return {name: 'term', children: [...map.values()]};
 }
-)
+)})
     },
     {
       name: "nlpStyles",
@@ -571,7 +578,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "b00ecf587a90e6f6@73",
+  id: "b00ecf587a90e6f6@76",
   modules: [m0,m1,m2,m3]
 };
 

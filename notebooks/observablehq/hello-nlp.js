@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 589
+// Version: 591
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@589",
+  id: "c2ff228e09d0a4ae@591",
   variables: [
     {
       inputs: ["md"],
@@ -284,9 +284,10 @@ getUniqueTags(tags)
 )})
     },
     {
-      inputs: ["tagTree"],
-      value: (function(tagTree){return(
-tagTree
+      name: "tagTree",
+      inputs: ["createTagTree","uniqueTags"],
+      value: (function(createTagTree,uniqueTags){return(
+createTagTree(uniqueTags)
 )})
     },
     {
@@ -536,8 +537,8 @@ require('d3-cloud')
     },
     {
       from: "@randomfractals/nlp-tag-tree",
-      name: "tagTree",
-      remote: "tagTree"
+      name: "createTagTree",
+      remote: "createTagTree"
     },
     {
       inputs: ["md"],
@@ -1322,10 +1323,10 @@ function getUniqueTags(tags) {
 )})
     },
     {
-      name: "tagTree",
-      inputs: ["tagTypes","uniqueTags","tagColors"],
-      value: (function(tagTypes,uniqueTags,tagColors)
-{
+      name: "createTagTree",
+      inputs: ["tagTypes","tagColors"],
+      value: (function(tagTypes,tagColors){return(
+function createTagTree(uniqueTags) {
   const map = new Map();
   for (const tagType of tagTypes) {
     map.set(tagType, {name: tagType, children: []});
@@ -1343,7 +1344,7 @@ function getUniqueTags(tags) {
   }
   return {name: 'term', children: [...map.values()]};
 }
-)
+)})
     },
     {
       name: "d3",
@@ -1370,9 +1371,21 @@ createTagTreeSvg(tagTree)
       remote: "serialize"
     },
     {
+      name: "tagTree",
+      inputs: ["createTagTree","uniqueTags"],
+      value: (function(createTagTree,uniqueTags){return(
+createTagTree(uniqueTags)
+)})
+    },
+    {
       from: "@randomfractals/nlp-text-tags",
       name: "tagTypes",
       remote: "tagTypes"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagColors",
+      remote: "tagColors"
     },
     {
       name: "uniqueTags",
@@ -1380,11 +1393,6 @@ createTagTreeSvg(tagTree)
       value: (function(getUniqueTags,tags){return(
 getUniqueTags(tags)
 )})
-    },
-    {
-      from: "@randomfractals/nlp-text-tags",
-      name: "tagColors",
-      remote: "tagColors"
     },
     {
       name: "tags",
@@ -1547,7 +1555,7 @@ Known to the dancers and dealers and doers of dust
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@589",
+  id: "c2ff228e09d0a4ae@591",
   modules: [m0,m1,m2,m3,m4,m5]
 };
 
