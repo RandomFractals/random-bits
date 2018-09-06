@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-taste
 // Title: NLP Taste ;)
 // Author: Taras Novak (@randomfractals)
-// Version: 638
+// Version: 642
 // Runtime version: 1
 
 const m0 = {
-  id: "8bb41180f1927ba6@638",
+  id: "8bb41180f1927ba6@642",
   variables: [
     {
       inputs: ["md"],
@@ -263,6 +263,12 @@ doc.ngrams().data()
       inputs: ["doc"],
       value: (function(doc){return(
 doc.contractions().data()
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Tags`
 )})
     },
     {
@@ -1608,7 +1614,7 @@ Known to the dancers and dealers and doers of dust
 };
 
 const notebook = {
-  id: "8bb41180f1927ba6@638",
+  id: "8bb41180f1927ba6@642",
   modules: [m0,m1,m2,m3,m4,m5]
 };
 

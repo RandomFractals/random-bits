@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 591
+// Version: 595
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@591",
+  id: "c2ff228e09d0a4ae@595",
   variables: [
     {
       inputs: ["md"],
@@ -255,6 +255,12 @@ doc.ngrams().data()
       inputs: ["doc"],
       value: (function(doc){return(
 doc.contractions().data()
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `### Tags`
 )})
     },
     {
@@ -1555,7 +1561,7 @@ Known to the dancers and dealers and doers of dust
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@591",
+  id: "c2ff228e09d0a4ae@595",
   modules: [m0,m1,m2,m3,m4,m5]
 };
 

@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tag-tree
 // Title: NLP Tag Tree
 // Author: Taras Novak (@randomfractals)
-// Version: 76
+// Version: 78
 // Runtime version: 1
 
 const m0 = {
-  id: "b00ecf587a90e6f6@76",
+  id: "b00ecf587a90e6f6@78",
   variables: [
     {
       inputs: ["md"],
@@ -578,7 +578,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "b00ecf587a90e6f6@76",
+  id: "b00ecf587a90e6f6@78",
   modules: [m0,m1,m2,m3]
 };
 
