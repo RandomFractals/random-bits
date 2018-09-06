@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 528
+// Version: 538
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@528",
+  id: "c2ff228e09d0a4ae@538",
   variables: [
     {
       inputs: ["md"],
@@ -61,6 +61,15 @@ md `## Mac Miller - [Self Care (video)](https://www.youtube.com/watch?v=SsKT0s5J
   yield svg;
 }
 )
+    },
+    {
+      inputs: ["html","DOM","rasterize","cloud","serialize"],
+      value: (async function(html,DOM,rasterize,cloud,serialize){return(
+html`
+${DOM.download(await rasterize(cloud), `lyrics-tag-cloud.png`, "Download as PNG")}
+${DOM.download(await serialize(cloud), `lyrics-tag-cloud.svg`, "Download as SVG")}
+`
+)})
     },
     {
       inputs: ["md"],
@@ -253,6 +262,15 @@ md `## Lingo Parts`
   return svg.node();
 }
 )
+    },
+    {
+      inputs: ["html","DOM","rasterize","lingoTree","serialize"],
+      value: (async function(html,DOM,rasterize,lingoTree,serialize){return(
+html`
+${DOM.download(await rasterize(lingoTree), `lyrics-lingo-tree.png`, "Download as PNG")}
+${DOM.download(await serialize(lingoTree), `lyrics-lingo-tree.svg`, "Download as SVG")}
+`
+)})
     },
     {
       name: "lingo",
@@ -474,6 +492,7 @@ doc.contractions().data()
   'Preposition',
   'Determiner',
   'QuestionWord',
+  'Value',  
 ]
 )})
     },
@@ -491,6 +510,7 @@ doc.contractions().data()
   QuestionWord: 'lavender',
   Noun: '#7990d6',
   Expression: '#b3d3c6',
+  Value: 'palegoldenrod',  
 }
 )})
     },
@@ -700,6 +720,16 @@ require('d3-cloud')
 )})
     },
     {
+      from: "@mbostock/saving-svg",
+      name: "rasterize",
+      remote: "rasterize"
+    },
+    {
+      from: "@mbostock/saving-svg",
+      name: "serialize",
+      remote: "serialize"
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Styles`
@@ -827,9 +857,53 @@ function printHtml(doc){
   ]
 };
 
+const m2 = {
+  id: "@mbostock/saving-svg",
+  variables: [
+    {
+      name: "rasterize",
+      inputs: ["DOM","serialize"],
+      value: (function(DOM,serialize){return(
+function rasterize(svg) {
+  let resolve, reject;
+  const promise = new Promise((y, n) => (resolve = y, reject = n));
+  const image = new Image;
+  image.onerror = reject;
+  image.onload = () => {
+    const rect = svg.getBoundingClientRect();
+    const context = DOM.context2d(rect.width, rect.height);
+    context.drawImage(image, 0, 0, rect.width, rect.height);
+    context.canvas.toBlob(resolve);
+  };
+  image.src = URL.createObjectURL(serialize(svg));
+  return promise;
+}
+)})
+    },
+    {
+      name: "serialize",
+      value: (function()
+{
+  const xmlns = "http://www.w3.org/2000/xmlns/";
+  const xlinkns = "http://www.w3.org/1999/xlink";
+  const svgns = "http://www.w3.org/2000/svg";
+  return function serialize(svg) {
+    svg = svg.cloneNode(true);
+    svg.setAttributeNS(xmlns, "xmlns", svgns);
+    svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
+    const serializer = new window.XMLSerializer;
+    const string = serializer.serializeToString(svg);
+    return new Blob([string], {type: "image/svg+xml"});
+  };
+}
+)
+    }
+  ]
+};
+
 const notebook = {
-  id: "c2ff228e09d0a4ae@528",
-  modules: [m0,m1]
+  id: "c2ff228e09d0a4ae@538",
+  modules: [m0,m1,m2]
 };
 
 export default notebook;
