@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-taste
 // Title: NLP Taste ;)
 // Author: Taras Novak (@randomfractals)
-// Version: 589
+// Version: 605
 // Runtime version: 1
 
 const m0 = {
-  id: "8bb41180f1927ba6@589",
+  id: "8bb41180f1927ba6@605",
   variables: [
     {
       inputs: ["md"],
@@ -30,14 +30,14 @@ see [#lingo parts tree](https://beta.observablehq.com/@randomfractals/nlp-taste#
     },
     {
       name: "cloud",
-      inputs: ["d3cloud","width","words","cloudConfig","scale","rotation","baseFont","fontSize","DOM","d3","color"],
-      value: (function*(d3cloud,width,words,cloudConfig,scale,rotation,baseFont,fontSize,DOM,d3,color)
+      inputs: ["d3cloud","width","words","cloudConfig","cloudScale","rotateWord","baseFont","fontSize","DOM","d3","wordColors"],
+      value: (function*(d3cloud,width,words,cloudConfig,cloudScale,rotateWord,baseFont,fontSize,DOM,d3,wordColors)
 {
   var layout = d3cloud()
     .size([width, width * 9/16]) 
     .words(words)
-    .padding(cloudConfig.padding * scale)
-    .rotate(rotation)
+    .padding(cloudConfig.padding * cloudScale)
+    .rotate(rotateWord)
     .font(baseFont)
     .fontSize(fontSize)
     .on('word', addWord);
@@ -50,7 +50,7 @@ see [#lingo parts tree](https://beta.observablehq.com/@randomfractals/nlp-taste#
     const text = group.append('text');
     text.style('font-size', '2px')
       .style('font-family', word.font)
-      .style('fill', color(Math.random()))
+      .style('fill', wordColors(Math.random()))
       .style('cursor', 'pointer')
       .attr('text-anchor', 'middle')
       .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
@@ -294,13 +294,6 @@ md `### Word Cloud`
 )})
     },
     {
-      name: "color",
-      inputs: ["d3"],
-      value: (function(d3){return(
-d3.scaleSequential(d3.interpolateRainbow)
-)})
-    },
-    {
       name: "words",
       inputs: ["toWords","nounsInfo","verbsInfo","adverbsInfo","adjectivesInfo"],
       value: (function(toWords,nounsInfo,verbsInfo,adverbsInfo,adjectivesInfo){return(
@@ -310,108 +303,6 @@ toWords(nounsInfo)
   .concat(toWords(adjectivesInfo))
   .sort((a,b) => b.freq - a.freq)
 )})
-    },
-    {
-      name: "toWords",
-      value: (function(){return(
-function toWords (terms) {
-  return terms.map(term => ({
-    text: term.normal,
-    count: term.count,
-    freq: term.percent/100
-  }));
-}
-)})
-    },
-    {
-      name: "nwords",
-      inputs: ["words"],
-      value: (function(words){return(
-words.length
-)})
-    },
-    {
-      name: "cloudConfig",
-      inputs: ["width"],
-      value: (function(width){return(
-{
-  minFontSize: 10,
-  maxFontSize: 80,
-  height: width/2,
-  padding: 1,
-}
-)})
-    },
-    {
-      name: "initial scale",
-      value: (function(){return(
-1
-)})
-    },
-    {
-      name: "mutable scale",
-      inputs: ["Mutable","initial scale"],
-      value: (M, _) => new M(_)
-    },
-    {
-      name: "scale",
-      inputs: ["mutable scale"],
-      value: _ => _.generator
-    },
-    {
-      name: "rotation",
-      value: (function(){return(
-function () { 
-  return ~~(Math.random() * 4) * 45 - 45; 
-}
-)})
-    },
-    {
-      name: "fontFamilies",
-      value: (function(){return(
-['Corben', 'Pacifico', 'impact']
-)})
-    },
-    {
-      name: "baseFont",
-      inputs: ["fontFamilies"],
-      value: (function(fontFamilies){return(
-function (d) {
-  return fontFamilies[~~(Math.random() * fontFamilies.length)]
-}
-)})
-    },
-    {
-      name: "frequencyToSize",
-      value: (function(){return(
-function (frequency) {
-  return Math.sqrt(frequency);
-}
-)})
-    },
-    {
-      name: "fontSize",
-      inputs: ["frequencyToSize","words","cloudConfig","width","mutable scale"],
-      value: (function(frequencyToSize,words,cloudConfig,width,$0)
-{
-  let totalArea = 0;
-  let minSize = frequencyToSize(words[words.length-1].freq);
-  let maxSize = frequencyToSize(words[0].freq);
-  for (let w of words) {
-    let size = frequencyToSize(w.freq);
-    let fontSize = cloudConfig.minFontSize + 
-      (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((size-minSize) / (maxSize-minSize));
-    totalArea += (w.text.length * 0.6 + cloudConfig.padding * 2) * fontSize * (fontSize + cloudConfig.padding * 2);
-  }
-  let s = Math.sqrt(width * cloudConfig.height/totalArea);
-  $0.value = s;
-  return function (w) {
-    return s * (cloudConfig.minFontSize + 
-        (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((frequencyToSize(w.freq) - minSize) / (maxSize - minSize))
-      );
-  }
-}
-)
     },
     {
       inputs: ["md"],
@@ -754,6 +645,51 @@ require('d3-cloud')
 )})
     },
     {
+      from: "@randomfractals/hello-nlp",
+      name: "wordColors",
+      remote: "wordColors"
+    },
+    {
+      from: "@randomfractals/hello-nlp",
+      name: "toWords",
+      remote: "toWords"
+    },
+    {
+      from: "@randomfractals/hello-nlp",
+      name: "cloudConfig",
+      remote: "cloudConfig"
+    },
+    {
+      from: "@randomfractals/hello-nlp",
+      name: "cloudScale",
+      remote: "cloudScale"
+    },
+    {
+      from: "@randomfractals/hello-nlp",
+      name: "rotateWord",
+      remote: "rotateWord"
+    },
+    {
+      from: "@randomfractals/hello-nlp",
+      name: "fontFamilies",
+      remote: "fontFamilies"
+    },
+    {
+      from: "@randomfractals/hello-nlp",
+      name: "baseFont",
+      remote: "baseFont"
+    },
+    {
+      from: "@randomfractals/hello-nlp",
+      name: "frequencyToSize",
+      remote: "frequencyToSize"
+    },
+    {
+      from: "@randomfractals/hello-nlp",
+      name: "fontSize",
+      remote: "fontSize"
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Styles`
@@ -882,9 +818,288 @@ function printHtml(doc){
   ]
 };
 
+const m2 = {
+  id: "@randomfractals/hello-nlp",
+  variables: [
+    {
+      name: "wordColors",
+      inputs: ["d3"],
+      value: (function(d3){return(
+d3.scaleSequential(d3.interpolateRainbow)
+)})
+    },
+    {
+      name: "toWords",
+      value: (function(){return(
+function toWords (terms) {
+  return terms.map(term => ({
+    text: term.normal,
+    count: term.count,
+    freq: term.percent/100
+  }));
+}
+)})
+    },
+    {
+      name: "cloudConfig",
+      inputs: ["width"],
+      value: (function(width){return(
+{
+  minFontSize: 10,
+  maxFontSize: 80,
+  height: width/2,
+  padding: 1,
+}
+)})
+    },
+    {
+      name: "initial cloudScale",
+      value: (function(){return(
+1
+)})
+    },
+    {
+      name: "mutable cloudScale",
+      inputs: ["Mutable","initial cloudScale"],
+      value: (M, _) => new M(_)
+    },
+    {
+      name: "cloudScale",
+      inputs: ["mutable cloudScale"],
+      value: _ => _.generator
+    },
+    {
+      name: "rotateWord",
+      value: (function(){return(
+function () { 
+  return ~~(Math.random() * 4) * 45 - 45; 
+}
+)})
+    },
+    {
+      name: "fontFamilies",
+      value: (function(){return(
+['Corben', 'Pacifico', 'impact']
+)})
+    },
+    {
+      name: "baseFont",
+      inputs: ["fontFamilies"],
+      value: (function(fontFamilies){return(
+function (d) {
+  return fontFamilies[~~(Math.random() * fontFamilies.length)]
+}
+)})
+    },
+    {
+      name: "frequencyToSize",
+      value: (function(){return(
+function (frequency) {
+  return Math.sqrt(frequency);
+}
+)})
+    },
+    {
+      name: "fontSize",
+      inputs: ["frequencyToSize","words","cloudConfig","width","mutable cloudScale"],
+      value: (function(frequencyToSize,words,cloudConfig,width,$0)
+{
+  let totalArea = 0;
+  let minSize = frequencyToSize(words[words.length-1].freq);
+  let maxSize = frequencyToSize(words[0].freq);
+  for (let w of words) {
+    let size = frequencyToSize(w.freq);
+    let fontSize = cloudConfig.minFontSize + 
+      (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((size-minSize) / (maxSize-minSize));
+    totalArea += (w.text.length * 0.6 + cloudConfig.padding * 2) * fontSize * (fontSize + cloudConfig.padding * 2);
+  }
+  let s = Math.sqrt(width * cloudConfig.height/totalArea);
+  $0.value = s;
+  return function (w) {
+    return s * (cloudConfig.minFontSize + 
+        (cloudConfig.maxFontSize - cloudConfig.minFontSize) * ((frequencyToSize(w.freq) - minSize) / (maxSize - minSize))
+      );
+  }
+}
+)
+    },
+    {
+      name: "d3",
+      inputs: ["require"],
+      value: (function(require){return(
+require('d3')
+)})
+    },
+    {
+      name: "words",
+      inputs: ["toWords","nounsInfo","verbsInfo","adverbsInfo","adjectivesInfo"],
+      value: (function(toWords,nounsInfo,verbsInfo,adverbsInfo,adjectivesInfo){return(
+toWords(nounsInfo)
+  .concat(toWords(verbsInfo))
+  .concat(toWords(adverbsInfo))
+  .concat(toWords(adjectivesInfo))
+  .sort((a,b) => b.freq - a.freq)
+)})
+    },
+    {
+      name: "nounsInfo",
+      inputs: ["normalizedDoc"],
+      value: (function(normalizedDoc){return(
+normalizedDoc.nouns().out('topk')
+)})
+    },
+    {
+      name: "verbsInfo",
+      inputs: ["normalizedDoc"],
+      value: (function(normalizedDoc){return(
+normalizedDoc.verbs().out('topk')
+)})
+    },
+    {
+      name: "adverbsInfo",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.adverbs().out('topk')
+)})
+    },
+    {
+      name: "adjectivesInfo",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.adjectives().out('topk')
+)})
+    },
+    {
+      name: "normalizedDoc",
+      inputs: ["nlp","lyrics"],
+      value: (function(nlp,lyrics){return(
+nlp(lyrics).normalize({
+  whitespace: true, // remove hyphens, newlines, and force one space between words
+  punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
+  case: true, // keep only first-word, and 'entity' titlecasing
+  numbers: true, // 'one'  →  '1'
+  plurals: true, // 'eyes'  →  'eye'  
+  verbs: true, // 'swtiched' → 'switch'
+})
+)})
+    },
+    {
+      name: "doc",
+      inputs: ["nlp","lyrics"],
+      value: (function(nlp,lyrics){return(
+nlp(lyrics)
+)})
+    },
+    {
+      name: "nlp",
+      inputs: ["require"],
+      value: (function(require){return(
+require('compromise')
+)})
+    },
+    {
+      name: "lyrics",
+      value: (function(){return(
+`
+Yeah, yeah, yeah, yeah
+Yeah, yeah, yeah
+
+I switched the time zone, but what do I know?
+Spending nights hitchhikin', where will I go?
+I could fly home with my eyes closed
+But it be kinda hard to see, that's no surprise though
+You can find me, I ain't hiding
+I don't move my feet when I be gliding
+I just slide in and then I roll out
+
+Yeah, well, climbing over that wall
+I remember, yes, I remember, yes, I remember it all
+Swear the height be too tall so like September I fall
+Down below, now I know that the medicine be on call, yeah
+It's feeling like you hot enough to melt, yeah
+Can't trust no one, can't even trust yourself yeah
+And I love you, I don't love nobody else, yeah
+Tell them they can take that bullshit elsewhere
+Self care, I'm treatin' me right
+Hell yea, we're gonna be alright
+(We gon' be alright)
+
+I switched the time zone, but what do I know?
+Spending nights hitchhikin', where will I go?
+I could fly home with my eyes closed
+But it be kinda hard to see, that's no surprise though
+You can find me, I ain't hiding
+I don't move my feet when I be gliding
+I just slide in and then I roll out
+
+Been on the road
+I don't see it
+Out on the road
+I don't see it
+
+Yeah, I been reading them signs
+I been losin' my, I been losin' my, I been losin' my mind, yeah
+Get the fuck out the way, must be this high to play
+It must be nice up above the lights, and what a lovely life that I made
+I know that feelin' like it's in my family tree, yeah
+That Mercedes drove me crazy, I was speedin'
+Somebody save me from myself, yeah
+Tell them they can take that bullshit elsewhere
+Self care, we gonna be good
+Hell yeah, they lettin' me go
+
+I switched the time zone, but what do I know?
+Spending nights hitchhikin', where will I go?
+I could fly home with my eyes closed
+But it be kinda hard to see, that's no surprise though
+You can find me, I ain't hiding
+I don't move my feet when I be gliding
+I just slide in and then I roll out
+
+And I didn't know, I didn't know
+I didn't know, I didn't know, hey
+Well, didn't know what I was missing, now it see a lil' different
+I was thinking too much
+Got stuck in oblivion, yeah, yeah
+Oblivion, yeah, yeah
+Oblivion, yeah, yeah
+I got all the time in the world so for now, I'm just chilling
+Plus I know it's a, it's a beautiful feeling
+In oblivion, yeah, yeah
+Oblivion, yeah, yeah
+Oblivion, yeah, yeah
+Yeah, ok I ride around my city when I come home
+The sun set quickly then get up slow
+My disc connect and upload
+Watch it spin around, we just spinnin' round
+Let's go and travel through the unknown
+We play it cool we know we fucked up, yeah
+You keep on sayin' you in love, so
+Tell me are you really down?
+Are you really down? Yeah
+Let's go back to my crib and play some 45's
+It's safer there, I know there's still a war outside
+We spend our nights all liquored up, our mornings high
+Can you feel it now?
+
+Oblivion, yeah, yeah
+Oblivion, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah
+Oblivion, yeah, yeah
+I got all the time in the world, so for now I'm just chilling
+Plus, I know it's a
+It's a beautiful feeling
+In oblivion, yeah, yeah
+Oblivion yeah, yeah
+Oblivion, yeah, yeah
+`
+)})
+    }
+  ]
+};
+
 const notebook = {
-  id: "8bb41180f1927ba6@589",
-  modules: [m0,m1]
+  id: "8bb41180f1927ba6@605",
+  modules: [m0,m1,m2]
 };
 
 export default notebook;
