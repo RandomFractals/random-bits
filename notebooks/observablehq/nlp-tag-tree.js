@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tag-tree
 // Title: NLP Tag Tree
 // Author: Taras Novak (@randomfractals)
-// Version: 61
+// Version: 73
 // Runtime version: 1
 
 const m0 = {
-  id: "b00ecf587a90e6f6@61",
+  id: "b00ecf587a90e6f6@73",
   variables: [
     {
       inputs: ["md"],
@@ -163,10 +163,27 @@ tagLegends
     },
     {
       name: "lingoTree",
-      inputs: ["tree","lingo","d3","DOM","width"],
-      value: (function(tree,lingo,d3,DOM,width)
-{
-  const root = tree(lingo);
+      inputs: ["createTagTreeSvg","tagTree"],
+      value: (function(createTagTreeSvg,tagTree){return(
+createTagTreeSvg(tagTree)
+)})
+    },
+    {
+      name: "downloadLingoTree",
+      inputs: ["html","DOM","rasterize","lingoTree","serialize"],
+      value: (async function(html,DOM,rasterize,lingoTree,serialize){return(
+html`
+${DOM.download(await rasterize(lingoTree), `lingo-tree.png`, "Download as PNG")}
+${DOM.download(await serialize(lingoTree), `lingo-tree.svg`, "Download as SVG")}
+`
+)})
+    },
+    {
+      name: "createTagTreeSvg",
+      inputs: ["tree","d3","DOM","width"],
+      value: (function(tree,d3,DOM,width){return(
+function createTagTreeSvg(tagTree) {
+  const root = tree(tagTree);
   let x0 = Infinity;
   let x1 = -x0;
   root.each(d => {
@@ -217,31 +234,14 @@ tagLegends
   
   return svg.node();
 }
-)
-    },
-    {
-      name: "downloadLingoTree",
-      inputs: ["html","DOM","rasterize","lingoTree","serialize"],
-      value: (async function(html,DOM,rasterize,lingoTree,serialize){return(
-html`
-${DOM.download(await rasterize(lingoTree), `lingo-tree.png`, "Download as PNG")}
-${DOM.download(await serialize(lingoTree), `lingo-tree.svg`, "Download as SVG")}
-`
-)})
-    },
-    {
-      name: "lingo",
-      inputs: ["tagTree"],
-      value: (function(tagTree){return(
-tagTree
 )})
     },
     {
       name: "tree",
-      inputs: ["d3","lingo","width"],
-      value: (function(d3,lingo,width){return(
+      inputs: ["d3","tagTree","width"],
+      value: (function(d3,tagTree,width){return(
 data => {
-  const root = d3.hierarchy(lingo);
+  const root = d3.hierarchy(tagTree);
   root.dx = 10;
   root.dy = width / (root.height + 1);
   return d3.tree().nodeSize([root.dx, root.dy])(root);
@@ -271,9 +271,15 @@ doc.out('tags')
     },
     {
       name: "uniqueTags",
-      inputs: ["tags"],
-      value: (function(tags)
-{
+      inputs: ["getUniqueTags","tags"],
+      value: (function(getUniqueTags,tags){return(
+getUniqueTags(tags)
+)})
+    },
+    {
+      name: "getUniqueTags",
+      value: (function(){return(
+function getUniqueTags(tags) {
   const map = new Map();
   for (const tag of tags) {
     let group = map.get(tag.normal);
@@ -286,7 +292,7 @@ doc.out('tags')
   }
   return {name: 'tags', children: [...map.values()]};
 }
-)
+)})
     },
     {
       name: "tagTree",
@@ -565,7 +571,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "b00ecf587a90e6f6@61",
+  id: "b00ecf587a90e6f6@73",
   modules: [m0,m1,m2,m3]
 };
 

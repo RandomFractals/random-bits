@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 581
+// Version: 589
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@581",
+  id: "c2ff228e09d0a4ae@589",
   variables: [
     {
       inputs: ["md"],
@@ -167,22 +167,16 @@ md `## Lingo Parts`
 )})
     },
     {
-      inputs: ["lingoTree"],
-      value: (function(lingoTree){return(
-lingoTree
+      name: "lingoTree",
+      inputs: ["createTagTreeSvg","tagTree"],
+      value: (function(createTagTreeSvg,tagTree){return(
+createTagTreeSvg(tagTree)
 )})
     },
     {
       inputs: ["downloadLingoTree"],
       value: (function(downloadLingoTree){return(
 downloadLingoTree
-)})
-    },
-    {
-      name: "lingo",
-      inputs: ["tagTree"],
-      value: (function(tagTree){return(
-tagTree
 )})
     },
     {
@@ -276,15 +270,17 @@ tagColors
 )})
     },
     {
-      inputs: ["tags"],
-      value: (function(tags){return(
-tags
+      name: "tags",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.out('tags')
 )})
     },
     {
-      inputs: ["uniqueTags"],
-      value: (function(uniqueTags){return(
-uniqueTags
+      name: "uniqueTags",
+      inputs: ["getUniqueTags","tags"],
+      value: (function(getUniqueTags,tags){return(
+getUniqueTags(tags)
 )})
     },
     {
@@ -520,8 +516,8 @@ require('d3-cloud')
     },
     {
       from: "@randomfractals/nlp-tag-tree",
-      name: "lingoTree",
-      remote: "lingoTree"
+      name: "createTagTreeSvg",
+      remote: "createTagTreeSvg"
     },
     {
       from: "@randomfractals/nlp-tag-tree",
@@ -535,13 +531,8 @@ require('d3-cloud')
     },
     {
       from: "@randomfractals/nlp-tag-tree",
-      name: "tags",
-      remote: "tags"
-    },
-    {
-      from: "@randomfractals/nlp-tag-tree",
-      name: "uniqueTags",
-      remote: "uniqueTags"
+      name: "getUniqueTags",
+      remote: "getUniqueTags"
     },
     {
       from: "@randomfractals/nlp-tag-tree",
@@ -1233,11 +1224,11 @@ const m5 = {
   id: "@randomfractals/nlp-tag-tree",
   variables: [
     {
-      name: "lingoTree",
-      inputs: ["tree","lingo","d3","DOM","width"],
-      value: (function(tree,lingo,d3,DOM,width)
-{
-  const root = tree(lingo);
+      name: "createTagTreeSvg",
+      inputs: ["tree","d3","DOM","width"],
+      value: (function(tree,d3,DOM,width){return(
+function createTagTreeSvg(tagTree) {
+  const root = tree(tagTree);
   let x0 = Infinity;
   let x1 = -x0;
   root.each(d => {
@@ -1288,7 +1279,7 @@ const m5 = {
   
   return svg.node();
 }
-)
+)})
     },
     {
       name: "downloadLingoTree",
@@ -1302,10 +1293,10 @@ ${DOM.download(await serialize(lingoTree), `lingo-tree.svg`, "Download as SVG")}
     },
     {
       name: "tree",
-      inputs: ["d3","lingo","width"],
-      value: (function(d3,lingo,width){return(
+      inputs: ["d3","tagTree","width"],
+      value: (function(d3,tagTree,width){return(
 data => {
-  const root = d3.hierarchy(lingo);
+  const root = d3.hierarchy(tagTree);
   root.dx = 10;
   root.dy = width / (root.height + 1);
   return d3.tree().nodeSize([root.dx, root.dy])(root);
@@ -1313,17 +1304,9 @@ data => {
 )})
     },
     {
-      name: "tags",
-      inputs: ["doc"],
-      value: (function(doc){return(
-doc.out('tags')
-)})
-    },
-    {
-      name: "uniqueTags",
-      inputs: ["tags"],
-      value: (function(tags)
-{
+      name: "getUniqueTags",
+      value: (function(){return(
+function getUniqueTags(tags) {
   const map = new Map();
   for (const tag of tags) {
     let group = map.get(tag.normal);
@@ -1336,7 +1319,7 @@ doc.out('tags')
   }
   return {name: 'tags', children: [...map.values()]};
 }
-)
+)})
     },
     {
       name: "tagTree",
@@ -1363,13 +1346,6 @@ doc.out('tags')
 )
     },
     {
-      name: "lingo",
-      inputs: ["tagTree"],
-      value: (function(tagTree){return(
-tagTree
-)})
-    },
-    {
       name: "d3",
       inputs: ["require"],
       value: (function(require){return(
@@ -1382,9 +1358,40 @@ require('d3')
       remote: "rasterize"
     },
     {
+      name: "lingoTree",
+      inputs: ["createTagTreeSvg","tagTree"],
+      value: (function(createTagTreeSvg,tagTree){return(
+createTagTreeSvg(tagTree)
+)})
+    },
+    {
       from: "@mbostock/saving-svg",
       name: "serialize",
       remote: "serialize"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagTypes",
+      remote: "tagTypes"
+    },
+    {
+      name: "uniqueTags",
+      inputs: ["getUniqueTags","tags"],
+      value: (function(getUniqueTags,tags){return(
+getUniqueTags(tags)
+)})
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagColors",
+      remote: "tagColors"
+    },
+    {
+      name: "tags",
+      inputs: ["doc"],
+      value: (function(doc){return(
+doc.out('tags')
+)})
     },
     {
       name: "doc",
@@ -1399,16 +1406,6 @@ nlp(text.value).normalize({
   verbs: true, // 'swtiched' → 'switch'
 })
 )})
-    },
-    {
-      from: "@randomfractals/nlp-text-tags",
-      name: "tagTypes",
-      remote: "tagTypes"
-    },
-    {
-      from: "@randomfractals/nlp-text-tags",
-      name: "tagColors",
-      remote: "tagColors"
     },
     {
       name: "nlp",
@@ -1550,7 +1547,7 @@ Known to the dancers and dealers and doers of dust
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@581",
+  id: "c2ff228e09d0a4ae@589",
   modules: [m0,m1,m2,m3,m4,m5]
 };
 
