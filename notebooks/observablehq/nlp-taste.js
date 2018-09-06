@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-taste
 // Title: NLP Taste ;)
 // Author: Taras Novak (@randomfractals)
-// Version: 642
+// Version: 644
 // Runtime version: 1
 
 const m0 = {
-  id: "8bb41180f1927ba6@642",
+  id: "8bb41180f1927ba6@644",
   variables: [
     {
       inputs: ["md"],
@@ -582,11 +582,6 @@ require('d3-cloud')
       from: "@randomfractals/nlp-tag-tree",
       name: "downloadLingoTree",
       remote: "downloadLingoTree"
-    },
-    {
-      from: "@randomfractals/nlp-tag-tree",
-      name: "tree",
-      remote: "tree"
     },
     {
       from: "@randomfractals/nlp-tag-tree",
@@ -1285,10 +1280,10 @@ const m5 = {
   variables: [
     {
       name: "createTagTreeSvg",
-      inputs: ["tree","d3","DOM","width"],
-      value: (function(tree,d3,DOM,width){return(
+      inputs: ["getRoot","d3","DOM","width"],
+      value: (function(getRoot,d3,DOM,width){return(
 function createTagTreeSvg(tagTree) {
-  const root = tree(tagTree);
+  const root = getRoot(tagTree);
   let x0 = Infinity;
   let x1 = -x0;
   root.each(d => {
@@ -1352,18 +1347,6 @@ ${DOM.download(await serialize(lingoTree), `lingo-tree.svg`, "Download as SVG")}
 )})
     },
     {
-      name: "tree",
-      inputs: ["d3","tagTree","width"],
-      value: (function(d3,tagTree,width){return(
-data => {
-  const root = d3.hierarchy(tagTree);
-  root.dx = 10;
-  root.dy = width / (root.height + 1);
-  return d3.tree().nodeSize([root.dx, root.dy])(root);
-}
-)})
-    },
-    {
       name: "getUniqueTags",
       value: (function(){return(
 function getUniqueTags(tags) {
@@ -1406,6 +1389,18 @@ function createTagTree(uniqueTags) {
 )})
     },
     {
+      name: "getRoot",
+      inputs: ["d3","width"],
+      value: (function(d3,width){return(
+function getRoot(tagTree) {
+  const root = d3.hierarchy(tagTree);
+  root.dx = 10;
+  root.dy = width / (root.height + 1);
+  return d3.tree().nodeSize([root.dx, root.dy])(root);
+}
+)})
+    },
+    {
       name: "d3",
       inputs: ["require"],
       value: (function(require){return(
@@ -1430,13 +1425,6 @@ createTagTreeSvg(tagTree)
       remote: "serialize"
     },
     {
-      name: "tagTree",
-      inputs: ["createTagTree","uniqueTags"],
-      value: (function(createTagTree,uniqueTags){return(
-createTagTree(uniqueTags)
-)})
-    },
-    {
       from: "@randomfractals/nlp-text-tags",
       name: "tagTypes",
       remote: "tagTypes"
@@ -1445,6 +1433,13 @@ createTagTree(uniqueTags)
       from: "@randomfractals/nlp-text-tags",
       name: "tagColors",
       remote: "tagColors"
+    },
+    {
+      name: "tagTree",
+      inputs: ["createTagTree","uniqueTags"],
+      value: (function(createTagTree,uniqueTags){return(
+createTagTree(uniqueTags)
+)})
     },
     {
       name: "uniqueTags",
@@ -1614,7 +1609,7 @@ Known to the dancers and dealers and doers of dust
 };
 
 const notebook = {
-  id: "8bb41180f1927ba6@642",
+  id: "8bb41180f1927ba6@644",
   modules: [m0,m1,m2,m3,m4,m5]
 };
 

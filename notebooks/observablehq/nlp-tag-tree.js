@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tag-tree
 // Title: NLP Tag Tree
 // Author: Taras Novak (@randomfractals)
-// Version: 78
+// Version: 81
 // Runtime version: 1
 
 const m0 = {
-  id: "b00ecf587a90e6f6@78",
+  id: "b00ecf587a90e6f6@81",
   variables: [
     {
       inputs: ["md"],
@@ -180,10 +180,10 @@ ${DOM.download(await serialize(lingoTree), `lingo-tree.svg`, "Download as SVG")}
     },
     {
       name: "createTagTreeSvg",
-      inputs: ["tree","d3","DOM","width"],
-      value: (function(tree,d3,DOM,width){return(
+      inputs: ["getRoot","d3","DOM","width"],
+      value: (function(getRoot,d3,DOM,width){return(
 function createTagTreeSvg(tagTree) {
-  const root = tree(tagTree);
+  const root = getRoot(tagTree);
   let x0 = Infinity;
   let x1 = -x0;
   root.each(d => {
@@ -237,10 +237,10 @@ function createTagTreeSvg(tagTree) {
 )})
     },
     {
-      name: "tree",
-      inputs: ["d3","tagTree","width"],
-      value: (function(d3,tagTree,width){return(
-data => {
+      name: "getRoot",
+      inputs: ["d3","width"],
+      value: (function(d3,width){return(
+function getRoot(tagTree) {
   const root = d3.hierarchy(tagTree);
   root.dx = 10;
   root.dy = width / (root.height + 1);
@@ -578,7 +578,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "b00ecf587a90e6f6@78",
+  id: "b00ecf587a90e6f6@81",
   modules: [m0,m1,m2,m3]
 };
 
