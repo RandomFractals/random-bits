@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 573
+// Version: 579
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@573",
+  id: "c2ff228e09d0a4ae@579",
   variables: [
     {
       inputs: ["md"],
@@ -154,13 +154,9 @@ ${printHtml(normalizedDoc)}
 )})
     },
     {
-      name: "legends",
-      inputs: ["html","tagTypes"],
-      value: (function(html,tagTypes){return(
-html `<p class="term">
-  ${tagTypes.map(type => `<span class="nl-${type}" title="${type}">${type}</span> `)
-    .reduce((html, tag) => html + tag)}
-</p>`
+      inputs: ["tagLegends"],
+      value: (function(tagLegends){return(
+tagLegends
 )})
     },
     {
@@ -507,6 +503,21 @@ require('d3-cloud')
       remote: "fontSize"
     },
     {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagLegends",
+      remote: "tagLegends"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagTypes",
+      remote: "tagTypes"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagColors",
+      remote: "tagColors"
+    },
+    {
       from: "@randomfractals/nlp-tag-tree",
       name: "lingoTree",
       remote: "lingoTree"
@@ -535,16 +546,6 @@ require('d3-cloud')
       from: "@randomfractals/nlp-tag-tree",
       name: "tagTree",
       remote: "tagTree"
-    },
-    {
-      from: "@randomfractals/nlp-tag-tree",
-      name: "tagTypes",
-      remote: "tagTypes"
-    },
-    {
-      from: "@randomfractals/nlp-tag-tree",
-      name: "tagColors",
-      remote: "tagColors"
     },
     {
       inputs: ["md"],
@@ -1099,6 +1100,94 @@ function rasterize(svg) {
 };
 
 const m4 = {
+  id: "@randomfractals/nlp-text-tags",
+  variables: [
+    {
+      name: "tagLegends",
+      inputs: ["html","tagTypes"],
+      value: (function(html,tagTypes){return(
+html `<p class="term">
+  ${tagTypes.map(type => `<span class="nl-${type}" title="${type}">${type}</span> `)
+    .reduce((html, tag) => html + tag)}
+</p>`
+)})
+    },
+    {
+      name: "tagTypes",
+      value: (function(){return(
+[
+  'Expression',
+  'Pronoun',
+  'Noun',
+  'Verb',
+  'Adjective',
+  'Adverb',
+  'Conjunction',
+  'Preposition',
+  'Determiner',
+  'QuestionWord',
+  'Value',  
+]
+)})
+    },
+    {
+      name: "tagColors",
+      value: (function(){return(
+{
+  Pronoun: '#81acce',
+  Verb: 'palevioletred',
+  Adverb: '#f39c73',
+  Adjective: '#b3d3c6',
+  Determiner: '#d3c0b3',
+  Preposition: '#9794a8',
+  Conjunction: '#c8c9cf',
+  QuestionWord: 'lavender',
+  Noun: '#7990d6',
+  Expression: '#b3d3c6',
+  Value: 'palegoldenrod',  
+}
+)})
+    },
+    {
+      name: "tagTypes",
+      value: (function(){return(
+[
+  'Expression',
+  'Pronoun',
+  'Noun',
+  'Verb',
+  'Adjective',
+  'Adverb',
+  'Conjunction',
+  'Preposition',
+  'Determiner',
+  'QuestionWord',
+  'Value',  
+]
+)})
+    },
+    {
+      name: "tagColors",
+      value: (function(){return(
+{
+  Pronoun: '#81acce',
+  Verb: 'palevioletred',
+  Adverb: '#f39c73',
+  Adjective: '#b3d3c6',
+  Determiner: '#d3c0b3',
+  Preposition: '#9794a8',
+  Conjunction: '#c8c9cf',
+  QuestionWord: 'lavender',
+  Noun: '#7990d6',
+  Expression: '#b3d3c6',
+  Value: 'palegoldenrod',  
+}
+)})
+    }
+  ]
+};
+
+const m5 = {
   id: "@randomfractals/nlp-tag-tree",
   variables: [
     {
@@ -1232,42 +1321,6 @@ doc.out('tags')
 )
     },
     {
-      name: "tagTypes",
-      value: (function(){return(
-[
-  'Expression',
-  'Pronoun',
-  'Noun',
-  'Verb',
-  'Adjective',
-  'Adverb',
-  'Conjunction',
-  'Preposition',
-  'Determiner',
-  'QuestionWord',
-  'Value',  
-]
-)})
-    },
-    {
-      name: "tagColors",
-      value: (function(){return(
-{
-  Pronoun: '#81acce',
-  Verb: 'palevioletred',
-  Adverb: '#f39c73',
-  Adjective: '#b3d3c6',
-  Determiner: '#d3c0b3',
-  Preposition: '#9794a8',
-  Conjunction: '#c8c9cf',
-  QuestionWord: 'lavender',
-  Noun: '#7990d6',
-  Expression: '#b3d3c6',
-  Value: 'palegoldenrod',  
-}
-)})
-    },
-    {
       name: "lingo",
       inputs: ["tagTree"],
       value: (function(tagTree){return(
@@ -1304,6 +1357,16 @@ nlp(text.value).normalize({
   verbs: true, // 'swtiched' → 'switch'
 })
 )})
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagTypes",
+      remote: "tagTypes"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagColors",
+      remote: "tagColors"
     },
     {
       name: "nlp",
@@ -1445,8 +1508,8 @@ Known to the dancers and dealers and doers of dust
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@573",
-  modules: [m0,m1,m2,m3,m4]
+  id: "c2ff228e09d0a4ae@579",
+  modules: [m0,m1,m2,m3,m4,m5]
 };
 
 export default notebook;

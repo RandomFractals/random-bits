@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tags-diagram
 // Title: NLP Tags Diagram
 // Author: Taras Novak (@randomfractals)
-// Version: 81
+// Version: 89
 // Runtime version: 1
 
 const m0 = {
-  id: "e92eff14ab092b9d@81",
+  id: "e92eff14ab092b9d@89",
   variables: [
     {
       inputs: ["md"],
@@ -176,9 +176,9 @@ ${printHtml(normalizedDoc)}
 )})
     },
     {
-      inputs: ["legends"],
-      value: (function(legends){return(
-legends
+      inputs: ["tagLegends"],
+      value: (function(tagLegends){return(
+tagLegends
 )})
     },
     {
@@ -283,21 +283,6 @@ require('compromise')
     },
     {
       from: "@randomfractals/hello-nlp",
-      name: "tagTypes",
-      remote: "tagTypes"
-    },
-    {
-      from: "@randomfractals/hello-nlp",
-      name: "tagColors",
-      remote: "tagColors"
-    },
-    {
-      from: "@randomfractals/hello-nlp",
-      name: "legends",
-      remote: "legends"
-    },
-    {
-      from: "@randomfractals/hello-nlp",
       name: "toWords",
       remote: "toWords"
     },
@@ -305,6 +290,31 @@ require('compromise')
       from: "@randomfractals/hello-nlp",
       name: "toShortList",
       remote: "toShortList"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagLegends",
+      remote: "tagLegends"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagTypes",
+      remote: "tagTypes"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagColors",
+      remote: "tagColors"
+    },
+    {
+      from: "@mbostock/saving-svg",
+      name: "rasterize",
+      remote: "rasterize"
+    },
+    {
+      from: "@mbostock/saving-svg",
+      name: "serialize",
+      remote: "serialize"
     },
     {
       name: "styles",
@@ -430,6 +440,54 @@ const m2 = {
   id: "@randomfractals/hello-nlp",
   variables: [
     {
+      from: "@randomfractals/nlp-word-cloud",
+      name: "toWords",
+      remote: "toWords"
+    },
+    {
+      name: "toShortList",
+      inputs: ["html"],
+      value: (function(html){return(
+function toShortList(list) {
+  return html `<div class="scrollable-container short-list">${list}</div>`;
+}
+)})
+    }
+  ]
+};
+
+const m3 = {
+  id: "@randomfractals/nlp-word-cloud",
+  variables: [
+    {
+      name: "toWords",
+      value: (function(){return(
+function toWords (terms) {
+  return terms.map(term => ({
+    text: term.normal,
+    count: term.count,
+    freq: term.percent/100
+  }));
+}
+)})
+    }
+  ]
+};
+
+const m4 = {
+  id: "@randomfractals/nlp-text-tags",
+  variables: [
+    {
+      name: "tagLegends",
+      inputs: ["html","tagTypes"],
+      value: (function(html,tagTypes){return(
+html `<p class="term">
+  ${tagTypes.map(type => `<span class="nl-${type}" title="${type}">${type}</span> `)
+    .reduce((html, tag) => html + tag)}
+</p>`
+)})
+    },
+    {
       name: "tagTypes",
       value: (function(){return(
 [
@@ -464,44 +522,57 @@ const m2 = {
   Value: 'palegoldenrod',  
 }
 )})
-    },
+    }
+  ]
+};
+
+const m5 = {
+  id: "@mbostock/saving-svg",
+  variables: [
     {
-      name: "legends",
-      inputs: ["html","tagTypes"],
-      value: (function(html,tagTypes){return(
-html `<p class="term">
-  ${tagTypes.map(type => `<span class="nl-${type}" title="${type}">${type}</span> `)
-    .reduce((html, tag) => html + tag)}
-</p>`
-)})
-    },
-    {
-      name: "toWords",
-      value: (function(){return(
-function toWords (terms) {
-  return terms.map(term => ({
-    text: term.normal,
-    count: term.count,
-    freq: term.percent/100
-  }));
+      name: "rasterize",
+      inputs: ["DOM","serialize"],
+      value: (function(DOM,serialize){return(
+function rasterize(svg) {
+  let resolve, reject;
+  const promise = new Promise((y, n) => (resolve = y, reject = n));
+  const image = new Image;
+  image.onerror = reject;
+  image.onload = () => {
+    const rect = svg.getBoundingClientRect();
+    const context = DOM.context2d(rect.width, rect.height);
+    context.drawImage(image, 0, 0, rect.width, rect.height);
+    context.canvas.toBlob(resolve);
+  };
+  image.src = URL.createObjectURL(serialize(svg));
+  return promise;
 }
 )})
     },
     {
-      name: "toShortList",
-      inputs: ["html"],
-      value: (function(html){return(
-function toShortList(list) {
-  return html `<div class="scrollable-container short-list">${list}</div>`;
+      name: "serialize",
+      value: (function()
+{
+  const xmlns = "http://www.w3.org/2000/xmlns/";
+  const xlinkns = "http://www.w3.org/1999/xlink";
+  const svgns = "http://www.w3.org/2000/svg";
+  return function serialize(svg) {
+    svg = svg.cloneNode(true);
+    svg.setAttributeNS(xmlns, "xmlns", svgns);
+    svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
+    const serializer = new window.XMLSerializer;
+    const string = serializer.serializeToString(svg);
+    return new Blob([string], {type: "image/svg+xml"});
+  };
 }
-)})
+)
     }
   ]
 };
 
 const notebook = {
-  id: "e92eff14ab092b9d@81",
-  modules: [m0,m1,m2]
+  id: "e92eff14ab092b9d@89",
+  modules: [m0,m1,m2,m3,m4,m5]
 };
 
 export default notebook;

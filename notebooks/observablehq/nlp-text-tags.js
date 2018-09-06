@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-text-tags
 // Title: NLP Text Tags
 // Author: Taras Novak (@randomfractals)
-// Version: 25
+// Version: 26
 // Runtime version: 1
 
 const m0 = {
-  id: "633ce5bdf8e4c178@25",
+  id: "633ce5bdf8e4c178@26",
   variables: [
     {
       inputs: ["md"],
@@ -154,7 +154,7 @@ ${printHtml(normalizedDoc)}
 )})
     },
     {
-      name: "legends",
+      name: "tagLegends",
       inputs: ["html","tagTypes"],
       value: (function(html,tagTypes){return(
 html `<p class="term">
@@ -331,7 +331,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "633ce5bdf8e4c178@25",
+  id: "633ce5bdf8e4c178@26",
   modules: [m0,m1]
 };
 

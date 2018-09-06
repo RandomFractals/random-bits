@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tag-tree
 // Title: NLP Tag Tree
 // Author: Taras Novak (@randomfractals)
-// Version: 44
+// Version: 60
 // Runtime version: 1
 
 const m0 = {
-  id: "b00ecf587a90e6f6@44",
+  id: "b00ecf587a90e6f6@60",
   variables: [
     {
       inputs: ["md"],
@@ -144,6 +144,21 @@ Warranty plus for fuckin' shit up
 We are the no-gooders, do-gooders
 Known to the dancers and dealers and doers of dust
 </textarea>`
+)})
+    },
+    {
+      name: "normalizedText",
+      inputs: ["html","printHtml","doc"],
+      value: (function(html,printHtml,doc){return(
+html `<div class="scrollable-container">
+${printHtml(doc)}
+</div>`
+)})
+    },
+    {
+      inputs: ["tagLegends"],
+      value: (function(tagLegends){return(
+tagLegends
 )})
     },
     {
@@ -298,6 +313,175 @@ doc.out('tags')
 )
     },
     {
+      name: "nlpStyles",
+      inputs: ["html"],
+      value: (function(html){return(
+html `
+<style>
+.scrollable-container {
+  max-height: 400px;
+  overflow: auto;
+}
+.short-list {
+  max-height: 200px;
+}
+.big{
+  font-size:1.5rem;
+  color:cornflowerblue;
+}
+.small{
+  color:grey;
+  margin-top:30px;
+}
+.term { color:grey; cursor:pointer;}
+.nl-Person { border-bottom:2px solid #6393b9; }
+.nl-Pronoun { border-bottom:2px solid #81acce; }
+.nl-Plural { border-bottom:2px solid steelblue; }
+.nl-Singular { border-bottom:2px solid lightsteelblue; }
+.nl-Verb { border-bottom:2px solid palevioletred; }
+.nl-Adverb { border-bottom:2px solid #f39c73; }
+.nl-Adjective { border-bottom:2px solid #b3d3c6; }
+.nl-Determiner { border-bottom:2px solid #d3c0b3; }
+.nl-Preposition { border-bottom:2px solid #9794a8; }
+.nl-Conjunction { border-bottom:2px solid #c8c9cf; }
+.nl-Value { border-bottom:2px solid palegoldenrod; }
+.nl-QuestionWord { border-bottom:2px solid lavender; }
+.nl-Acronym { border-bottom:2px solid violet; }
+.nl-Possessive { border-bottom:2px solid #7990d6; }
+.nl-Noun { border-bottom:2px solid #7990d6; }
+.nl-Expression { border-bottom:2px solid #b3d3c6; }
+.nl-Negative { border-bottom:2px solid #b4adad; }
+</style>
+`
+)})
+    },
+    {
+      name: "imports",
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Imports`
+)})
+    },
+    {
+      name: "nlp",
+      inputs: ["require"],
+      value: (function(require){return(
+require('compromise')
+)})
+    },
+    {
+      from: "@spencermountain/nlp-compromise",
+      name: "printList",
+      remote: "printList"
+    },
+    {
+      from: "@spencermountain/nlp-compromise",
+      name: "printHtml",
+      remote: "printHtml"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagLegends",
+      remote: "tagLegends"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagTypes",
+      remote: "tagTypes"
+    },
+    {
+      from: "@randomfractals/nlp-text-tags",
+      name: "tagColors",
+      remote: "tagColors"
+    },
+    {
+      name: "d3",
+      inputs: ["require"],
+      value: (function(require){return(
+require('d3')
+)})
+    },
+    {
+      from: "@mbostock/saving-svg",
+      name: "rasterize",
+      remote: "rasterize"
+    },
+    {
+      from: "@mbostock/saving-svg",
+      name: "serialize",
+      remote: "serialize"
+    }
+  ]
+};
+
+const m1 = {
+  id: "@spencermountain/nlp-compromise",
+  variables: [
+    {
+      name: "printList",
+      value: (function()
+{ 
+  const max = 35
+  return (list) => {
+     let len=list.length
+     list=list.slice(0, max)
+     let el = document.createElement("table");
+     el.innerHTML = list.reduce((str, o)=>{
+       str += '<tr>'
+       str += `<td style="color:#46468B;">${o.normal || o.text || ''}</td>`
+       str += `<td style="color:#7A7A8B;">${o.count || ''}</td>`
+       str += `<td style="color:#B7B7D1;">${o.percent+ '%'}</td>`
+        str += '</tr>'
+       return str
+     },'')
+     if(len>list.length){
+       el.innerHTML+='<b>(of '+len+' results)<b>'
+     }
+     return el
+   } 
+}
+)
+    },
+    {
+      name: "printHtml",
+      inputs: ["DOM"],
+      value: (function(DOM){return(
+function printHtml(doc){
+  let el = DOM.element()
+  let html = doc.out('html')
+  el.innerHTML = html
+  //add a hover 'title'
+  let sentences= el.children[0].children
+  for (var i = 0; i < sentences.length; i++) {
+    sentences[i].style='display:block;'
+    for (var o = 0; o < sentences[i].children.length; o++) {
+      let e=sentences[i].children[o]
+      var tags = e.getAttribute('class').split(' ').map(c=>c.replace(/^nl-/,' '))
+      e.classList.add('term')
+      e.setAttribute('title', tags)
+    }
+  }
+  return el
+}
+)})
+    }
+  ]
+};
+
+const m2 = {
+  id: "@randomfractals/nlp-text-tags",
+  variables: [
+    {
+      name: "tagLegends",
+      inputs: ["html","tagTypes"],
+      value: (function(html,tagTypes){return(
+html `<p class="term">
+  ${tagTypes.map(type => `<span class="nl-${type}" title="${type}">${type}</span> `)
+    .reduce((html, tag) => html + tag)}
+</p>`
+)})
+    },
+    {
       name: "tagTypes",
       value: (function(){return(
 [
@@ -332,42 +516,11 @@ doc.out('tags')
   Value: 'palegoldenrod',  
 }
 )})
-    },
-    {
-      name: "imports",
-      inputs: ["md"],
-      value: (function(md){return(
-md `## Imports`
-)})
-    },
-    {
-      name: "nlp",
-      inputs: ["require"],
-      value: (function(require){return(
-require('compromise')
-)})
-    },
-    {
-      name: "d3",
-      inputs: ["require"],
-      value: (function(require){return(
-require('d3')
-)})
-    },
-    {
-      from: "@mbostock/saving-svg",
-      name: "rasterize",
-      remote: "rasterize"
-    },
-    {
-      from: "@mbostock/saving-svg",
-      name: "serialize",
-      remote: "serialize"
     }
   ]
 };
 
-const m1 = {
+const m3 = {
   id: "@mbostock/saving-svg",
   variables: [
     {
@@ -412,8 +565,8 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "b00ecf587a90e6f6@44",
-  modules: [m0,m1]
+  id: "b00ecf587a90e6f6@60",
+  modules: [m0,m1,m2,m3]
 };
 
 export default notebook;
