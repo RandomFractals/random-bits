@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 538
+// Version: 548
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@538",
+  id: "c2ff228e09d0a4ae@548",
   variables: [
     {
       inputs: ["md"],
@@ -25,14 +25,14 @@ md `## Mac Miller - [Self Care (video)](https://www.youtube.com/watch?v=SsKT0s5J
     },
     {
       name: "cloud",
-      inputs: ["d3cloud","width","words","cloudConfig","scale","rotation","baseFont","fontSize","DOM","d3","color"],
-      value: (function*(d3cloud,width,words,cloudConfig,scale,rotation,baseFont,fontSize,DOM,d3,color)
+      inputs: ["d3cloud","width","words","cloudConfig","cloudScale","rotateWord","baseFont","fontSize","DOM","d3","wordColors"],
+      value: (function*(d3cloud,width,words,cloudConfig,cloudScale,rotateWord,baseFont,fontSize,DOM,d3,wordColors)
 {
   var layout = d3cloud()
     .size([width, width * 9/16]) 
     .words(words)
-    .padding(cloudConfig.padding * scale)
-    .rotate(rotation)
+    .padding(cloudConfig.padding * cloudScale)
+    .rotate(rotateWord)
     .font(baseFont)
     .fontSize(fontSize)
     .on('word', addWord);
@@ -45,7 +45,7 @@ md `## Mac Miller - [Self Care (video)](https://www.youtube.com/watch?v=SsKT0s5J
     const text = group.append('text');
     text.style('font-size', '2px')
       .style('font-family', word.font)
-      .style('fill', color(Math.random()))
+      .style('fill', wordColors(Math.random()))
       .style('cursor', 'pointer')
       .attr('text-anchor', 'middle')
       .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
@@ -304,7 +304,7 @@ md `### Word Cloud`
 )})
     },
     {
-      name: "color",
+      name: "wordColors",
       inputs: ["d3"],
       value: (function(d3){return(
 d3.scaleSequential(d3.interpolateRainbow)
@@ -334,13 +334,6 @@ function toWords (terms) {
 )})
     },
     {
-      name: "nwords",
-      inputs: ["words"],
-      value: (function(words){return(
-words.length
-)})
-    },
-    {
       name: "cloudConfig",
       inputs: ["width"],
       value: (function(width){return(
@@ -353,23 +346,23 @@ words.length
 )})
     },
     {
-      name: "initial scale",
+      name: "initial cloudScale",
       value: (function(){return(
 1
 )})
     },
     {
-      name: "mutable scale",
-      inputs: ["Mutable","initial scale"],
+      name: "mutable cloudScale",
+      inputs: ["Mutable","initial cloudScale"],
       value: (M, _) => new M(_)
     },
     {
-      name: "scale",
-      inputs: ["mutable scale"],
+      name: "cloudScale",
+      inputs: ["mutable cloudScale"],
       value: _ => _.generator
     },
     {
-      name: "rotation",
+      name: "rotateWord",
       value: (function(){return(
 function () { 
   return ~~(Math.random() * 4) * 45 - 45; 
@@ -401,7 +394,7 @@ function (frequency) {
     },
     {
       name: "fontSize",
-      inputs: ["frequencyToSize","words","cloudConfig","width","mutable scale"],
+      inputs: ["frequencyToSize","words","cloudConfig","width","mutable cloudScale"],
       value: (function(frequencyToSize,words,cloudConfig,width,$0)
 {
   let totalArea = 0;
@@ -902,7 +895,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@538",
+  id: "c2ff228e09d0a4ae@548",
   modules: [m0,m1,m2]
 };
 
