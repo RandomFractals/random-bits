@@ -1,18 +1,18 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-word-cloud
 // Title: NLP Word Cloud
 // Author: Taras Novak (@randomfractals)
-// Version: 56
+// Version: 57
 // Runtime version: 1
 
 const m0 = {
-  id: "27475421558b3d85@56",
+  id: "27475421558b3d85@57",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md`# NLP Word Cloud
 
-Notebook for displaying word cloud with http://compromise.cool NLP library
+Displaying text words with http://compromise.cool NLP library
 and [d3 Word Cloud Layout](https://www.jasondavies.com/wordcloud/)`
 )})
     },
@@ -453,7 +453,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "27475421558b3d85@56",
+  id: "27475421558b3d85@57",
   modules: [m0,m1]
 };
 
