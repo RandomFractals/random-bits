@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-taste
 // Title: NLP Taste ;)
 // Author: Taras Novak (@randomfractals)
-// Version: 605
+// Version: 610
 // Runtime version: 1
 
 const m0 = {
-  id: "8bb41180f1927ba6@605",
+  id: "8bb41180f1927ba6@610",
   variables: [
     {
       inputs: ["md"],
@@ -29,43 +29,16 @@ see [#lingo parts tree](https://beta.observablehq.com/@randomfractals/nlp-taste#
 )})
     },
     {
-      name: "cloud",
-      inputs: ["d3cloud","width","words","cloudConfig","cloudScale","rotateWord","baseFont","fontSize","DOM","d3","wordColors"],
-      value: (function*(d3cloud,width,words,cloudConfig,cloudScale,rotateWord,baseFont,fontSize,DOM,d3,wordColors)
-{
-  var layout = d3cloud()
-    .size([width, width * 9/16]) 
-    .words(words)
-    .padding(cloudConfig.padding * cloudScale)
-    .rotate(rotateWord)
-    .font(baseFont)
-    .fontSize(fontSize)
-    .on('word', addWord);
-
-  const svg = DOM.svg(layout.size()[0], layout.size()[1]); // width, height
-  const group = d3.select(svg).append('g')
-    //.attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-  
-  function addWord (word) {
-    const text = group.append('text');
-    text.style('font-size', '2px')
-      .style('font-family', word.font)
-      .style('fill', wordColors(Math.random()))
-      .style('cursor', 'pointer')
-      .attr('text-anchor', 'middle')
-      .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
-      .text(word.text)
-      .transition()
-      .duration(1500)
-      .ease(d3.easeLinear)
-      .style('font-size', `${word.size}px`);
-    text.append('title').text(`${word.text} (${word.count})`); // toolitp
-  }
-  
-  layout.start();
-  yield svg;
-}
-)
+      inputs: ["wordCloud"],
+      value: (function(wordCloud){return(
+wordCloud
+)})
+    },
+    {
+      inputs: ["downloadWordCloud"],
+      value: (function(downloadWordCloud){return(
+downloadWordCloud
+)})
     },
     {
       inputs: ["md"],
@@ -645,47 +618,57 @@ require('d3-cloud')
 )})
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
+      name: "wordCloud",
+      remote: "wordCloud"
+    },
+    {
+      from: "@randomfractals/nlp-word-cloud",
+      name: "downloadWordCloud",
+      remote: "downloadWordCloud"
+    },
+    {
+      from: "@randomfractals/nlp-word-cloud",
       name: "wordColors",
       remote: "wordColors"
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
       name: "toWords",
       remote: "toWords"
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
       name: "cloudConfig",
       remote: "cloudConfig"
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
       name: "cloudScale",
       remote: "cloudScale"
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
       name: "rotateWord",
       remote: "rotateWord"
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
       name: "fontFamilies",
       remote: "fontFamilies"
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
       name: "baseFont",
       remote: "baseFont"
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
       name: "frequencyToSize",
       remote: "frequencyToSize"
     },
     {
-      from: "@randomfractals/hello-nlp",
+      from: "@randomfractals/nlp-word-cloud",
       name: "fontSize",
       remote: "fontSize"
     },
@@ -819,8 +802,57 @@ function printHtml(doc){
 };
 
 const m2 = {
-  id: "@randomfractals/hello-nlp",
+  id: "@randomfractals/nlp-word-cloud",
   variables: [
+    {
+      name: "wordCloud",
+      inputs: ["d3cloud","width","words","cloudConfig","cloudScale","rotateWord","baseFont","fontSize","DOM","d3","wordColors"],
+      value: (function*(d3cloud,width,words,cloudConfig,cloudScale,rotateWord,baseFont,fontSize,DOM,d3,wordColors)
+{
+  var layout = d3cloud()
+    .size([width, width * 9/16]) 
+    .words(words)
+    .padding(cloudConfig.padding * cloudScale)
+    .rotate(rotateWord)
+    .font(baseFont)
+    .fontSize(fontSize)
+    .on('word', addWord);
+
+  const svg = DOM.svg(layout.size()[0], layout.size()[1]); // width, height
+  const group = d3.select(svg).append('g')
+    //.attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+  
+  function addWord (word) {
+    const text = group.append('text');
+    text.style('font-size', '2px')
+      .style('font-family', word.font)
+      .style('fill', wordColors(Math.random()))
+      .style('cursor', 'pointer')
+      .attr('text-anchor', 'middle')
+      .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
+      .text(word.text)
+      .transition()
+      .duration(1500)
+      .ease(d3.easeLinear)
+      .style('font-size', `${word.size}px`);
+    text.append('title').text(`${word.text} (${word.count})`); // toolitp
+  }
+  
+  layout.start();
+  yield svg;
+}
+)
+    },
+    {
+      name: "downloadWordCloud",
+      inputs: ["html","DOM","rasterize","wordCloud","serialize"],
+      value: (async function(html,DOM,rasterize,wordCloud,serialize){return(
+html `
+${DOM.download(await rasterize(wordCloud), `tag-cloud.png`, "Download as PNG")}
+${DOM.download(await serialize(wordCloud), `tag-cloud.svg`, "Download as SVG")}
+`
+)})
+    },
     {
       name: "wordColors",
       inputs: ["d3"],
@@ -924,6 +956,24 @@ function (frequency) {
 )
     },
     {
+      name: "d3cloud",
+      inputs: ["require"],
+      value: (function(require){return(
+require('d3-cloud')
+)})
+    },
+    {
+      name: "words",
+      inputs: ["toWords","doc"],
+      value: (function(toWords,doc){return(
+toWords(doc.nouns().out('topk')) // sort by frequency
+  .concat(toWords(doc.verbs().out('topk')))
+  .concat(toWords(doc.adverbs().out('topk')))
+  .concat(toWords(doc.adjectives().out('topk')))
+  .sort((a,b) => b.freq - a.freq)
+)})
+    },
+    {
       name: "d3",
       inputs: ["require"],
       value: (function(require){return(
@@ -931,49 +981,20 @@ require('d3')
 )})
     },
     {
-      name: "words",
-      inputs: ["toWords","nounsInfo","verbsInfo","adverbsInfo","adjectivesInfo"],
-      value: (function(toWords,nounsInfo,verbsInfo,adverbsInfo,adjectivesInfo){return(
-toWords(nounsInfo)
-  .concat(toWords(verbsInfo))
-  .concat(toWords(adverbsInfo))
-  .concat(toWords(adjectivesInfo))
-  .sort((a,b) => b.freq - a.freq)
-)})
+      from: "@mbostock/saving-svg",
+      name: "rasterize",
+      remote: "rasterize"
     },
     {
-      name: "nounsInfo",
-      inputs: ["normalizedDoc"],
-      value: (function(normalizedDoc){return(
-normalizedDoc.nouns().out('topk')
-)})
+      from: "@mbostock/saving-svg",
+      name: "serialize",
+      remote: "serialize"
     },
     {
-      name: "verbsInfo",
-      inputs: ["normalizedDoc"],
-      value: (function(normalizedDoc){return(
-normalizedDoc.verbs().out('topk')
-)})
-    },
-    {
-      name: "adverbsInfo",
-      inputs: ["doc"],
-      value: (function(doc){return(
-doc.adverbs().out('topk')
-)})
-    },
-    {
-      name: "adjectivesInfo",
-      inputs: ["doc"],
-      value: (function(doc){return(
-doc.adjectives().out('topk')
-)})
-    },
-    {
-      name: "normalizedDoc",
-      inputs: ["nlp","lyrics"],
-      value: (function(nlp,lyrics){return(
-nlp(lyrics).normalize({
+      name: "doc",
+      inputs: ["nlp","text"],
+      value: (function(nlp,text){return(
+nlp(text.value).normalize({
   whitespace: true, // remove hyphens, newlines, and force one space between words
   punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
   case: true, // keep only first-word, and 'entity' titlecasing
@@ -984,13 +1005,6 @@ nlp(lyrics).normalize({
 )})
     },
     {
-      name: "doc",
-      inputs: ["nlp","lyrics"],
-      value: (function(nlp,lyrics){return(
-nlp(lyrics)
-)})
-    },
-    {
       name: "nlp",
       inputs: ["require"],
       value: (function(require){return(
@@ -998,108 +1012,184 @@ require('compromise')
 )})
     },
     {
-      name: "lyrics",
-      value: (function(){return(
-`
-Yeah, yeah, yeah, yeah
-Yeah, yeah, yeah
+      name: "text",
+      inputs: ["html"],
+      value: (function(html){return(
+html `<textarea rows="10" cols="60">
+[Verse 1: Killer Mike]
+Hear what I say, we are the business today
+Fuck shit is finished today (what)
+RT and J—we the new PB & J
+We dropped a classic today (what)
+We did a tablet of acid today
+Lit joints with the matches and ashes away
+SKRRRT! We dash away
+Donner and Dixon, the pistol is blasting away
 
-I switched the time zone, but what do I know?
-Spending nights hitchhikin', where will I go?
-I could fly home with my eyes closed
-But it be kinda hard to see, that's no surprise though
-You can find me, I ain't hiding
-I don't move my feet when I be gliding
-I just slide in and then I roll out
+[Verse 2: El-P]
+Doctors of death
+Curing our patients of breath
+We are the pain you can trust
+Crooked at work
+Cookin' up curses and slurs
+Smokin' my brain into mush
+I became famous for flamin' you fucks
+Maimin' my way through the brush
+There is no training or taming of me and my bruh
+Look like a man, but I'm animal raw
 
-Yeah, well, climbing over that wall
-I remember, yes, I remember, yes, I remember it all
-Swear the height be too tall so like September I fall
-Down below, now I know that the medicine be on call, yeah
-It's feeling like you hot enough to melt, yeah
-Can't trust no one, can't even trust yourself yeah
-And I love you, I don't love nobody else, yeah
-Tell them they can take that bullshit elsewhere
-Self care, I'm treatin' me right
-Hell yea, we're gonna be alright
-(We gon' be alright)
+[Verse 3: Killer Mike]
+We are the murderous pair
+That went to jail and we murdered the murderers there
+Then went to Hell and discovered the devil
+Delivered some hurt and despair
+Used to have powder to push
+Now I smoke pounds of the kush
+Holy, I'm burnin' a bush
+Now I give a fuck about none of this shit
+Jewel runner over and out of this bitch
 
-I switched the time zone, but what do I know?
-Spending nights hitchhikin', where will I go?
-I could fly home with my eyes closed
-But it be kinda hard to see, that's no surprise though
-You can find me, I ain't hiding
-I don't move my feet when I be gliding
-I just slide in and then I roll out
+[Hook]
+Woo!
+Woo!
+Step into the spotlight, woo!
+Woo!
 
-Been on the road
-I don't see it
-Out on the road
-I don't see it
+[Verse 4: El-P]
+Copping of uppers and downers get done
+I'm in a rush to be numb
+Droppin' a thousand ain't much
+Come from the clouds
+On a missile to turn this whole town into dust
+Don't make a sound, baby, hush
+I am the living swipe right, on the mic I'm a slut
+I don't know how to not spit like a lout
+I'll spill a pound of my kids on your couch
 
-Yeah, I been reading them signs
-I been losin' my, I been losin' my, I been losin' my mind, yeah
-Get the fuck out the way, must be this high to play
-It must be nice up above the lights, and what a lovely life that I made
-I know that feelin' like it's in my family tree, yeah
-That Mercedes drove me crazy, I was speedin'
-Somebody save me from myself, yeah
-Tell them they can take that bullshit elsewhere
-Self care, we gonna be good
-Hell yeah, they lettin' me go
+[Verse 5: Killer Mike]
+Half of a mongrel and mythical team
+Villainous treacherous things
+Legend says El is a spawn out of Hell
+The myth is my mama's a murderous queen
+Your life can end like in Godfather 1
+You get the gun as I christen my son
+If I die today and it's Hell I should pay
+Tell the Lord Mikey said, "Fuck, it was fun"
 
-I switched the time zone, but what do I know?
-Spending nights hitchhikin', where will I go?
-I could fly home with my eyes closed
-But it be kinda hard to see, that's no surprise though
-You can find me, I ain't hiding
-I don't move my feet when I be gliding
-I just slide in and then I roll out
+[Verse 6: El-P]
+Every new record's my dick in a box
+We get a doozy, the moola's a lock
+You're getting used to me doing no wrong
+I don't play chicken, you prick, I'm a fox
+You wanna kick it, I'll give you the rocks
+You kiss the wood chipper blade if you bark
+I'm fuckin' magic, in fact I'm a warlock of talk
+I got a unicorn horn for a (stop)
 
-And I didn't know, I didn't know
-I didn't know, I didn't know, hey
-Well, didn't know what I was missing, now it see a lil' different
-I was thinking too much
-Got stuck in oblivion, yeah, yeah
-Oblivion, yeah, yeah
-Oblivion, yeah, yeah
-I got all the time in the world so for now, I'm just chilling
-Plus I know it's a, it's a beautiful feeling
-In oblivion, yeah, yeah
-Oblivion, yeah, yeah
-Oblivion, yeah, yeah
-Yeah, ok I ride around my city when I come home
-The sun set quickly then get up slow
-My disc connect and upload
-Watch it spin around, we just spinnin' round
-Let's go and travel through the unknown
-We play it cool we know we fucked up, yeah
-You keep on sayin' you in love, so
-Tell me are you really down?
-Are you really down? Yeah
-Let's go back to my crib and play some 45's
-It's safer there, I know there's still a war outside
-We spend our nights all liquored up, our mornings high
-Can you feel it now?
+[Hook]
+Woo!
+Woo!
+Step into the spotlight, woo!
+Woo!
 
-Oblivion, yeah, yeah
-Oblivion, yeah, yeah, yeah, yeah, yeah, yeah, yeah, yeah
-Oblivion, yeah, yeah
-I got all the time in the world, so for now I'm just chilling
-Plus, I know it's a
-It's a beautiful feeling
-In oblivion, yeah, yeah
-Oblivion yeah, yeah
-Oblivion, yeah, yeah
-`
+[Interlude]
+And the crowd goes RTJ!
+And the crowd goes RTJ!
+And the crowd goes RTJ!
+And the crowd goes RTJ!
+RTJ!
+RTJ!
+RTJ!
+RTJ!
+
+[Verse 7: Killer Mike]
+Mike Pentangeli won't snitch
+I'll rent a room at the Ritz
+I'll sip a fifth of the whisk
+I'll smoke a dub in the tub
+Then I will split both my wrists
+
+[Verse 8: El-P]
+I'll pull a sword on you simps
+Just with a flick of the wrist
+Get your neck giving up mist
+Me and Mike skip away whistlin' and grin
+Every day's golden when you only win
+
+[Verse 9: Killer Mike & El-P]
+Bullyin' bastards and beatin' on beats
+Sounds like a day at the beach, preach
+I keep it middle school, step on your feet
+Before you can speak, blaow! to the teeth
+
+[Verse 10: El-P]
+We move among the ones you think are meek
+You think I'm lion, you right, see my teeth
+Don't be a bore when I'm roaring vamoose
+Hunting's no fun when your prey doesn't move
+I'll put a gun to a bunny like choose
+Say somethin' funny or bunny go boom
+You got a bevy of shit you could groove
+We'd like to thank you for choosing our crew
+
+[Verse 11: Killer Mike]
+And that's from the crew you can trust
+Warranty plus for fuckin' shit up
+We are the no-gooders, do-gooders
+Known to the dancers and dealers and doers of dust
+</textarea>`
 )})
     }
   ]
 };
 
+const m3 = {
+  id: "@mbostock/saving-svg",
+  variables: [
+    {
+      name: "rasterize",
+      inputs: ["DOM","serialize"],
+      value: (function(DOM,serialize){return(
+function rasterize(svg) {
+  let resolve, reject;
+  const promise = new Promise((y, n) => (resolve = y, reject = n));
+  const image = new Image;
+  image.onerror = reject;
+  image.onload = () => {
+    const rect = svg.getBoundingClientRect();
+    const context = DOM.context2d(rect.width, rect.height);
+    context.drawImage(image, 0, 0, rect.width, rect.height);
+    context.canvas.toBlob(resolve);
+  };
+  image.src = URL.createObjectURL(serialize(svg));
+  return promise;
+}
+)})
+    },
+    {
+      name: "serialize",
+      value: (function()
+{
+  const xmlns = "http://www.w3.org/2000/xmlns/";
+  const xlinkns = "http://www.w3.org/1999/xlink";
+  const svgns = "http://www.w3.org/2000/svg";
+  return function serialize(svg) {
+    svg = svg.cloneNode(true);
+    svg.setAttributeNS(xmlns, "xmlns", svgns);
+    svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
+    const serializer = new window.XMLSerializer;
+    const string = serializer.serializeToString(svg);
+    return new Blob([string], {type: "image/svg+xml"});
+  };
+}
+)
+    }
+  ]
+};
+
 const notebook = {
-  id: "8bb41180f1927ba6@605",
-  modules: [m0,m1,m2]
+  id: "8bb41180f1927ba6@610",
+  modules: [m0,m1,m2,m3]
 };
 
 export default notebook;
