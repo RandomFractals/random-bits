@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-word-cloud
 // Title: NLP Word Cloud
 // Author: Taras Novak (@randomfractals)
-// Version: 69
+// Version: 82
 // Runtime version: 1
 
 const m0 = {
-  id: "27475421558b3d85@69",
+  id: "27475421558b3d85@82",
   variables: [
     {
       inputs: ["md"],
@@ -24,13 +24,10 @@ createWordCloudSvg(words)
 )})
     },
     {
-      name: "downloadWordCloud",
-      inputs: ["html","DOM","rasterize","wordCloud","serialize"],
-      value: (async function(html,DOM,rasterize,wordCloud,serialize){return(
-html `
-${DOM.download(await rasterize(wordCloud), `tag-cloud.png`, "Download as PNG")}
-${DOM.download(await serialize(wordCloud), `tag-cloud.svg`, "Download as SVG")}
-`
+      name: "download",
+      inputs: ["downloadWordCloudSvg","wordCloud"],
+      value: (function(downloadWordCloudSvg,wordCloud){return(
+downloadWordCloudSvg('word-cloud', wordCloud)
 )})
     },
     {
@@ -223,9 +220,9 @@ function createWordCloudSvg(words) {
       .attr('text-anchor', 'middle')
       .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
       .text(word.text)
-      .transition()
-      .duration(1500)
-      .ease(d3.easeLinear)
+      //.transition()
+      //.duration(1500)
+      //.ease(d3.easeLinear)
       .style('font-size', `${word.size}px`);
     text.append('title').text(`${word.text} (${word.count})`); // toolitp
   }
@@ -363,6 +360,15 @@ function (frequency) {
 )
     },
     {
+      name: "downloadWordCloudSvg",
+      inputs: ["html","DOM","serialize"],
+      value: (function(html,DOM,serialize){return(
+function downloadWordCloudSvg(fileName, svg) {
+  return html `${DOM.download(serialize(svg), `${fileName}.svg`, "Save SVG")}`;
+}
+)})
+    },
+    {
       name: "styles",
       inputs: ["html"],
       value: (function(html){return(
@@ -460,7 +466,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "27475421558b3d85@69",
+  id: "27475421558b3d85@82",
   modules: [m0,m1]
 };
 

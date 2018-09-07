@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-taste
 // Title: NLP Taste ;)
 // Author: Taras Novak (@randomfractals)
-// Version: 644
+// Version: 646
 // Runtime version: 1
 
 const m0 = {
-  id: "8bb41180f1927ba6@644",
+  id: "8bb41180f1927ba6@646",
   variables: [
     {
       inputs: ["md"],
@@ -36,9 +36,10 @@ createWordCloudSvg(words)
 )})
     },
     {
-      inputs: ["downloadWordCloud"],
-      value: (function(downloadWordCloud){return(
-downloadWordCloud
+      name: "downloadWordCloud",
+      inputs: ["downloadWordCloudSvg","wordCloud"],
+      value: (function(downloadWordCloudSvg,wordCloud){return(
+downloadWordCloudSvg('word-cloud', wordCloud)
 )})
     },
     {
@@ -510,8 +511,8 @@ require('d3-cloud')
     },
     {
       from: "@randomfractals/nlp-word-cloud",
-      name: "downloadWordCloud",
-      remote: "downloadWordCloud"
+      name: "downloadWordCloudSvg",
+      remote: "downloadWordCloudSvg"
     },
     {
       from: "@randomfractals/nlp-word-cloud",
@@ -752,9 +753,9 @@ function createWordCloudSvg(words) {
       .attr('text-anchor', 'middle')
       .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
       .text(word.text)
-      .transition()
-      .duration(1500)
-      .ease(d3.easeLinear)
+      //.transition()
+      //.duration(1500)
+      //.ease(d3.easeLinear)
       .style('font-size', `${word.size}px`);
     text.append('title').text(`${word.text} (${word.count})`); // toolitp
   }
@@ -765,13 +766,12 @@ function createWordCloudSvg(words) {
 )})
     },
     {
-      name: "downloadWordCloud",
-      inputs: ["html","DOM","rasterize","wordCloud","serialize"],
-      value: (async function(html,DOM,rasterize,wordCloud,serialize){return(
-html `
-${DOM.download(await rasterize(wordCloud), `tag-cloud.png`, "Download as PNG")}
-${DOM.download(await serialize(wordCloud), `tag-cloud.svg`, "Download as SVG")}
-`
+      name: "downloadWordCloudSvg",
+      inputs: ["html","DOM","serialize"],
+      value: (function(html,DOM,serialize){return(
+function downloadWordCloudSvg(fileName, svg) {
+  return html `${DOM.download(serialize(svg), `${fileName}.svg`, "Save SVG")}`;
+}
 )})
     },
     {
@@ -888,18 +888,6 @@ require('d3-cloud')
       inputs: ["require"],
       value: (function(require){return(
 require('d3')
-)})
-    },
-    {
-      from: "@mbostock/saving-svg",
-      name: "rasterize",
-      remote: "rasterize"
-    },
-    {
-      name: "wordCloud",
-      inputs: ["createWordCloudSvg","words"],
-      value: (function(createWordCloudSvg,words){return(
-createWordCloudSvg(words)
 )})
     },
     {
@@ -1108,26 +1096,6 @@ Be a king? Think not, why be a king when you can be a God?
 const m3 = {
   id: "@mbostock/saving-svg",
   variables: [
-    {
-      name: "rasterize",
-      inputs: ["DOM","serialize"],
-      value: (function(DOM,serialize){return(
-function rasterize(svg) {
-  let resolve, reject;
-  const promise = new Promise((y, n) => (resolve = y, reject = n));
-  const image = new Image;
-  image.onerror = reject;
-  image.onload = () => {
-    const rect = svg.getBoundingClientRect();
-    const context = DOM.context2d(rect.width, rect.height);
-    context.drawImage(image, 0, 0, rect.width, rect.height);
-    context.canvas.toBlob(resolve);
-  };
-  image.src = URL.createObjectURL(serialize(svg));
-  return promise;
-}
-)})
-    },
     {
       name: "serialize",
       value: (function()
@@ -1609,7 +1577,7 @@ Known to the dancers and dealers and doers of dust
 };
 
 const notebook = {
-  id: "8bb41180f1927ba6@644",
+  id: "8bb41180f1927ba6@646",
   modules: [m0,m1,m2,m3,m4,m5]
 };
 
