@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-text-tags
 // Title: NLP Text Tags
 // Author: Taras Novak (@randomfractals)
-// Version: 26
+// Version: 27
 // Runtime version: 1
 
 const m0 = {
-  id: "633ce5bdf8e4c178@26",
+  id: "633ce5bdf8e4c178@27",
   variables: [
     {
       inputs: ["md"],
@@ -20,127 +20,61 @@ Tagging text with http://compromise.cool NLP library`
       inputs: ["html"],
       value: (function(html){return(
 html `<textarea rows="10" cols="60">
-[Verse 1: Killer Mike]
-Hear what I say, we are the business today
-Fuck shit is finished today (what)
-RT and J—we the new PB & J
-We dropped a classic today (what)
-We did a tablet of acid today
-Lit joints with the matches and ashes away
-SKRRRT! We dash away
-Donner and Dixon, the pistol is blasting away
+[Intro]
+My love is, working hard yadadamean?
+My love is, working hard yadadamean?
 
-[Verse 2: El-P]
-Doctors of death
-Curing our patients of breath
-We are the pain you can trust
-Crooked at work
-Cookin' up curses and slurs
-Smokin' my brain into mush
-I became famous for flamin' you fucks
-Maimin' my way through the brush
-There is no training or taming of me and my bruh
-Look like a man, but I'm animal raw
-
-[Verse 3: Killer Mike]
-We are the murderous pair
-That went to jail and we murdered the murderers there
-Then went to Hell and discovered the devil
-Delivered some hurt and despair
-Used to have powder to push
-Now I smoke pounds of the kush
-Holy, I'm burnin' a bush
-Now I give a fuck about none of this shit
-Jewel runner over and out of this bitch
+[Verse 1]
+I've been sitting on the charts like a beach chair
+My last album spent 52 weeks there
+Almost finished with the second, you should be scared
+Storms coming you should go inside and prepare
+No shortcuts there ain't no cheats there
+I brought the whole city out like a street fair, yeah
+And fuck it I'm the coldest white rapper in the game
+Since the one with the bleached hair
+Yeah, you love it when I talk shit
+I get around, yeah I'm on my 2Pac shit
+I kinda feel there's no girl I could not get
+I'm not found at the function if it's not lit
+Yeah, it's nothing that no one can tell me
+I made it here dolo, nobody to help me
+From the Bay, the birthplace of the hyphy
+So bitch, come and say to my face you don't like me
 
 [Hook]
-Woo!
-Woo!
-Step into the spotlight, woo!
-Woo!
+My love is, working hard yadadamean?
+My love is, working hard yadadamean?
+My love is, working hard yadadamean?
+My love is, working hard yadadamean?
 
-[Verse 4: El-P]
-Copping of uppers and downers get done
-I'm in a rush to be numb
-Droppin' a thousand ain't much
-Come from the clouds
-On a missile to turn this whole town into dust
-Don't make a sound, baby, hush
-I am the living swipe right, on the mic I'm a slut
-I don't know how to not spit like a lout
-I'll spill a pound of my kids on your couch
-
-[Verse 5: Killer Mike]
-Half of a mongrel and mythical team
-Villainous treacherous things
-Legend says El is a spawn out of Hell
-The myth is my mama's a murderous queen
-Your life can end like in Godfather 1
-You get the gun as I christen my son
-If I die today and it's Hell I should pay
-Tell the Lord Mikey said, "Fuck, it was fun"
-
-[Verse 6: El-P]
-Every new record's my dick in a box
-We get a doozy, the moola's a lock
-You're getting used to me doing no wrong
-I don't play chicken, you prick, I'm a fox
-You wanna kick it, I'll give you the rocks
-You kiss the wood chipper blade if you bark
-I'm fuckin' magic, in fact I'm a warlock of talk
-I got a unicorn horn for a (stop)
+[Verse 2]
+It's like I'm always found where the troubles at
+Drinking brown shit now I'm off cup of that
+Your girl's on me, what's up with that?
+If I like her, all this shit will really take is a double tap
+Having visions of fucking an A-list singer, Kardashian, or a Jenner
+But Ye's got Kim, Tyga swooped up Kylie
+So there's one left watch me go get her
+Yeah, they tell me calm down
+Fuck that I'm too lit can't calm down
+I'm so drunk right now I might fall down
+And I don't give a fuck how boring do y'all sound
+Up and down on a Wednesday
+Then we do the same shit the next day
+The next star out the Bay is Eazy
+Yadadamean? For sho'
+Yadadamean? For sheezy
 
 [Hook]
-Woo!
-Woo!
-Step into the spotlight, woo!
-Woo!
+My love is, working hard yadadamean?
+My love is, working hard yadadamean?
+My love is, working hard yadadamean?
+My love is, working hard yadadamean?
 
-[Interlude]
-And the crowd goes RTJ!
-And the crowd goes RTJ!
-And the crowd goes RTJ!
-And the crowd goes RTJ!
-RTJ!
-RTJ!
-RTJ!
-RTJ!
-
-[Verse 7: Killer Mike]
-Mike Pentangeli won't snitch
-I'll rent a room at the Ritz
-I'll sip a fifth of the whisk
-I'll smoke a dub in the tub
-Then I will split both my wrists
-
-[Verse 8: El-P]
-I'll pull a sword on you simps
-Just with a flick of the wrist
-Get your neck giving up mist
-Me and Mike skip away whistlin' and grin
-Every day's golden when you only win
-
-[Verse 9: Killer Mike & El-P]
-Bullyin' bastards and beatin' on beats
-Sounds like a day at the beach, preach
-I keep it middle school, step on your feet
-Before you can speak, blaow! to the teeth
-
-[Verse 10: El-P]
-We move among the ones you think are meek
-You think I'm lion, you right, see my teeth
-Don't be a bore when I'm roaring vamoose
-Hunting's no fun when your prey doesn't move
-I'll put a gun to a bunny like choose
-Say somethin' funny or bunny go boom
-You got a bevy of shit you could groove
-We'd like to thank you for choosing our crew
-
-[Verse 11: Killer Mike]
-And that's from the crew you can trust
-Warranty plus for fuckin' shit up
-We are the no-gooders, do-gooders
-Known to the dancers and dealers and doers of dust
+[Outro]
+My love is, working hard yadadamean?
+My love is, working hard yadadamean?   
 </textarea>`
 )})
     },
@@ -331,7 +265,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "633ce5bdf8e4c178@26",
+  id: "633ce5bdf8e4c178@27",
   modules: [m0,m1]
 };
 
