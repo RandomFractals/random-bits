@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tags-diagram
 // Title: NLP Tags Diagram
 // Author: Taras Novak (@randomfractals)
-// Version: 89
+// Version: 93
 // Runtime version: 1
 
 const m0 = {
-  id: "e92eff14ab092b9d@89",
+  id: "e92eff14ab092b9d@93",
   variables: [
     {
       inputs: ["md"],
@@ -34,7 +34,7 @@ https://beta.observablehq.com/@randomfractals/notebooks#notebooksGraph
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## [RTJ!](https://www.youtube.com/watch?v=vWaljXUiCaE&index=3&list=RDBEOximWoFd0) :)`
+md `## [RTJ!](https://www.youtube.com/watch?v=PkGwI7nGehA) :)`
 )})
     },
     {
@@ -42,127 +42,92 @@ md `## [RTJ!](https://www.youtube.com/watch?v=vWaljXUiCaE&index=3&list=RDBEOximW
       inputs: ["html"],
       value: (function(html){return(
 html `<textarea rows="10" cols="60">
-[Verse 1: Killer Mike]
-Hear what I say, we are the business today
-Fuck shit is finished today (what)
-RT and J—we the new PB & J
-We dropped a classic today (what)
-We did a tablet of acid today
-Lit joints with the matches and ashes away
-SKRRRT! We dash away
-Donner and Dixon, the pistol is blasting away
+"Close Your Eyes (And Count To Fuck)"
+(feat. Zack De La Rocha)
 
-[Verse 2: El-P]
-Doctors of death
-Curing our patients of breath
-We are the pain you can trust
-Crooked at work
-Cookin' up curses and slurs
-Smokin' my brain into mush
-I became famous for flamin' you fucks
-Maimin' my way through the brush
-There is no training or taming of me and my bruh
-Look like a man, but I'm animal raw
+[Zack De La Rocha:]
+Run them jewels fast, run them, run them jewels fast
+Run them, run them, r-run them, run them, fuck the slow mo
 
-[Verse 3: Killer Mike]
-We are the murderous pair
-That went to jail and we murdered the murderers there
-Then went to Hell and discovered the devil
-Delivered some hurt and despair
-Used to have powder to push
-Now I smoke pounds of the kush
-Holy, I'm burnin' a bush
-Now I give a fuck about none of this shit
-Jewel runner over and out of this bitch
+[Killer Mike (El-P):]
+Fashion slave, you protestin' to get in a fuckin' look book
+Everything I scribble's like The Anarchist Cookbook
+(Look good, posing in a centerfold of Crook Book)
+Black on black on black with a ski mask, that is my crook look
+How you like my stylin', bruh? Ain't nobody stylin', bruh
+'Bout to turn this mothafucka up like Riker's Island, bruh
+Where my thuggers and my cripples and my bloodles and my brothers?
+When you niggas gon' unite and kill the police, mothafuckas?
+Or take over a jail, give those COs hell
+The burnin' of the sulfur, God damn I love the smell
+Like it's a pillow torchin', where the fuck the warden?
+And when you find him, we don't kill him, we just waterboard him
+We killin' 'em for freedom cause they tortured us for boredom
+And even if some good ones die, fuck it, the Lord'll sort 'em
 
-[Hook]
-Woo!
-Woo!
-Step into the spotlight, woo!
-Woo!
+[El-P (Killer Mike):]
+We out of order, your honor, you're out of order
+This whole court is unimportant, you fuckers are walkin' corpses
+I'm a flip wig synonym, livin' within distortion
+I'll bite into a cyanide molar before you whores win
+I'm a New Yorkian, I fuck for the jump
+I wear my Yankee so tilted I actually walk with a hunch
+Look at Mikey, I think he likey, we are sinister sons
+(Aye, we the type to beat the preacher with a grin and a gun)
 
-[Verse 4: El-P]
-Copping of uppers and downers get done
-I'm in a rush to be numb
-Droppin' a thousand ain't much
-Come from the clouds
-On a missile to turn this whole town into dust
-Don't make a sound, baby, hush
-I am the living swipe right, on the mic I'm a slut
-I don't know how to not spit like a lout
-I'll spill a pound of my kids on your couch
+[Hook - Zack De La Rocha:]
+Run them jewels fast, run them, run them jewels fast
+Run them, run them, r-run them, r-run them, run them, r-run them
+Run them jewels fast, run them, run them jewels fast
+Run them, run them, r-run them, r-run them, run them, r-run them
 
-[Verse 5: Killer Mike]
-Half of a mongrel and mythical team
-Villainous treacherous things
-Legend says El is a spawn out of Hell
-The myth is my mama's a murderous queen
-Your life can end like in Godfather 1
-You get the gun as I christen my son
-If I die today and it's Hell I should pay
-Tell the Lord Mikey said, "Fuck, it was fun"
+[El-P (Killer Mike):]
+A wise man once said, ("We all dead, fuck it")
+Just spit it disgusting youngin', and hold your nuts while you're gunnin'
+I listened, tatted a sentence on my dick last summer
+Now I'll never get that phrase off my brain, it's no wonder
+I'm here to buy hearts, I got hundreds, honey
+The cheaper the parts, the better buy for the money
+I'm trained in vagina whisperin', glistenin'
+Waitin' for their christenin', I know the neighbors can't help but listen in
+A dirty boy who come down on a side of dissonance
+I can't even relax without sirens off in the distances
+Not shittin' you, little buddy, this fuckin' island's a prison
+The only silence I have is an act of conjugal visitin'
 
-[Verse 6: El-P]
-Every new record's my dick in a box
-We get a doozy, the moola's a lock
-You're getting used to me doing no wrong
-I don't play chicken, you prick, I'm a fox
-You wanna kick it, I'll give you the rocks
-You kiss the wood chipper blade if you bark
-I'm fuckin' magic, in fact I'm a warlock of talk
-I got a unicorn horn for a (stop)
+[Killer Mike (El-P):]
+My solitary condition's preventin' conjugal visits
+Go mane and missin' my misses, they keepin' me from my children
+Conditions create a villain, the villain is givin' vision
+The vision becomes a vow to seek vengeance on all the vicious
+Liars and politicians, profiteers of the prisons
+The forehead engravers, enslavers of men and women
+Includin' members of clergy that rule on you through religion
+(So strippin' kids to the nude and then tell 'em God'll forgive 'em)
 
 [Hook]
-Woo!
-Woo!
-Step into the spotlight, woo!
-Woo!
 
-[Interlude]
-And the crowd goes RTJ!
-And the crowd goes RTJ!
-And the crowd goes RTJ!
-And the crowd goes RTJ!
-RTJ!
-RTJ!
-RTJ!
-RTJ!
+[Zack De La Rocha:]
+It's De La on the cut, liftin' 6 on your stitchy crew
+I'm miles ahead of you, you can sip my bitches brew
+My battle status is burnin' mansions from Dallas to Malibu
+Check my résumé, your residence is residue
+Call her a skin job and my honey dip'll backflip for you
+You playin', God your eye sockets, she gon' rip in two
+We sick of bleedin' out a trace, spray a victim, you
+Done dyin', Phillip AK Dickin' you
+With clips in the bottom, we dippin' from Gotham
+Yes eclipsed by the shadows, a dark dance to the coffin
+I'm a fellow with melanin, suspect of a felony
+Ripped like Rakim Allah, feds is checkin' my melody
+Yes aggressively tested we'll bump stretchers and penalties
+Dump cases with face and the cop pleas when we seizing a pump
+With reason to dump on you global grand dragons
+Still pilin' fast, plus Afghani toe taggin'
+Now they trackin' me and we bustin' back, see
+The only thing that close quicker than our caskets be the factories
 
-[Verse 7: Killer Mike]
-Mike Pentangeli won't snitch
-I'll rent a room at the Ritz
-I'll sip a fifth of the whisk
-I'll smoke a dub in the tub
-Then I will split both my wrists
-
-[Verse 8: El-P]
-I'll pull a sword on you simps
-Just with a flick of the wrist
-Get your neck giving up mist
-Me and Mike skip away whistlin' and grin
-Every day's golden when you only win
-
-[Verse 9: Killer Mike & El-P]
-Bullyin' bastards and beatin' on beats
-Sounds like a day at the beach, preach
-I keep it middle school, step on your feet
-Before you can speak, blaow! to the teeth
-
-[Verse 10: El-P]
-We move among the ones you think are meek
-You think I'm lion, you right, see my teeth
-Don't be a bore when I'm roaring vamoose
-Hunting's no fun when your prey doesn't move
-I'll put a gun to a bunny like choose
-Say somethin' funny or bunny go boom
-You got a bevy of shit you could groove
-We'd like to thank you for choosing our crew
-
-[Verse 11: Killer Mike]
-And that's from the crew you can trust
-Warranty plus for fuckin' shit up
-We are the no-gooders, do-gooders
-Known to the dancers and dealers and doers of dust
+[Hook]
 </textarea>`
 )})
     },
@@ -571,7 +536,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "e92eff14ab092b9d@89",
+  id: "e92eff14ab092b9d@93",
   modules: [m0,m1,m2,m3,m4,m5]
 };
 
