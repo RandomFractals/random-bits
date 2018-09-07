@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tag-tree
 // Title: NLP Tag Tree
 // Author: Taras Novak (@randomfractals)
-// Version: 81
+// Version: 84
 // Runtime version: 1
 
 const m0 = {
-  id: "b00ecf587a90e6f6@81",
+  id: "b00ecf587a90e6f6@84",
   variables: [
     {
       inputs: ["md"],
@@ -170,12 +170,9 @@ createTagTreeSvg(tagTree)
     },
     {
       name: "downloadLingoTree",
-      inputs: ["html","DOM","rasterize","lingoTree","serialize"],
-      value: (async function(html,DOM,rasterize,lingoTree,serialize){return(
-html`
-${DOM.download(await rasterize(lingoTree), `lingo-tree.png`, "Download as PNG")}
-${DOM.download(await serialize(lingoTree), `lingo-tree.svg`, "Download as SVG")}
-`
+      inputs: ["downloadTagTreeSvg","lingoTree"],
+      value: (function(downloadTagTreeSvg,lingoTree){return(
+downloadTagTreeSvg('lingo-tree', lingoTree)
 )})
     },
     {
@@ -233,6 +230,15 @@ function createTagTreeSvg(tagTree) {
     .attr("stroke", "white");
   
   return svg.node();
+}
+)})
+    },
+    {
+      name: "downloadTagTreeSvg",
+      inputs: ["html","DOM","serialize"],
+      value: (function(html,DOM,serialize){return(
+function downloadTagTreeSvg(fileName, svg) {
+  return html `${DOM.download(serialize(svg), `${fileName}.svg`, "Save SVG")}`;
 }
 )})
     },
@@ -578,7 +584,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "b00ecf587a90e6f6@81",
+  id: "b00ecf587a90e6f6@84",
   modules: [m0,m1,m2,m3]
 };
 
