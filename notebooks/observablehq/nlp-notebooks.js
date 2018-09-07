@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-notebooks
 // Title: NLP Notebooks
 // Author: Taras Novak (@randomfractals)
-// Version: 13
+// Version: 16
 // Runtime version: 1
 
 const m0 = {
-  id: "dc45f3febaf85857@13",
+  id: "dc45f3febaf85857@16",
   variables: [
     {
       inputs: ["md"],
@@ -20,7 +20,7 @@ NLP Notebooks for text analysis with http://compromise.cool NLP library
       name: "nlp",
       inputs: ["html"],
       value: (function(html){return(
-html `<a href="https://beta.observablehq.com/search?query=NLP">
+html `<a href="https://beta.observablehq.com/search?query=NLP" target="_blank">
   <img src="https://raw.githubusercontent.com/RandomFractals/random-bits/master/notebooks/observablehq/nlp-notebooks-2.png" alt="Search NLP" />
 </a>
 `
@@ -28,9 +28,9 @@ html `<a href="https://beta.observablehq.com/search?query=NLP">
     },
     {
       name: "nlpNotebooks",
-      inputs: ["md","getLinksMarkdown","searchByTitle","notebooks"],
-      value: (function(md,getLinksMarkdown,searchByTitle,notebooks){return(
-md `${getLinksMarkdown(searchByTitle(notebooks, 'nlp'))}`
+      inputs: ["md","getLinksHtml","searchByTitle","notebooks"],
+      value: (function(md,getLinksHtml,searchByTitle,notebooks){return(
+md `${getLinksHtml(searchByTitle(notebooks, 'nlp'))}`
 )})
     },
     {
@@ -45,8 +45,8 @@ md `${getLinksMarkdown(searchByTitle(notebooks, 'nlp'))}`
     },
     {
       from: "@randomfractals/notebooks",
-      name: "getLinksMarkdown",
-      remote: "getLinksMarkdown"
+      name: "getLinksHtml",
+      remote: "getLinksHtml"
     }
   ]
 };
@@ -89,11 +89,12 @@ function searchByTitle(notebooks, title) {
 )})
     },
     {
-      name: "getLinksMarkdown",
+      name: "getLinksHtml",
       inputs: ["userName"],
       value: (function(userName){return(
-function getLinksMarkdown(notebooks) {
-  return notebooks.map(notebook => `[${notebook.title}](https://beta.observablehq.com/@${userName}/${notebook.slug})<br /><br />`)
+function getLinksHtml(notebooks) {
+  return notebooks.map(notebook => 
+    `<a href="https://beta.observablehq.com/@${userName}/${notebook.slug}" target="_blank">${notebook.title}<br />`)
     .reduce((html, link) => html + link);
 }
 )})
@@ -133,7 +134,7 @@ new URLSearchParams(html`<a href>`.search).get('userName')
 };
 
 const notebook = {
-  id: "dc45f3febaf85857@13",
+  id: "dc45f3febaf85857@16",
   modules: [m0,m1]
 };
 
