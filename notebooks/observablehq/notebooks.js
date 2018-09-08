@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 655
+// Version: 669
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@655",
+  id: "5c54ccd4ac62f235@669",
   variables: [
     {
       inputs: ["md"],
@@ -55,26 +55,9 @@ md `**[@${userName}](https://beta.observablehq.com/@${userName})** *data from* h
     },
     {
       name: "userBio",
-      inputs: ["html","userName","user","notebooks","stats"],
-      value: (function(html,userName,user,notebooks,stats){return(
-html `
-<style>
-#avatar {float: left;} 
-#avatar img {max-width: 24px; border-radius: 12px; margin-right: 10px;}
-</style>
-<div id="avatar">
-  <a href="https://beta.observablehq.com/@${userName}" 
-    title="@${userName} a.k.a. ${user.name}" target="_blank"><img src="${user.avatar_url}"></img></a>
-</div>
-<i>${user.bio || "??"}</i>:
-<a href="${user.home_url}">${user.home_url}</a>
-<br />
-Notebooks: ${notebooks.length} |
-Original: ${stats.original.length} |
-Forked: ${stats.forked.length} |
-Likes: ${stats.liked.reduce((total, count) => total + count)} |
-Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()}
-`
+      inputs: ["getUserBioHtml","userName","user","stats","notebooks"],
+      value: (function(getUserBioHtml,userName,user,stats,notebooks){return(
+getUserBioHtml(userName, user, stats, notebooks)
 )})
     },
     {
@@ -111,10 +94,40 @@ getStats(notebooks)
 )})
     },
     {
+      name: "getUserBioHtml",
+      inputs: ["html"],
+      value: (function(html){return(
+function getUserBioHtml(userName, user, stats, notebooks) {
+  return html `
+    <div id="avatar">
+      <a href="https://beta.observablehq.com/@${userName}" 
+        title="@${userName} a.k.a. ${user.name}" target="_blank">
+        <img src="${user.avatar_url}"></img>
+      </a>
+    </div>
+    <i>${user.bio || "??"}</i>: <a href="${user.home_url}">${user.home_url}</a>
+    <br />
+    Notebooks: ${notebooks.length} |
+    Original: ${stats.original.length} |
+    Forked: ${stats.forked.length} |
+    Likes: ${stats.liked.reduce((total, count) => total + count)} |
+    Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()}
+  `;
+}
+)})
+    },
+    {
       inputs: ["md","userName"],
       value: (function(md,userName){return(
 md `--- 
 ## [@${userName} Notebooks](https://beta.observablehq.com/@randomfractals)`
+)})
+    },
+    {
+      name: "notebooksStats",
+      inputs: ["getUserBioHtml","userName","user","stats","notebooks"],
+      value: (function(getUserBioHtml,userName,user,stats,notebooks){return(
+getUserBioHtml(userName, user, stats, notebooks)
 )})
     },
     {
@@ -430,6 +443,18 @@ html `
 <link href="https://fonts.googleapis.com/css?family=Pacifico|Corben" rel="stylesheet">
 <p style="font-family:Pacifico;">Pacifico</p>
 <p style="font-family:Corben;">Corben</p>
+`
+)})
+    },
+    {
+      name: "userBioStyles",
+      inputs: ["html"],
+      value: (function(html){return(
+html 
+`<style>
+#avatar {float: left;} 
+#avatar img {max-width: 24px; border-radius: 12px; margin-right: 10px;}
+</style>
 `
 )})
     },
@@ -1028,7 +1053,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@655",
+  id: "5c54ccd4ac62f235@669",
   modules: [m0,m1,m2,m3,m4]
 };
 
