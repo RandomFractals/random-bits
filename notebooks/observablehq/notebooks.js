@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 650
+// Version: 655
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@650",
+  id: "5c54ccd4ac62f235@655",
   variables: [
     {
       inputs: ["md"],
@@ -334,16 +334,18 @@ md `**TODO: add notebooks grid view display with thumbnails for creating custom 
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `see [Chicago Crimes EDA](https://beta.observablehq.com/@randomfractals/chicagocrimes) 
+& [NLP Notebooks](https://beta.observablehq.com/@randomfractals/nlp-notebooks) 
+for notebooks search and links api usage example`
+)})
+    },
+    {
       name: "searchNotebooks",
       inputs: ["searchByTitle","notebooks"],
       value: (function(searchByTitle,notebooks){return(
 searchByTitle(notebooks, 'chicago crimes')
-)})
-    },
-    {
-      inputs: ["md"],
-      value: (function(md){return(
-md `see [Chicago Crimes EDA](https://beta.observablehq.com/@randomfractals/chicagocrimes) for search and links markdown api usage example`
 )})
     },
     {
@@ -642,9 +644,9 @@ function createWordCloudSvg(words) {
       .attr('text-anchor', 'middle')
       .attr('transform', `translate(${[word.x, word.y]})rotate(${word.rotate})`)
       .text(word.text)
-      .transition()
-      .duration(1500)
-      .ease(d3.easeLinear)
+      //.transition()
+      //.duration(1500)
+      //.ease(d3.easeLinear)
       .style('font-size', `${word.size}px`);
     text.append('title').text(`${word.text} (${word.count})`); // toolitp
   }
@@ -652,16 +654,6 @@ function createWordCloudSvg(words) {
   layout.start();
   return svg;
 }
-)})
-    },
-    {
-      name: "downloadWordCloud",
-      inputs: ["html","DOM","rasterize","wordCloud","serialize"],
-      value: (async function(html,DOM,rasterize,wordCloud,serialize){return(
-html `
-${DOM.download(await rasterize(wordCloud), `tag-cloud.png`, "Download as PNG")}
-${DOM.download(await serialize(wordCloud), `tag-cloud.svg`, "Download as SVG")}
-`
 )})
     },
     {
@@ -779,23 +771,6 @@ require('d3-cloud')
       value: (function(require){return(
 require('d3')
 )})
-    },
-    {
-      from: "@mbostock/saving-svg",
-      name: "rasterize",
-      remote: "rasterize"
-    },
-    {
-      name: "wordCloud",
-      inputs: ["createWordCloudSvg","words"],
-      value: (function(createWordCloudSvg,words){return(
-createWordCloudSvg(words)
-)})
-    },
-    {
-      from: "@mbostock/saving-svg",
-      name: "serialize",
-      remote: "serialize"
     },
     {
       name: "words",
@@ -996,6 +971,19 @@ Be a king? Think not, why be a king when you can be a God?
 };
 
 const m3 = {
+  id: "@mbostock/graphviz",
+  variables: [
+    {
+      name: "dot",
+      inputs: ["require"],
+      value: (function(require){return(
+require("@observablehq/graphviz@0.1")
+)})
+    }
+  ]
+};
+
+const m4 = {
   id: "@mbostock/saving-svg",
   variables: [
     {
@@ -1035,63 +1023,12 @@ function rasterize(svg) {
   };
 }
 )
-    },
-    {
-      name: "rasterize",
-      inputs: ["DOM","serialize"],
-      value: (function(DOM,serialize){return(
-function rasterize(svg) {
-  let resolve, reject;
-  const promise = new Promise((y, n) => (resolve = y, reject = n));
-  const image = new Image;
-  image.onerror = reject;
-  image.onload = () => {
-    const rect = svg.getBoundingClientRect();
-    const context = DOM.context2d(rect.width, rect.height);
-    context.drawImage(image, 0, 0, rect.width, rect.height);
-    context.canvas.toBlob(resolve);
-  };
-  image.src = URL.createObjectURL(serialize(svg));
-  return promise;
-}
-)})
-    },
-    {
-      name: "serialize",
-      value: (function()
-{
-  const xmlns = "http://www.w3.org/2000/xmlns/";
-  const xlinkns = "http://www.w3.org/1999/xlink";
-  const svgns = "http://www.w3.org/2000/svg";
-  return function serialize(svg) {
-    svg = svg.cloneNode(true);
-    svg.setAttributeNS(xmlns, "xmlns", svgns);
-    svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
-    const serializer = new window.XMLSerializer;
-    const string = serializer.serializeToString(svg);
-    return new Blob([string], {type: "image/svg+xml"});
-  };
-}
-)
-    }
-  ]
-};
-
-const m4 = {
-  id: "@mbostock/graphviz",
-  variables: [
-    {
-      name: "dot",
-      inputs: ["require"],
-      value: (function(require){return(
-require("@observablehq/graphviz@0.1")
-)})
     }
   ]
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@650",
+  id: "5c54ccd4ac62f235@655",
   modules: [m0,m1,m2,m3,m4]
 };
 
