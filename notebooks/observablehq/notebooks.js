@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 669
+// Version: 719
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@669",
+  id: "5c54ccd4ac62f235@719",
   variables: [
     {
       inputs: ["md"],
@@ -114,6 +114,23 @@ function getUserBioHtml(userName, user, stats, notebooks) {
     Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()}
   `;
 }
+)})
+    },
+    {
+      name: "codesAbout",
+      inputs: ["md","getUserBioHtml","userName","user","stats","notebooks"],
+      value: (function(md,getUserBioHtml,userName,user,stats,notebooks){return(
+md `---
+${getUserBioHtml(userName, user, stats, notebooks)}
+
+## Codes about...`
+)})
+    },
+    {
+      name: "wordCloud",
+      inputs: ["createWordCloudSvg","notebooksWords"],
+      value: (function(createWordCloudSvg,notebooksWords){return(
+createWordCloudSvg(notebooksWords)
 )})
     },
     {
@@ -254,22 +271,57 @@ html `
 )
     },
     {
-      name: "notebookTags",
-      inputs: ["notebooks","nlp"],
-      value: (function(notebooks,nlp)
-{
-  const titles = notebooks.map((titles, notebook) => titles + ' ' + notebook.title);
-  const tagsDoc = nlp(titles).normalize({
-    whitespace: true, // remove hyphens, newlines, and force one space between words
-    punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
-    case: true, // keep only first-word, and 'entity' titlecasing
-    numbers: true, // 'one'  →  '1'
-    plurals: true, // 'eyes'  →  'eye'  
-    verbs: true, // 'swtiched' → 'switch'
-  });
-  return tagsDoc.out('tags');
-}
-)
+      name: "notebookTitles",
+      inputs: ["notebooks"],
+      value: (function(notebooks){return(
+notebooks.map(notebook => notebook.title)
+)})
+    },
+    {
+      name: "notebookTitlesDoc",
+      inputs: ["notebookTitles"],
+      value: (function(notebookTitles){return(
+notebookTitles.reduce((doc, title) => doc + '\n' + title, '')
+)})
+    },
+    {
+      name: "normalizedTitlesDoc",
+      inputs: ["nlp","notebookTitlesDoc"],
+      value: (function(nlp,notebookTitlesDoc){return(
+nlp(notebookTitlesDoc).normalize({
+  whitespace: true, // remove hyphens, newlines, and force one space between words
+  punctuation: true, // remove commas, semicolons - but keep sentence-ending punctuation
+  case: true, // keep only first-word, and 'entity' titlecasing
+  numbers: true, // 'one'  →  '1'
+  plurals: true, // 'eyes'  →  'eye'  
+  verbs: true, // 'swtiched' → 'switch'
+})
+)})
+    },
+    {
+      name: "notebooksTags",
+      inputs: ["normalizedTitlesDoc"],
+      value: (function(normalizedTitlesDoc){return(
+normalizedTitlesDoc.out('tags')
+)})
+    },
+    {
+      name: "doc",
+      inputs: ["normalizedTitlesDoc"],
+      value: (function(normalizedTitlesDoc){return(
+normalizedTitlesDoc
+)})
+    },
+    {
+      name: "notebooksWords",
+      inputs: ["toWords","doc"],
+      value: (function(toWords,doc){return(
+toWords(doc.nouns().out('topk')) // sort by frequency
+  .concat(toWords(doc.verbs().out('topk')))
+  .concat(toWords(doc.adverbs().out('topk')))
+  .concat(toWords(doc.adjectives().out('topk')))
+  .sort((a,b) => b.freq - a.freq)
+)})
     },
     {
       name: "MAX_DOCS",
@@ -524,48 +576,8 @@ require('d3-cloud')
     },
     {
       from: "@randomfractals/nlp-word-cloud",
-      name: "wordColors",
-      remote: "wordColors"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
       name: "toWords",
       remote: "toWords"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "cloudConfig",
-      remote: "cloudConfig"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "cloudScale",
-      remote: "cloudScale"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "rotateWord",
-      remote: "rotateWord"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "fontFamilies",
-      remote: "fontFamilies"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "baseFont",
-      remote: "baseFont"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "frequencyToSize",
-      remote: "frequencyToSize"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "fontSize",
-      remote: "fontSize"
     },
     {
       from: "@mbostock/graphviz",
@@ -682,13 +694,6 @@ function createWordCloudSvg(words) {
 )})
     },
     {
-      name: "wordColors",
-      inputs: ["d3"],
-      value: (function(d3){return(
-d3.scaleSequential(d3.interpolateRainbow)
-)})
-    },
-    {
       name: "toWords",
       value: (function(){return(
 function toWords (terms) {
@@ -698,6 +703,13 @@ function toWords (terms) {
     freq: term.percent/100
   }));
 }
+)})
+    },
+    {
+      name: "d3cloud",
+      inputs: ["require"],
+      value: (function(require){return(
+require('d3-cloud')
 )})
     },
     {
@@ -737,25 +749,11 @@ function () {
 )})
     },
     {
-      name: "fontFamilies",
-      value: (function(){return(
-['Corben', 'Pacifico', 'impact']
-)})
-    },
-    {
       name: "baseFont",
       inputs: ["fontFamilies"],
       value: (function(fontFamilies){return(
 function (d) {
   return fontFamilies[~~(Math.random() * fontFamilies.length)]
-}
-)})
-    },
-    {
-      name: "frequencyToSize",
-      value: (function(){return(
-function (frequency) {
-  return Math.sqrt(frequency);
 }
 )})
     },
@@ -784,17 +782,31 @@ function (frequency) {
 )
     },
     {
-      name: "d3cloud",
-      inputs: ["require"],
-      value: (function(require){return(
-require('d3-cloud')
-)})
-    },
-    {
       name: "d3",
       inputs: ["require"],
       value: (function(require){return(
 require('d3')
+)})
+    },
+    {
+      name: "wordColors",
+      inputs: ["d3"],
+      value: (function(d3){return(
+d3.scaleSequential(d3.interpolateRainbow)
+)})
+    },
+    {
+      name: "fontFamilies",
+      value: (function(){return(
+['Corben', 'Pacifico', 'impact']
+)})
+    },
+    {
+      name: "frequencyToSize",
+      value: (function(){return(
+function (frequency) {
+  return Math.sqrt(frequency);
+}
 )})
     },
     {
@@ -1053,7 +1065,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@669",
+  id: "5c54ccd4ac62f235@719",
   modules: [m0,m1,m2,m3,m4]
 };
 
