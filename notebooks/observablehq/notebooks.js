@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 719
+// Version: 725
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@719",
+  id: "5c54ccd4ac62f235@725",
   variables: [
     {
       inputs: ["md"],
@@ -121,9 +121,10 @@ function getUserBioHtml(userName, user, stats, notebooks) {
       inputs: ["md","getUserBioHtml","userName","user","stats","notebooks"],
       value: (function(md,getUserBioHtml,userName,user,stats,notebooks){return(
 md `---
-${getUserBioHtml(userName, user, stats, notebooks)}
 
-## Codes about...`
+${getUserBioHtml(userName, user, stats, notebooks)}
+#### ${user.name} codes about... 
+`
 )})
     },
     {
@@ -1065,7 +1066,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@719",
+  id: "5c54ccd4ac62f235@725",
   modules: [m0,m1,m2,m3,m4]
 };
 
