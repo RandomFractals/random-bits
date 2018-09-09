@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/hello-nlp
 // Title: Hello, NLP!
 // Author: Taras Novak (@randomfractals)
-// Version: 603
+// Version: 606
 // Runtime version: 1
 
 const m0 = {
-  id: "c2ff228e09d0a4ae@603",
+  id: "c2ff228e09d0a4ae@606",
   variables: [
     {
       inputs: ["md"],
@@ -465,48 +465,8 @@ require('d3-cloud')
     },
     {
       from: "@randomfractals/nlp-word-cloud",
-      name: "wordColors",
-      remote: "wordColors"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
       name: "toWords",
       remote: "toWords"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "cloudConfig",
-      remote: "cloudConfig"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "cloudScale",
-      remote: "cloudScale"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "rotateWord",
-      remote: "rotateWord"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "fontFamilies",
-      remote: "fontFamilies"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "baseFont",
-      remote: "baseFont"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "frequencyToSize",
-      remote: "frequencyToSize"
-    },
-    {
-      from: "@randomfractals/nlp-word-cloud",
-      name: "fontSize",
-      remote: "fontSize"
     },
     {
       from: "@randomfractals/nlp-text-tags",
@@ -723,13 +683,6 @@ function downloadWordCloudSvg(fileName, svg) {
 )})
     },
     {
-      name: "wordColors",
-      inputs: ["d3"],
-      value: (function(d3){return(
-d3.scaleSequential(d3.interpolateRainbow)
-)})
-    },
-    {
       name: "toWords",
       value: (function(){return(
 function toWords (terms) {
@@ -739,6 +692,13 @@ function toWords (terms) {
     freq: term.percent/100
   }));
 }
+)})
+    },
+    {
+      name: "d3cloud",
+      inputs: ["require"],
+      value: (function(require){return(
+require('d3-cloud')
 )})
     },
     {
@@ -778,25 +738,11 @@ function () {
 )})
     },
     {
-      name: "fontFamilies",
-      value: (function(){return(
-['Corben', 'Pacifico', 'impact']
-)})
-    },
-    {
       name: "baseFont",
       inputs: ["fontFamilies"],
       value: (function(fontFamilies){return(
 function (d) {
   return fontFamilies[~~(Math.random() * fontFamilies.length)]
-}
-)})
-    },
-    {
-      name: "frequencyToSize",
-      value: (function(){return(
-function (frequency) {
-  return Math.sqrt(frequency);
 }
 )})
     },
@@ -825,13 +771,6 @@ function (frequency) {
 )
     },
     {
-      name: "d3cloud",
-      inputs: ["require"],
-      value: (function(require){return(
-require('d3-cloud')
-)})
-    },
-    {
       name: "d3",
       inputs: ["require"],
       value: (function(require){return(
@@ -839,9 +778,30 @@ require('d3')
 )})
     },
     {
+      name: "wordColors",
+      inputs: ["d3"],
+      value: (function(d3){return(
+d3.scaleSequential(d3.interpolateRainbow)
+)})
+    },
+    {
       from: "@mbostock/saving-svg",
       name: "serialize",
       remote: "serialize"
+    },
+    {
+      name: "fontFamilies",
+      value: (function(){return(
+['Corben', 'Pacifico', 'impact']
+)})
+    },
+    {
+      name: "frequencyToSize",
+      value: (function(){return(
+function (frequency) {
+  return Math.sqrt(frequency);
+}
+)})
     },
     {
       name: "words",
@@ -1321,7 +1281,7 @@ require('d3')
 };
 
 const notebook = {
-  id: "c2ff228e09d0a4ae@603",
+  id: "c2ff228e09d0a4ae@606",
   modules: [m0,m1,m2,m3,m4,m5]
 };
 
