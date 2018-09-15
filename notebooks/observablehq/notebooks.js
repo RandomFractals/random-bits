@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 725
+// Version: 735
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@725",
+  id: "5c54ccd4ac62f235@735",
   variables: [
     {
       inputs: ["md"],
@@ -87,6 +87,13 @@ getUserInfo(userName)
 )})
     },
     {
+      name: "collections",
+      inputs: ["getUserCollections","userName"],
+      value: (function(getUserCollections,userName){return(
+getUserCollections(userName)
+)})
+    },
+    {
       name: "stats",
       inputs: ["getStats","notebooks"],
       value: (function(getStats,notebooks){return(
@@ -95,8 +102,8 @@ getStats(notebooks)
     },
     {
       name: "getUserBioHtml",
-      inputs: ["html"],
-      value: (function(html){return(
+      inputs: ["html","collections"],
+      value: (function(html,collections){return(
 function getUserBioHtml(userName, user, stats, notebooks) {
   return html `
     <div id="avatar">
@@ -111,7 +118,12 @@ function getUserBioHtml(userName, user, stats, notebooks) {
     Original: ${stats.original.length} |
     Forked: ${stats.forked.length} |
     Likes: ${stats.liked.reduce((total, count) => total + count)} |
-    Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()}
+    Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()} |
+    Collections: 
+      <a href="https://beta.observablehq.com/@${userName}?tab=collections" 
+        title="@${userName} a.k.a. ${user.name} Collections" target="_blank">
+        ${collections.length}      
+      </a>
   `;
 }
 )})
@@ -121,7 +133,6 @@ function getUserBioHtml(userName, user, stats, notebooks) {
       inputs: ["md","getUserBioHtml","userName","user","stats","notebooks"],
       value: (function(md,getUserBioHtml,userName,user,stats,notebooks){return(
 md `---
-
 ${getUserBioHtml(userName, user, stats, notebooks)}
 #### ${user.name} codes about... 
 `
@@ -348,6 +359,15 @@ md `# Notebooks API`
       value: (function(apiUrl){return(
 function getUserInfo(userName) {
   return fetch(`${apiUrl}/user/@${userName}`).then(d => d.json())
+}
+)})
+    },
+    {
+      name: "getUserCollections",
+      inputs: ["apiUrl"],
+      value: (function(apiUrl){return(
+function getUserCollections(userName) {
+  return fetch(`${apiUrl}/collections/@${userName}`).then(d => d.json())  
 }
 )})
     },
@@ -1066,7 +1086,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@725",
+  id: "5c54ccd4ac62f235@735",
   modules: [m0,m1,m2,m3,m4]
 };
 
