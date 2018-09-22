@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 736
+// Version: 743
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@736",
+  id: "5c54ccd4ac62f235@743",
   variables: [
     {
       inputs: ["md"],
@@ -29,9 +29,13 @@ new URLSearchParams(html`<a href>`.search).get('userName')
     },
     {
       name: "viewof userName",
-      inputs: ["md","userNameParam"],
-      value: (function(md,userNameParam){return(
-md `<input value="${userNameParam ? userNameParam : 'randomfractals'}">`
+      inputs: ["text","userNameParam"],
+      value: (function(text,userNameParam){return(
+text({
+  placeholder: 'type observable username and click Get Stats', 
+  description: 'enter observable username to get stats',
+  value: `${userNameParam ? userNameParam : 'randomfractals'}`,
+  submit: 'Get Stats'})
 )})
     },
     {
@@ -112,9 +116,13 @@ function getUserBioHtml(userName, user, stats, notebooks) {
         <img src="${user.avatar_url}"></img>
       </a>
     </div>
-    <i>${user.bio || "??"}</i>: <a href="${user.home_url}">${user.home_url}</a>
+    <i>${user.bio || "??"}</i>: <a href="${user.home_url}" target="_blank">${user.home_url}</a>
     <br />
-    Notebooks: ${notebooks.length} |
+    Notebooks: 
+      <a href="https://beta.observablehq.com/@${userName}" 
+        title="@${userName} a.k.a. ${user.name} Notebooks" target="_blank">
+        ${notebooks.length}
+      </a> |
     Original: ${stats.original.length} |
     Forked: ${stats.forked.length} |
     Likes: ${stats.liked.reduce((total, count) => total + count)} |
@@ -579,6 +587,11 @@ require('compromise')
       remote: "printHtml"
     },
     {
+      from: "@jashkenas/inputs",
+      name: "text",
+      remote: "text"
+    },
+    {
       name: "d3cloud",
       inputs: ["require"],
       value: (function(require){return(
@@ -673,6 +686,74 @@ function printHtml(doc){
 };
 
 const m2 = {
+  id: "@jashkenas/inputs",
+  variables: [
+    {
+      name: "text",
+      inputs: ["input"],
+      value: (function(input){return(
+function text(config = {}) {
+  const {value, title, description, autocomplete, maxlength, minlength, pattern, placeholder, size, submit} = config;
+  if (typeof config == "string") value = config;
+  const form = input({
+    type: "text", title, description, submit,
+    attributes: {value, autocomplete, maxlength, minlength, pattern, placeholder, size}
+  });
+  form.output.remove();
+  form.input.style.fontSize = "1em";
+  return form;
+}
+)})
+    },
+    {
+      name: "input",
+      inputs: ["html","d3format"],
+      value: (function(html,d3format){return(
+function input(config) {
+  let {form, type = "text", attributes = {}, action, getValue, title, description, format, submit, options} = config;
+  if (!form) form = html`<form>
+	<input name=input type=${type} />
+  </form>`;
+  const input = form.input;
+  Object.keys(attributes).forEach(key => {
+    const val = attributes[key];
+    if (val != null) input.setAttribute(key, val);
+  });
+  if (submit) form.append(html`<input name=submit type=submit style="margin: 0 0.75em" value="${typeof submit == 'string' ? submit : 'Submit'}" />`);
+  form.append(html`<output name=output style="font: 14px Menlo, Consolas, monospace; margin-left: 0.5em;"></output>`);
+  if (title) form.prepend(html`<div style="font: 700 0.9rem sans-serif;">${title}</div>`);
+  if (description) form.append(html`<div style="font-size: 0.85rem; font-style: italic;">${description}</div>`);
+  if (format) format = d3format.format(format);
+  if (action) {
+    action(form);
+  } else {
+    const verb = submit ? "onsubmit" : type == "button" ? "onclick" : type == "checkbox" || type == "radio" ? "onchange" : "oninput";
+    form[verb] = (e) => {
+      e && e.preventDefault();
+      const value = getValue ? getValue(input) : input.value;
+      if (form.output) form.output.value = format ? format(value) : value;
+      form.value = value;
+      if (verb !== "oninput") form.dispatchEvent(new CustomEvent("input"));
+    };
+    if (verb !== "oninput") input.oninput = e => e && e.stopPropagation() && e.preventDefault();
+    if (verb !== "onsubmit") form.onsubmit = (e) => e && e.preventDefault();
+    form[verb]();
+  }
+  return form;
+}
+)})
+    },
+    {
+      name: "d3format",
+      inputs: ["require"],
+      value: (function(require){return(
+require("d3-format")
+)})
+    }
+  ]
+};
+
+const m3 = {
   id: "@randomfractals/nlp-word-cloud",
   variables: [
     {
@@ -1028,7 +1109,7 @@ Be a king? Think not, why be a king when you can be a God?
   ]
 };
 
-const m3 = {
+const m4 = {
   id: "@mbostock/graphviz",
   variables: [
     {
@@ -1041,7 +1122,7 @@ require("@observablehq/graphviz@0.1")
   ]
 };
 
-const m4 = {
+const m5 = {
   id: "@mbostock/saving-svg",
   variables: [
     {
@@ -1086,8 +1167,8 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@736",
-  modules: [m0,m1,m2,m3,m4]
+  id: "5c54ccd4ac62f235@743",
+  modules: [m0,m1,m2,m3,m4,m5]
 };
 
 export default notebook;
