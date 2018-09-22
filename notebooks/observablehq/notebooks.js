@@ -1,17 +1,17 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 771
+// Version: 781
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@771",
+  id: "5c54ccd4ac62f235@781",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md `# Notebooks Visualizer
-This notebook uses actual https://api.observablehq.com to display user stats and notebooks info`
+This notebook uses actual https://api.observablehq.com to display user stats, collections, and notebooks info`
 )})
     },
     {
@@ -232,6 +232,23 @@ ${DOM.download(await serialize(notebooksGraph), `${userName}-notebooks.svg`, "Do
 )})
     },
     {
+      name: "collectionList",
+      inputs: ["md"],
+      value: (function(md){return(
+md `--- 
+## Collections`
+)})
+    },
+    {
+      inputs: ["html","getCollectionsHtml","collections"],
+      value: (function(html,getCollectionsHtml,collections){return(
+html `
+<div class="scrollable-container">
+  ${getCollectionsHtml(collections)}
+</div>`
+)})
+    },
+    {
       name: "notebookList",
       inputs: ["md"],
       value: (function(md){return(
@@ -430,6 +447,17 @@ function getLinksMarkdown(notebooks) {
 function getLinksHtml(notebooks) {
   return notebooks.map(notebook => 
     `<a href="https://beta.observablehq.com/@${userName}/${notebook.slug}" target="_blank">${notebook.title}<br />`)
+    .reduce((html, link) => html + link);
+}
+)})
+    },
+    {
+      name: "getCollectionsHtml",
+      inputs: ["userName"],
+      value: (function(userName){return(
+function getCollectionsHtml(collections) {
+  return collections.map(collection => 
+    `<a href="https://beta.observablehq.com/collection/@${userName}/${collection.slug}" target="_blank">${collection.title}<br />`)
     .reduce((html, link) => html + link);
 }
 )})
@@ -1116,7 +1144,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@771",
+  id: "5c54ccd4ac62f235@781",
   modules: [m0,m1,m2,m3,m4]
 };
 
