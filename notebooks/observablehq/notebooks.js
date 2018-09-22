@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 743
+// Version: 771
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@743",
+  id: "5c54ccd4ac62f235@771",
   variables: [
     {
       inputs: ["md"],
@@ -142,7 +142,7 @@ function getUserBioHtml(userName, user, stats, notebooks) {
       value: (function(md,getUserBioHtml,userName,user,stats,notebooks){return(
 md `---
 ${getUserBioHtml(userName, user, stats, notebooks)}
-#### ${user.name} codes about... 
+#### ...... ${user.name} codes about:
 `
 )})
     },
@@ -233,6 +233,13 @@ ${DOM.download(await serialize(notebooksGraph), `${userName}-notebooks.svg`, "Do
     },
     {
       name: "notebookList",
+      inputs: ["md"],
+      value: (function(md){return(
+md `--- 
+## Notebooks List`
+)})
+    },
+    {
       inputs: ["html","getLinksHtml","notebooks"],
       value: (function(html,getLinksHtml,notebooks){return(
 html `
@@ -289,6 +296,12 @@ html `
   return [...map.values()];
 }
 )
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Notebook Titles & Tags`
+)})
     },
     {
       name: "notebookTitles",
@@ -507,7 +520,7 @@ html`${
       name: "cellCodeColor",
       value: (function(){return(
 function cellCodeColor(i) {
-  return "#" + ("4b9ec1-b5a636-495e1d-e55934-fa7921".split("-")[i%5])
+  return '#' + ('4b9ec1-b5a636-495e1d-e55934-fa7921'.split('-')[i % 5]);
 }
 )})
     },
@@ -577,16 +590,6 @@ require('compromise')
 )})
     },
     {
-      from: "@spencermountain/nlp-compromise",
-      name: "printList",
-      remote: "printList"
-    },
-    {
-      from: "@spencermountain/nlp-compromise",
-      name: "printHtml",
-      remote: "printHtml"
-    },
-    {
       from: "@jashkenas/inputs",
       name: "text",
       remote: "text"
@@ -632,60 +635,6 @@ require('d3-cloud')
 };
 
 const m1 = {
-  id: "@spencermountain/nlp-compromise",
-  variables: [
-    {
-      name: "printList",
-      value: (function()
-{ 
-  const max = 35
-  return (list) => {
-     let len=list.length
-     list=list.slice(0, max)
-     let el = document.createElement("table");
-     el.innerHTML = list.reduce((str, o)=>{
-       str += '<tr>'
-       str += `<td style="color:#46468B;">${o.normal || o.text || ''}</td>`
-       str += `<td style="color:#7A7A8B;">${o.count || ''}</td>`
-       str += `<td style="color:#B7B7D1;">${o.percent+ '%'}</td>`
-        str += '</tr>'
-       return str
-     },'')
-     if(len>list.length){
-       el.innerHTML+='<b>(of '+len+' results)<b>'
-     }
-     return el
-   } 
-}
-)
-    },
-    {
-      name: "printHtml",
-      inputs: ["DOM"],
-      value: (function(DOM){return(
-function printHtml(doc){
-  let el = DOM.element()
-  let html = doc.out('html')
-  el.innerHTML = html
-  //add a hover 'title'
-  let sentences= el.children[0].children
-  for (var i = 0; i < sentences.length; i++) {
-    sentences[i].style='display:block;'
-    for (var o = 0; o < sentences[i].children.length; o++) {
-      let e=sentences[i].children[o]
-      var tags = e.getAttribute('class').split(' ').map(c=>c.replace(/^nl-/,' '))
-      e.classList.add('term')
-      e.setAttribute('title', tags)
-    }
-  }
-  return el
-}
-)})
-    }
-  ]
-};
-
-const m2 = {
   id: "@jashkenas/inputs",
   variables: [
     {
@@ -753,7 +702,7 @@ require("d3-format")
   ]
 };
 
-const m3 = {
+const m2 = {
   id: "@randomfractals/nlp-word-cloud",
   variables: [
     {
@@ -1109,7 +1058,7 @@ Be a king? Think not, why be a king when you can be a God?
   ]
 };
 
-const m4 = {
+const m3 = {
   id: "@mbostock/graphviz",
   variables: [
     {
@@ -1122,7 +1071,7 @@ require("@observablehq/graphviz@0.1")
   ]
 };
 
-const m5 = {
+const m4 = {
   id: "@mbostock/saving-svg",
   variables: [
     {
@@ -1167,8 +1116,8 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@743",
-  modules: [m0,m1,m2,m3,m4,m5]
+  id: "5c54ccd4ac62f235@771",
+  modules: [m0,m1,m2,m3,m4]
 };
 
 export default notebook;
