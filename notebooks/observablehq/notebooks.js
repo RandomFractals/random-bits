@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 781
+// Version: 782
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@781",
+  id: "5c54ccd4ac62f235@782",
   variables: [
     {
       inputs: ["md"],
@@ -457,7 +457,7 @@ function getLinksHtml(notebooks) {
       value: (function(userName){return(
 function getCollectionsHtml(collections) {
   return collections.map(collection => 
-    `<a href="https://beta.observablehq.com/collection/@${userName}/${collection.slug}" target="_blank">${collection.title}<br />`)
+    `<a href="https://beta.observablehq.com/collection/@${userName}/${collection.slug}" target="_blank">${collection.title}</a> (${collection.document_count} notebooks)<br />`)
     .reduce((html, link) => html + link);
 }
 )})
@@ -1144,7 +1144,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@781",
+  id: "5c54ccd4ac62f235@782",
   modules: [m0,m1,m2,m3,m4]
 };
 
