@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/venn-diagram-generator
 // Title: Venn Diagram Generator
 // Author: Taras Novak (@randomfractals)
-// Version: 89
+// Version: 102
 // Runtime version: 1
 
 const m0 = {
-  id: "822cdc79cde80ab2@89",
+  id: "822cdc79cde80ab2@102",
   variables: [
     {
       inputs: ["md"],
@@ -59,8 +59,8 @@ textarea({
 select({
   title: 'shape',
   description: 'segment shape',
-  options: ['circle', 'ellipses'],
-  value: 'circle'
+  options: ['circles', 'ellipses', 'random'],
+  value: 'circles'
 })
 )})
     },
@@ -77,8 +77,8 @@ svg `
   <svg xmlns="http://www.w3.org/2000/svg" ref="figure"
      width="${width}" height="${width}" viewBox="0 0 ${width} ${width}">
     <text id="svg-diagram-title" 
-      x="50%" y="20" 
-      fontSize="40"
+      x="50%" y="24" 
+      font-size="32"
       font-weight="bold"
       fill="#000"
       text-anchor="middle">${title} Venn Diagram</text>
@@ -96,13 +96,13 @@ svg `
       <!-- main diagram topic label -->
       <text id="intersection-label" 
         x="50%" y="50%" 
-        font-size="18" 
+        font-size="24" 
         font-weight="bold"
         text-anchor="middle">${title}</text>
       ${segments.map(topic =>
         `<text x="${topic.textX}" y="${topic.textY}"
           transform="${topic.transform}"
-          font-size="16"
+          font-size="20"
           text-anchor="middle">
           ${topic.title}
         </text>`              
@@ -185,6 +185,8 @@ function createSegments(topics, width, radius = 100, layout = 'circles') {
         topic.ry = radius - 40;
         // rotate label/ellipse angle
         topic.rotateAngle = (360 / topics.length * i - 90) % 180;
+        topic.textX = topic.cx;
+        topic.textY = topic.cy;        
         break;
       case 'random':
         // random placement, sizing, and rotation just for fun
@@ -427,7 +429,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "822cdc79cde80ab2@89",
+  id: "822cdc79cde80ab2@102",
   modules: [m0,m1,m2]
 };
 
