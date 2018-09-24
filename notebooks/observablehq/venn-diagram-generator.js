@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/venn-diagram-generator
 // Title: Venn Diagram Generator
 // Author: Taras Novak (@randomfractals)
-// Version: 82
+// Version: 89
 // Runtime version: 1
 
 const m0 = {
-  id: "822cdc79cde80ab2@82",
+  id: "822cdc79cde80ab2@89",
   variables: [
     {
       inputs: ["md"],
@@ -50,6 +50,23 @@ textarea({
     {
       name: "topicsText",
       inputs: ["Generators","viewof topicsText"],
+      value: (G, _) => G.input(_)
+    },
+    {
+      name: "viewof shape",
+      inputs: ["select"],
+      value: (function(select){return(
+select({
+  title: 'shape',
+  description: 'segment shape',
+  options: ['circle', 'ellipses'],
+  value: 'circle'
+})
+)})
+    },
+    {
+      name: "shape",
+      inputs: ["Generators","viewof shape"],
       value: (G, _) => G.input(_)
     },
     {
@@ -128,9 +145,9 @@ topicsText.split('\n')
     },
     {
       name: "segments",
-      inputs: ["createSegments","topics","width"],
-      value: (function(createSegments,topics,width){return(
-createSegments(topics, width, width/4 - 40)
+      inputs: ["createSegments","topics","width","shape"],
+      value: (function(createSegments,topics,width,shape){return(
+createSegments(topics, width, width/4 - 40, shape)
 )})
     },
     {
@@ -210,6 +227,11 @@ function getRandomColor(colorPalette) {
       remote: "textarea"
     },
     {
+      from: "@jashkenas/inputs",
+      name: "select",
+      remote: "select"
+    },
+    {
       from: "@mbostock/saving-svg",
       name: "rasterize",
       remote: "rasterize"
@@ -258,6 +280,56 @@ function textarea(config = {}) {
   form.output.remove();
   if (submit) form.submit.style.margin = "0";
   if (title || description) form.input.style.margin = "3px 0";
+  return form;
+}
+)})
+    },
+    {
+      name: "select",
+      inputs: ["input","html"],
+      value: (function(input,html){return(
+function select(config = {}) {
+  let {
+    value: formValue,
+    title,
+    description,
+    submit,
+    multiple,
+    size,
+    options
+  } = config;
+  if (Array.isArray(config)) options = config;
+  options = options.map(
+    o => (typeof o === "object" ? o : { value: o, label: o })
+  );
+  const form = input({
+    type: "select",
+    title,
+    description,
+    submit,
+    getValue: input => {
+      const selected = Array.prototype.filter
+        .call(input.options, i => i.selected)
+        .map(i => i.value);
+      return multiple ? selected : selected[0];
+    },
+    form: html`
+      <form>
+        <select name="input" ${
+          multiple ? `multiple size="${size || options.length}"` : ""
+        }>
+          ${options.map(
+            ({ value, label }) => `
+            <option value="${value}" ${
+              value === formValue ? "selected" : ""
+            }>${label}</option>
+          `
+          )}
+        </select>
+      </form>
+    `
+  });
+  form.output.remove();
   return form;
 }
 )})
@@ -355,7 +427,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "822cdc79cde80ab2@82",
+  id: "822cdc79cde80ab2@89",
   modules: [m0,m1,m2]
 };
 
