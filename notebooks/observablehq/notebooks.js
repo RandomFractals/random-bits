@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 782
+// Version: 809
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@782",
+  id: "5c54ccd4ac62f235@809",
   variables: [
     {
       inputs: ["md"],
@@ -511,6 +511,27 @@ getNotebookInfo(notebooks[0])
 )})
     },
     {
+      name: "notebookNodes",
+      inputs: ["notebook"],
+      value: (function(notebook){return(
+notebook.nodes
+)})
+    },
+    {
+      name: "notebookFunctions",
+      inputs: ["getNotebookFunctions","notebook"],
+      value: (function(getNotebookFunctions,notebook){return(
+getNotebookFunctions(notebook)
+)})
+    },
+    {
+      name: "namedNotebookCells",
+      inputs: ["getNamedNotebookCells","notebook"],
+      value: (function(getNamedNotebookCells,notebook){return(
+getNamedNotebookCells(notebook)
+)})
+    },
+    {
       name: "getNotebookInfo",
       inputs: ["apiUrl","userName"],
       value: (function(apiUrl,userName){return(
@@ -529,15 +550,32 @@ function getNotebookById(notebookId) {
 )})
     },
     {
+      name: "getNotebookFunctions",
+      value: (function(){return(
+function getNotebookFunctions(notebook) {
+  return notebook.nodes.filter(node => node.value.startsWith('function'));
+}
+)})
+    },
+    {
+      name: "getNamedNotebookCells",
+      value: (function(){return(
+function getNamedNotebookCells(notebook) {
+  return notebook.nodes.filter(node => !node.value.startsWith('function') && node.value.indexOf('=') > 0)  
+}
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Displaying Notebook Cells Code`
 )})
     },
     {
+      name: "notebookCells",
       inputs: ["html","notebook","cellCodeColor"],
       value: (function(html,notebook,cellCodeColor){return(
-html`${
+html `${
   notebook.nodes
     .map((d,i) => `<pre style="font-size:14px; color:${cellCodeColor(i)}">${d.value.replace(/</g, "&lt;")}</pre>`)
     .join("<hr style='margin:0;padding:0'>")
@@ -1144,7 +1182,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@782",
+  id: "5c54ccd4ac62f235@809",
   modules: [m0,m1,m2,m3,m4]
 };
 
