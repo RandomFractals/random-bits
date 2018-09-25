@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Info Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 148
+// Version: 149
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@148",
+  id: "33e49de92e6a98bc@149",
   variables: [
     {
       inputs: ["md"],
@@ -37,7 +37,7 @@ new URLSearchParams(html`<a href>`.search).get('notebook')
       value: (function(text,notebookUrlParam){return(
 text({
   placeholder: 'type observable notebook url and click Get Stats', 
-  description: 'enter observable notebook url to get stats',
+  description: 'enter observable notebook url to get more notebook cells info',
   value: `${notebookUrlParam ? notebookUrlParam : '@randomfractals/notebook-info'}`,
   submit: 'Get Info'})
 )})
@@ -451,7 +451,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@148",
+  id: "33e49de92e6a98bc@149",
   modules: [m0,m1,m2,m3,m4]
 };
 
