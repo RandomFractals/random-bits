@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 809
+// Version: 817
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@809",
+  id: "5c54ccd4ac62f235@817",
   variables: [
     {
       inputs: ["md"],
@@ -550,6 +550,15 @@ function getNotebookById(notebookId) {
 )})
     },
     {
+      name: "getNotebookByUrl",
+      inputs: ["apiUrl"],
+      value: (function(apiUrl){return(
+function getNotebookByUrl(notebookUrl) {
+  return fetch(`${apiUrl}/document/${notebookUrl}`).then(d => d.json())  
+}
+)})
+    },
+    {
       name: "getNotebookFunctions",
       value: (function(){return(
 function getNotebookFunctions(notebook) {
@@ -568,26 +577,9 @@ function getNamedNotebookCells(notebook) {
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## Displaying Notebook Cells Code`
-)})
-    },
-    {
-      name: "notebookCells",
-      inputs: ["html","notebook","cellCodeColor"],
-      value: (function(html,notebook,cellCodeColor){return(
-html `${
-  notebook.nodes
-    .map((d,i) => `<pre style="font-size:14px; color:${cellCodeColor(i)}">${d.value.replace(/</g, "&lt;")}</pre>`)
-    .join("<hr style='margin:0;padding:0'>")
-}`
-)})
-    },
-    {
-      name: "cellCodeColor",
-      value: (function(){return(
-function cellCodeColor(i) {
-  return '#' + ('4b9ec1-b5a636-495e1d-e55934-fa7921'.split('-')[i % 5]);
-}
+md `## Displaying Notebook Stats and Cells Code
+
+see: https://beta.observablehq.com/@randomfractals/notebook-info`
 )})
     },
     {
@@ -1182,7 +1174,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@809",
+  id: "5c54ccd4ac62f235@817",
   modules: [m0,m1,m2,m3,m4]
 };
 
