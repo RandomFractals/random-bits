@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Info
 // Author: Taras Novak (@randomfractals)
-// Version: 90
+// Version: 97
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@90",
+  id: "33e49de92e6a98bc@97",
   variables: [
     {
       inputs: ["md"],
@@ -42,6 +42,20 @@ text({
       value: (G, _) => G.input(_)
     },
     {
+      name: "shareLink",
+      inputs: ["md","notebookUrl"],
+      value: (function(md,notebookUrl){return(
+md `*share a link to your notebook info: [${notebookUrl}](?notebook=${notebookUrl})*`
+)})
+    },
+    {
+      name: "userBio",
+      inputs: ["getUserBioHtml","userName","userInfo"],
+      value: (function(getUserBioHtml,userName,userInfo){return(
+getUserBioHtml(userName, userInfo)
+)})
+    },
+    {
       name: "userName",
       inputs: ["notebookUrl"],
       value: (function(notebookUrl){return(
@@ -53,13 +67,6 @@ notebookUrl.substring(1, notebookUrl.indexOf('/'))
       inputs: ["getUserInfo","userName"],
       value: (function(getUserInfo,userName){return(
 getUserInfo(userName)
-)})
-    },
-    {
-      name: "userBio",
-      inputs: ["getUserBioHtml","userName","userInfo"],
-      value: (function(getUserBioHtml,userName,userInfo){return(
-getUserBioHtml(userName, userInfo)
 )})
     },
     {
@@ -376,7 +383,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@90",
+  id: "33e49de92e6a98bc@97",
   modules: [m0,m1,m2,m3,m4]
 };
 

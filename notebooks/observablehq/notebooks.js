@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 836
+// Version: 837
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@836",
+  id: "5c54ccd4ac62f235@837",
   variables: [
     {
       inputs: ["md"],
@@ -47,7 +47,7 @@ text({
       name: "shareLink",
       inputs: ["md","userName"],
       value: (function(md,userName){return(
-md `Share a link to your user info and notebooks stats: [@${userName}](?userName=${userName})`
+md `*share a link to your user info and notebooks stats: [@${userName}](?userName=${userName})*`
 )})
     },
     {
@@ -1189,7 +1189,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@836",
+  id: "5c54ccd4ac62f235@837",
   modules: [m0,m1,m2,m3,m4]
 };
 
