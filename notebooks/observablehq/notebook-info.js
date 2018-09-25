@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Info Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 133
+// Version: 142
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@133",
+  id: "33e49de92e6a98bc@142",
   variables: [
     {
       inputs: ["md"],
@@ -57,7 +57,7 @@ md `*share a link to your notebook info: [${notebookUrl}](?notebook=${notebookUr
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## User Info and Notebook Graph (todo)`
+md `## User Info and Notebook Cells Graph (todo)`
 )})
     },
     {
@@ -141,6 +141,27 @@ getNotebookFunctions(notebook)
       inputs: ["getNamedNotebookCells","notebook"],
       value: (function(getNamedNotebookCells,notebook){return(
 getNamedNotebookCells(notebook)
+)})
+    },
+    {
+      name: "htmlCells",
+      inputs: ["notebook"],
+      value: (function(notebook){return(
+notebook.nodes.filter(node => node.value.substring(0, 6).replace(' ', '').startsWith('html`'))
+)})
+    },
+    {
+      name: "mdCells",
+      inputs: ["notebook"],
+      value: (function(notebook){return(
+notebook.nodes.filter(node => node.value.substring(0, 4).replace(' ', '').startsWith('md`'))
+)})
+    },
+    {
+      name: "svgCells",
+      inputs: ["notebook"],
+      value: (function(notebook){return(
+notebook.nodes.filter(node => node.value.substring(0, 5).replace(' ', '').startsWith('svg`'))
 )})
     },
     {
@@ -423,7 +444,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@133",
+  id: "33e49de92e6a98bc@142",
   modules: [m0,m1,m2,m3,m4]
 };
 
