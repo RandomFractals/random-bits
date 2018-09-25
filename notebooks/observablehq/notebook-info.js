@@ -1,21 +1,27 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
-// Title: Notebook Info
+// Title: Notebook Info Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 97
+// Version: 133
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@97",
+  id: "33e49de92e6a98bc@133",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
-md `# Notebook Info
+md `# Notebook Info Visualizer
 
 Simple Observable JS Notebook Info Visualizer. 
 
 *see [Notebooks Visualizer](https://beta.observablehq.com/@randomfractals/notebooks) for user bio, original and forked notebooks stats, etc.*
 `
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Input Notebook Url`
 )})
     },
     {
@@ -33,7 +39,7 @@ text({
   placeholder: 'type observable notebook url and click Get Stats', 
   description: 'enter observable notebook url to get stats',
   value: `${notebookUrlParam ? notebookUrlParam : '@randomfractals/notebook-info'}`,
-  submit: 'Get Stats'})
+  submit: 'Get Info'})
 )})
     },
     {
@@ -49,10 +55,38 @@ md `*share a link to your notebook info: [${notebookUrl}](?notebook=${notebookUr
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## User Info and Notebook Graph (todo)`
+)})
+    },
+    {
       name: "userBio",
       inputs: ["getUserBioHtml","userName","userInfo"],
       value: (function(getUserBioHtml,userName,userInfo){return(
 getUserBioHtml(userName, userInfo)
+)})
+    },
+    {
+      name: "notebookGraph",
+      inputs: ["dot","notebookUrl","userInfo","notebook"],
+      value: (function(dot,notebookUrl,userInfo,notebook){return(
+dot `
+digraph "${notebookUrl}" {
+  "@${userInfo.login}" [shape = oval, style = filled, fillcolor = "#b3e6cc",
+    href = "https://beta.observablehq.com/@${userInfo.login}", target = _blank]
+  "/${notebook.slug}" [shape = rectangle, style = filled, fillcolor = "#b3e0ff",
+    href = "https://beta.observablehq.com/${notebookUrl}", target = _blank]
+}`
+)})
+    },
+    {
+      inputs: ["html","DOM","rasterize","notebookGraph","notebookUrl","serialize"],
+      value: (async function(html,DOM,rasterize,notebookGraph,notebookUrl,serialize){return(
+html`
+${DOM.download(await rasterize(notebookGraph), `${notebookUrl}-graph.png`, "Save as PNG")}
+${DOM.download(await serialize(notebookGraph), `${notebookUrl}-graph.svg`, "Save as SVG")}
+`
 )})
     },
     {
@@ -73,6 +107,12 @@ getUserInfo(userName)
       name: "apiUrl",
       value: (function(){return(
 'https://observable-cors.glitch.me/https://api.observablehq.com'
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Notebook Info`
 )})
     },
     {
@@ -383,7 +423,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@97",
+  id: "33e49de92e6a98bc@133",
   modules: [m0,m1,m2,m3,m4]
 };
 
