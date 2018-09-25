@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 817
+// Version: 836
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@817",
+  id: "5c54ccd4ac62f235@836",
   variables: [
     {
       inputs: ["md"],
@@ -59,9 +59,16 @@ md `**[@${userName}](https://beta.observablehq.com/@${userName})** *data from* h
     },
     {
       name: "userBio",
-      inputs: ["getUserBioHtml","userName","user","stats","notebooks"],
-      value: (function(getUserBioHtml,userName,user,stats,notebooks){return(
-getUserBioHtml(userName, user, stats, notebooks)
+      inputs: ["getUserBioHtml","userName","user"],
+      value: (function(getUserBioHtml,userName,user){return(
+getUserBioHtml(userName, user)
+)})
+    },
+    {
+      name: "notebooksStats",
+      inputs: ["getNotebooksStatsHtml","userName","user","stats","notebooks"],
+      value: (function(getNotebooksStatsHtml,userName,user,stats,notebooks){return(
+getNotebooksStatsHtml(userName, user, stats, notebooks)
 )})
     },
     {
@@ -105,44 +112,12 @@ getStats(notebooks)
 )})
     },
     {
-      name: "getUserBioHtml",
-      inputs: ["html","collections"],
-      value: (function(html,collections){return(
-function getUserBioHtml(userName, user, stats, notebooks) {
-  return html `
-    <div id="avatar">
-      <a href="https://beta.observablehq.com/@${userName}" 
-        title="@${userName} a.k.a. ${user.name}" target="_blank">
-        <img src="${user.avatar_url}"></img>
-      </a>
-    </div>
-    <i>${user.bio || "??"}</i>: <a href="${user.home_url}" target="_blank">${user.home_url}</a>
-    <br />
-    Notebooks: 
-      <a href="https://beta.observablehq.com/@${userName}" 
-        title="@${userName} a.k.a. ${user.name} Notebooks" target="_blank">
-        ${notebooks.length}
-      </a> |
-    Original: ${stats.original.length} |
-    Forked: ${stats.forked.length} |
-    Likes: ${stats.liked.reduce((total, count) => total + count)} |
-    Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()} |
-    Collections: 
-      <a href="https://beta.observablehq.com/@${userName}?tab=collections" 
-        title="@${userName} a.k.a. ${user.name} Collections" target="_blank">
-        ${collections.length}      
-      </a>
-  `;
-}
-)})
-    },
-    {
       name: "codesAbout",
       inputs: ["md","getUserBioHtml","userName","user","stats","notebooks"],
       value: (function(md,getUserBioHtml,userName,user,stats,notebooks){return(
 md `---
 ${getUserBioHtml(userName, user, stats, notebooks)}
-#### ...... ${user.name} codes about:
+#### ${user.name} codes about...
 `
 )})
     },
@@ -161,10 +136,9 @@ md `---
 )})
     },
     {
-      name: "notebooksStats",
-      inputs: ["getUserBioHtml","userName","user","stats","notebooks"],
-      value: (function(getUserBioHtml,userName,user,stats,notebooks){return(
-getUserBioHtml(userName, user, stats, notebooks)
+      inputs: ["getUserBioHtml","userName","user"],
+      value: (function(getUserBioHtml,userName,user){return(
+getUserBioHtml(userName, user)
 )})
     },
     {
@@ -382,7 +356,7 @@ toWords(doc.nouns().out('topk')) // sort by frequency
     {
       inputs: ["md"],
       value: (function(md){return(
-md `# Notebooks API`
+md `# User & Notebooks API`
 )})
     },
     {
@@ -397,6 +371,23 @@ md `# Notebooks API`
       value: (function(apiUrl){return(
 function getUserInfo(userName) {
   return fetch(`${apiUrl}/user/@${userName}`).then(d => d.json())
+}
+)})
+    },
+    {
+      name: "getUserBioHtml",
+      inputs: ["html"],
+      value: (function(html){return(
+function getUserBioHtml(userName, user) {
+  return html `
+    <div id="avatar">
+      <a href="https://beta.observablehq.com/@${userName}" 
+        title="@${userName} a.k.a. ${user.name}" target="_blank">
+        <img src="${user.avatar_url}"></img>
+      </a>
+    </div>
+    <i>${user.bio || "??"}</i>: <a href="${user.home_url}" target="_blank">${user.home_url}</a>
+    <br />`;
 }
 )})
     },
@@ -427,6 +418,30 @@ function getStats(notebooks) {
     stats.liked.push(notebook.likes);
   });
   return stats;
+}
+)})
+    },
+    {
+      name: "getNotebooksStatsHtml",
+      inputs: ["html","collections"],
+      value: (function(html,collections){return(
+function getNotebooksStatsHtml(userName, user, stats, notebooks) {
+  return html `
+    Notebooks: 
+      <a href="https://beta.observablehq.com/@${userName}" 
+        title="@${userName} a.k.a. ${user.name} Notebooks" target="_blank">
+        ${notebooks.length}
+      </a> |
+    Original: ${stats.original.length} |
+    Forked: ${stats.forked.length} |
+    Likes: ${stats.liked.reduce((total, count) => total + count)} |
+    Revisions: ${(notebooks.reduce((total, notebook) => total + Number(notebook.version), 0)).toLocaleString()} |
+    Collections: 
+      <a href="https://beta.observablehq.com/@${userName}?tab=collections" 
+        title="@${userName} a.k.a. ${user.name} Collections" target="_blank">
+        ${collections.length}      
+      </a>
+  `;
 }
 )})
     },
@@ -1174,7 +1189,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@817",
+  id: "5c54ccd4ac62f235@836",
   modules: [m0,m1,m2,m3,m4]
 };
 

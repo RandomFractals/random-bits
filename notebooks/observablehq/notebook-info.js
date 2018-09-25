@@ -1,24 +1,20 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Info
 // Author: Taras Novak (@randomfractals)
-// Version: 78
+// Version: 90
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@78",
+  id: "33e49de92e6a98bc@90",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md `# Notebook Info
 
-Simple Observable JS Notebook Info visualizer. 
+Simple Observable JS Notebook Info Visualizer. 
 
-see Notebooks Visualizer for user bio, original and forked notebooks stats, etc:
-
-https://beta.observablehq.com/@randomfractals/notebooks
-
-...
+*see [Notebooks Visualizer](https://beta.observablehq.com/@randomfractals/notebooks) for user bio, original and forked notebooks stats, etc.*
 `
 )})
     },
@@ -57,6 +53,13 @@ notebookUrl.substring(1, notebookUrl.indexOf('/'))
       inputs: ["getUserInfo","userName"],
       value: (function(getUserInfo,userName){return(
 getUserInfo(userName)
+)})
+    },
+    {
+      name: "userBio",
+      inputs: ["getUserBioHtml","userName","userInfo"],
+      value: (function(getUserBioHtml,userName,userInfo){return(
+getUserBioHtml(userName, userInfo)
 )})
     },
     {
@@ -119,6 +122,18 @@ function cellCodeColor(i) {
 )})
     },
     {
+      name: "userBioStyles",
+      inputs: ["html"],
+      value: (function(html){return(
+html 
+`<style>
+#avatar {float: left;} 
+#avatar img {max-width: 24px; border-radius: 12px; margin-right: 10px;}
+</style>
+`
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Imports`
@@ -148,6 +163,11 @@ md `## Imports`
       from: "@randomfractals/notebooks",
       name: "getUserInfo",
       remote: "getUserInfo"
+    },
+    {
+      from: "@randomfractals/notebooks",
+      name: "getUserBioHtml",
+      remote: "getUserBioHtml"
     },
     {
       from: "@randomfractals/notebooks",
@@ -305,6 +325,23 @@ function getUserInfo(userName) {
 )})
     },
     {
+      name: "getUserBioHtml",
+      inputs: ["html"],
+      value: (function(html){return(
+function getUserBioHtml(userName, user) {
+  return html `
+    <div id="avatar">
+      <a href="https://beta.observablehq.com/@${userName}" 
+        title="@${userName} a.k.a. ${user.name}" target="_blank">
+        <img src="${user.avatar_url}"></img>
+      </a>
+    </div>
+    <i>${user.bio || "??"}</i>: <a href="${user.home_url}" target="_blank">${user.home_url}</a>
+    <br />`;
+}
+)})
+    },
+    {
       name: "getNotebookByUrl",
       inputs: ["apiUrl"],
       value: (function(apiUrl){return(
@@ -339,7 +376,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@78",
+  id: "33e49de92e6a98bc@90",
   modules: [m0,m1,m2,m3,m4]
 };
 
