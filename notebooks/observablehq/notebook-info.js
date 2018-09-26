@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Info Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 149
+// Version: 169
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@149",
+  id: "33e49de92e6a98bc@169",
   variables: [
     {
       inputs: ["md"],
@@ -151,24 +151,40 @@ getNamedNotebookCells(notebook)
 )})
     },
     {
+      name: "namedCells",
+      inputs: ["namedNotebookCells"],
+      value: (function(namedNotebookCells){return(
+namedNotebookCells.map(cell => cell.value.substring(0, cell.value.indexOf('=')).replace(' ', ''))
+)})
+    },
+    {
       name: "htmlCells",
-      inputs: ["notebook"],
-      value: (function(notebook){return(
-notebook.nodes.filter(node => node.value.substring(0, 6).replace(' ', '').startsWith('html`'))
+      inputs: ["notebook","isMarkupCell"],
+      value: (function(notebook,isMarkupCell){return(
+notebook.nodes.filter(node =>  isMarkupCell(node.value, 'html'))
 )})
     },
     {
       name: "mdCells",
-      inputs: ["notebook"],
-      value: (function(notebook){return(
-notebook.nodes.filter(node => node.value.substring(0, 4).replace(' ', '').startsWith('md`'))
+      inputs: ["notebook","isMarkupCell"],
+      value: (function(notebook,isMarkupCell){return(
+notebook.nodes.filter(node =>  isMarkupCell(node.value, 'md'))
 )})
     },
     {
       name: "svgCells",
-      inputs: ["notebook"],
-      value: (function(notebook){return(
-notebook.nodes.filter(node => node.value.substring(0, 5).replace(' ', '').startsWith('svg`'))
+      inputs: ["notebook","isMarkupCell"],
+      value: (function(notebook,isMarkupCell){return(
+notebook.nodes.filter(node => isMarkupCell(node.value, 'svg'))
+)})
+    },
+    {
+      name: "isMarkupCell",
+      value: (function(){return(
+function isMarkupCell(code, markup) {
+  return code.length >= (markup.length + 2) &&
+    code.substring(0, markup.length + 2).replace(' ', '').startsWith(markup + '`');
+}
 )})
     },
     {
@@ -437,7 +453,9 @@ function getNotebookFunctions(notebook) {
       name: "getNamedNotebookCells",
       value: (function(){return(
 function getNamedNotebookCells(notebook) {
-  return notebook.nodes.filter(node => !node.value.startsWith('function') && node.value.indexOf('=') > 0)  
+  return notebook.nodes.filter(node => !node.value.startsWith('function') && 
+    node.value.indexOf('=') > 0 && 
+    (node.value.indexOf('`') < 0 || node.value.indexOf('`') > node.value.indexOf('=')) );
 }
 )})
     },
@@ -451,7 +469,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@149",
+  id: "33e49de92e6a98bc@169",
   modules: [m0,m1,m2,m3,m4]
 };
 
