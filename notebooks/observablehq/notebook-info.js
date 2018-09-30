@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 193
+// Version: 200
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@193",
+  id: "33e49de92e6a98bc@200",
   variables: [
     {
       inputs: ["md"],
@@ -84,13 +84,14 @@ getUserBioHtml(userName, userInfo)
     },
     {
       name: "notebookStats",
-      inputs: ["html","notebookNodes","notebookFunctions","namedNotebookNodes","mdCells"],
-      value: (function(html,notebookNodes,notebookFunctions,namedNotebookNodes,mdCells){return(
+      inputs: ["html","notebookNodes","notebookFunctions","namedNotebookNodes","mdCells","notebookCode"],
+      value: (function(html,notebookNodes,notebookFunctions,namedNotebookNodes,mdCells,notebookCode){return(
 html `
 Total Cells: <a href="#notebookNodes">${notebookNodes.length}</a> |
 Functions: <a href="#notebookFunctions">${notebookFunctions.length}</a> |
 Named Cells: <a href="#namedNotebookNodes">${namedNotebookNodes.length}</a> |
-Md Cells: <a href="#mdCells">${mdCells.length}</a>
+Md Cells: <a href="#mdCells">${mdCells.length}</a> |
+Lines of Code: <a href="#notebookCode">${notebookCode.split('\n').length}</a>
 `
 )})
     },
@@ -230,6 +231,19 @@ html `${
     .map((d,i) => `<pre style="font-size:14px; color:${cellCodeColor(i)}">${d.value.replace(/</g, "&lt;")}</pre>`)
     .join("<hr style='margin:0;padding:0'>")
 }`
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Raw Notebook Code`
+)})
+    },
+    {
+      name: "notebookCode",
+      inputs: ["notebook"],
+      value: (function(notebook){return(
+notebook.nodes.map((d,i) => d.value).join("\n")
 )})
     },
     {
@@ -497,7 +511,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@193",
+  id: "33e49de92e6a98bc@200",
   modules: [m0,m1,m2,m3,m4]
 };
 
