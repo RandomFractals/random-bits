@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 200
+// Version: 215
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@200",
+  id: "33e49de92e6a98bc@215",
   variables: [
     {
       inputs: ["md"],
@@ -65,7 +65,7 @@ html `Download
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## User Info and Notebook Cells Graph (todo)`
+md `## User Info and Notebook Cells Graph`
 )})
     },
     {
@@ -97,15 +97,24 @@ Lines of Code: <a href="#notebookCode">${notebookCode.split('\n').length}</a>
     },
     {
       name: "notebookGraph",
-      inputs: ["dot","notebookUrl","userInfo","notebook"],
-      value: (function(dot,notebookUrl,userInfo,notebook){return(
+      inputs: ["dot","notebookUrl","userInfo","notebook","notebookFunctionNames","namedCells"],
+      value: (function(dot,notebookUrl,userInfo,notebook,notebookFunctionNames,namedCells){return(
 dot `
 digraph "${notebookUrl}" {
+  rankdir = LR;
   "@${userInfo.login}" [shape=oval, style=filled, fillcolor="#b3e6cc",
     href="https://beta.observablehq.com/@${userInfo.login}", target=_blank]
   "/${notebook.slug}" [shape=rectangle, style=filled, fillcolor="#b3e0ff",
     href="https://beta.observablehq.com/${notebookUrl}", target=_blank]
   "@${userInfo.login}" -> "/${notebook.slug}"
+  ${notebookFunctionNames.map(functionName => 
+    `"${functionName}(...)" [shape=rectangle, style=filled, fillcolor="#f6f6f6", 
+      href="https://beta.observablehq.com/${notebookUrl}/#${functionName}", target=_blank]`).join('\n')}
+  ${notebookFunctionNames.map(functionName => `"/${notebook.slug}" -> "${functionName}(...)"`).join('\n')}
+  ${namedCells.map(cellName => 
+    `"#${cellName}" [shape=rectangle, style=filled, fillcolor="#f6f6f6", 
+      href="https://beta.observablehq.com/${notebookUrl}/#${cellName}", target=_blank]`).join('\n')}
+  ${namedCells.map(cellName => `"/${notebook.slug}" -> "#${cellName}"`).join('\n')}
 }`
 )})
     },
@@ -511,7 +520,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@200",
+  id: "33e49de92e6a98bc@215",
   modules: [m0,m1,m2,m3,m4]
 };
 
