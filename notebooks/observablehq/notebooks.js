@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 854
+// Version: 858
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@854",
+  id: "5c54ccd4ac62f235@858",
   variables: [
     {
       inputs: ["md"],
@@ -602,9 +602,9 @@ function getNotebookImports(notebook) {
       .substring(importNode.value.indexOf(' from ')).replace(' from ', '')
       .replace('"', '').replace("'", '').replace('"', '').replace("'", '');
     let importedMethods = importNode.value
-      .substring(importNode.value.indexOf('{') + 1, importNode.value.indexOf('}')).replace(' ', '').split(',');
+      .substring(importNode.value.indexOf('{') + 1, importNode.value.indexOf('}')).split(',');
     for (let method of importedMethods) {
-      importedFunctions.push(({notebook: importedFromNotebook, cell: method})); 
+      importedFunctions.push(({notebook: importedFromNotebook, cell: method.replace(' ', '')})); 
     }
   }
   return importedFunctions;
@@ -1217,7 +1217,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@854",
+  id: "5c54ccd4ac62f235@858",
   modules: [m0,m1,m2,m3,m4]
 };
 
