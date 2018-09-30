@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 219
+// Version: 223
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@219",
+  id: "33e49de92e6a98bc@223",
   variables: [
     {
       inputs: ["md"],
@@ -198,9 +198,9 @@ namedNotebookNodes.map(node => node.value.substring(0, node.value.indexOf('=')).
     },
     {
       name: "notebookImports",
-      inputs: ["notebook"],
-      value: (function(notebook){return(
-notebook.nodes.filter(node => node.value.startsWith('import'))
+      inputs: ["getNotebookImports","notebook"],
+      value: (function(getNotebookImports,notebook){return(
+getNotebookImports(notebook)
 )})
     },
     {
@@ -333,6 +333,11 @@ md `## Imports`
       from: "@randomfractals/notebooks",
       name: "getNamedNotebookCells",
       remote: "getNamedNotebookCells"
+    },
+    {
+      from: "@randomfractals/notebooks",
+      name: "getNotebookImports",
+      remote: "getNotebookImports"
     }
   ]
 };
@@ -519,6 +524,26 @@ function getNamedNotebookCells(notebook) {
 )})
     },
     {
+      name: "getNotebookImports",
+      value: (function(){return(
+function getNotebookImports(notebook) {
+  const importedFunctions = [];
+  const importedNodes = notebook.nodes.filter(node => node.value.startsWith('import'));
+  for (let importNode of importedNodes) {
+    let importedFromNotebook = importNode.value
+      .substring(importNode.value.indexOf(' from ')).replace(' from ', '')
+      .replace('"', '').replace("'", '').replace('"', '').replace("'", '');
+    let importedMethods = importNode.value
+      .substring(importNode.value.indexOf('{') + 1, importNode.value.indexOf('}')).replace(' ', '').split(',');
+    for (let method of importedMethods) {
+      importedFunctions.push(({notebook: importedFromNotebook, cell: method})); 
+    }
+  }
+  return importedFunctions;
+}
+)})
+    },
+    {
       name: "apiUrl",
       value: (function(){return(
 'https://observable-cors.glitch.me/https://api.observablehq.com'
@@ -528,7 +553,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@219",
+  id: "33e49de92e6a98bc@223",
   modules: [m0,m1,m2,m3,m4]
 };
 

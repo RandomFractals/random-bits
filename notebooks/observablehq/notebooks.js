@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 839
+// Version: 854
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@839",
+  id: "5c54ccd4ac62f235@854",
   variables: [
     {
       inputs: ["md"],
@@ -592,6 +592,32 @@ function getNamedNotebookCells(notebook) {
 )})
     },
     {
+      name: "getNotebookImports",
+      value: (function(){return(
+function getNotebookImports(notebook) {
+  const importedFunctions = [];
+  const importedNodes = notebook.nodes.filter(node => node.value.startsWith('import'));
+  for (let importNode of importedNodes) {
+    let importedFromNotebook = importNode.value
+      .substring(importNode.value.indexOf(' from ')).replace(' from ', '')
+      .replace('"', '').replace("'", '').replace('"', '').replace("'", '');
+    let importedMethods = importNode.value
+      .substring(importNode.value.indexOf('{') + 1, importNode.value.indexOf('}')).replace(' ', '').split(',');
+    for (let method of importedMethods) {
+      importedFunctions.push(({notebook: importedFromNotebook, cell: method})); 
+    }
+  }
+  return importedFunctions;
+}
+)})
+    },
+    {
+      inputs: ["getNotebookImports","notebook"],
+      value: (function(getNotebookImports,notebook){return(
+getNotebookImports(notebook)
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Displaying Notebook Stats and Cells Code
@@ -1140,7 +1166,7 @@ const m3 = {
       name: "dot",
       inputs: ["require"],
       value: (function(require){return(
-require("@observablehq/graphviz@0.1")
+require("@observablehq/graphviz@0.2")
 )})
     }
   ]
@@ -1191,7 +1217,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@839",
+  id: "5c54ccd4ac62f235@854",
   modules: [m0,m1,m2,m3,m4]
 };
 
