@@ -1,18 +1,18 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
-// Title: Notebook Info Visualizer
+// Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 183
+// Version: 189
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@183",
+  id: "33e49de92e6a98bc@189",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
-md `# Notebook Info Visualizer
+md `# Notebook Inspector
 
-Simple Observable JS Notebook Info Visualizer. 
+Simple Observable js Notebook inspector for notebook info and code cells stats display. 
 
 *see [Notebooks Visualizer](https://beta.observablehq.com/@randomfractals/notebooks) for user bio, original and forked notebooks stats, etc.*
 `
@@ -88,10 +88,11 @@ getUserBioHtml(userName, userInfo)
       value: (function(dot,notebookUrl,userInfo,notebook){return(
 dot `
 digraph "${notebookUrl}" {
-  "@${userInfo.login}" [shape = oval, style = filled, fillcolor = "#b3e6cc",
-    href = "https://beta.observablehq.com/@${userInfo.login}", target = _blank]
-  "/${notebook.slug}" [shape = rectangle, style = filled, fillcolor = "#b3e0ff",
-    href = "https://beta.observablehq.com/${notebookUrl}", target = _blank]
+  "@${userInfo.login}" [shape=oval, style=filled, fillcolor="#b3e6cc",
+    href="https://beta.observablehq.com/@${userInfo.login}", target=_blank]
+  "/${notebook.slug}" [shape=rectangle, style=filled, fillcolor="#b3e0ff",
+    href="https://beta.observablehq.com/${notebookUrl}", target=_blank]
+  "@${userInfo.login}" -> "/${notebook.slug}"
 }`
 )})
     },
@@ -484,7 +485,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@183",
+  id: "33e49de92e6a98bc@189",
   modules: [m0,m1,m2,m3,m4]
 };
 
