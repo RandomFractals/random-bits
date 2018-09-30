@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 189
+// Version: 193
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@189",
+  id: "33e49de92e6a98bc@193",
   variables: [
     {
       inputs: ["md"],
@@ -80,6 +80,18 @@ md `## [${notebookUrl}](https://beta.observablehq.com/${notebookUrl})`
       inputs: ["getUserBioHtml","userName","userInfo"],
       value: (function(getUserBioHtml,userName,userInfo){return(
 getUserBioHtml(userName, userInfo)
+)})
+    },
+    {
+      name: "notebookStats",
+      inputs: ["html","notebookNodes","notebookFunctions","namedNotebookNodes","mdCells"],
+      value: (function(html,notebookNodes,notebookFunctions,namedNotebookNodes,mdCells){return(
+html `
+Total Cells: <a href="#notebookNodes">${notebookNodes.length}</a> |
+Functions: <a href="#notebookFunctions">${notebookFunctions.length}</a> |
+Named Cells: <a href="#namedNotebookNodes">${namedNotebookNodes.length}</a> |
+Md Cells: <a href="#mdCells">${mdCells.length}</a>
+`
 )})
     },
     {
@@ -485,7 +497,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@189",
+  id: "33e49de92e6a98bc@193",
   modules: [m0,m1,m2,m3,m4]
 };
 
