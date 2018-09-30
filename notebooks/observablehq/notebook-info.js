@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 223
+// Version: 228
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@223",
+  id: "33e49de92e6a98bc@228",
   variables: [
     {
       inputs: ["md"],
@@ -98,8 +98,8 @@ Imports: <a href="#notebookImports">${notebookImports.length}</a>
     },
     {
       name: "notebookGraph",
-      inputs: ["dot","notebookUrl","userInfo","notebook","notebookFunctionNames","namedCells"],
-      value: (function(dot,notebookUrl,userInfo,notebook,notebookFunctionNames,namedCells){return(
+      inputs: ["dot","notebookUrl","userInfo","notebook","notebookFunctionNames","namedCells","notebookImports"],
+      value: (function(dot,notebookUrl,userInfo,notebook,notebookFunctionNames,namedCells,notebookImports){return(
 dot `
 digraph "${notebookUrl}" {
   rankdir = LR;
@@ -116,6 +116,10 @@ digraph "${notebookUrl}" {
     `"#${cellName}" [shape=rectangle, style=filled, fillcolor="#f6f6f6", 
       href="https://beta.observablehq.com/${notebookUrl}/#${cellName}", target=_blank]`).join('\n')}
   ${namedCells.map(cellName => `"/${notebook.slug}" -> "#${cellName}"`).join('\n')}
+  ${notebookImports.map(importedFrom => 
+    `"#${importedFrom.cell}" [shape=oval, style=filled, fillcolor="#f6f6f6", 
+      href="https://beta.observablehq.com/${importedFrom.notebook}/#${importedFrom.cell}", target=_blank]`).join('\n')}
+  ${notebookImports.map(importedFrom => `"import from ${importedFrom.notebook}" -> "#${importedFrom.cell}"`).join('\n')}
 }`
 )})
     },
@@ -534,9 +538,9 @@ function getNotebookImports(notebook) {
       .substring(importNode.value.indexOf(' from ')).replace(' from ', '')
       .replace('"', '').replace("'", '').replace('"', '').replace("'", '');
     let importedMethods = importNode.value
-      .substring(importNode.value.indexOf('{') + 1, importNode.value.indexOf('}')).replace(' ', '').split(',');
+      .substring(importNode.value.indexOf('{') + 1, importNode.value.indexOf('}')).split(',');
     for (let method of importedMethods) {
-      importedFunctions.push(({notebook: importedFromNotebook, cell: method})); 
+      importedFunctions.push(({notebook: importedFromNotebook, cell: method.replace(' ', '')})); 
     }
   }
   return importedFunctions;
@@ -553,7 +557,7 @@ function getNotebookImports(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@223",
+  id: "33e49de92e6a98bc@228",
   modules: [m0,m1,m2,m3,m4]
 };
 
