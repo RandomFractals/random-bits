@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 215
+// Version: 219
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@215",
+  id: "33e49de92e6a98bc@219",
   variables: [
     {
       inputs: ["md"],
@@ -84,14 +84,15 @@ getUserBioHtml(userName, userInfo)
     },
     {
       name: "notebookStats",
-      inputs: ["html","notebookNodes","notebookFunctions","namedNotebookNodes","mdCells","notebookCode"],
-      value: (function(html,notebookNodes,notebookFunctions,namedNotebookNodes,mdCells,notebookCode){return(
+      inputs: ["html","notebookNodes","notebookFunctions","namedNotebookNodes","mdCells","notebookCode","notebookImports"],
+      value: (function(html,notebookNodes,notebookFunctions,namedNotebookNodes,mdCells,notebookCode,notebookImports){return(
 html `
 Total Cells: <a href="#notebookNodes">${notebookNodes.length}</a> |
 Functions: <a href="#notebookFunctions">${notebookFunctions.length}</a> |
 Named Cells: <a href="#namedNotebookNodes">${namedNotebookNodes.length}</a> |
 Md Cells: <a href="#mdCells">${mdCells.length}</a> |
-Lines of Code: <a href="#notebookCode">${notebookCode.split('\n').length}</a>
+Lines of Code: <a href="#notebookCode">${notebookCode.split('\n').length}</a> |
+Imports: <a href="#notebookImports">${notebookImports.length}</a>
 `
 )})
     },
@@ -193,6 +194,13 @@ getNamedNotebookCells(notebook)
       inputs: ["namedNotebookNodes"],
       value: (function(namedNotebookNodes){return(
 namedNotebookNodes.map(node => node.value.substring(0, node.value.indexOf('=')).replace('viewof ', '').replace(' ', ''))
+)})
+    },
+    {
+      name: "notebookImports",
+      inputs: ["notebook"],
+      value: (function(notebook){return(
+notebook.nodes.filter(node => node.value.startsWith('import'))
 )})
     },
     {
@@ -520,7 +528,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@215",
+  id: "33e49de92e6a98bc@219",
   modules: [m0,m1,m2,m3,m4]
 };
 
