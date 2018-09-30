@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Info Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 169
+// Version: 182
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@169",
+  id: "33e49de92e6a98bc@182",
   variables: [
     {
       inputs: ["md"],
@@ -55,9 +55,24 @@ md `*share a link to your notebook info: [${notebookUrl}](?notebook=${notebookUr
 )})
     },
     {
+      name: "downloadLink",
+      inputs: ["html","notebookUrl"],
+      value: (function(html,notebookUrl){return(
+html `Download
+<a href="https://api.observablehq.com/${notebookUrl}.js" target="_blank" title="Download notebook">${notebookUrl}.js</a>`
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## User Info and Notebook Cells Graph (todo)`
+)})
+    },
+    {
+      name: "notebookLink",
+      inputs: ["md","notebookUrl"],
+      value: (function(md,notebookUrl){return(
+md `## [${notebookUrl}](https://beta.observablehq.com/${notebookUrl})`
 )})
     },
     {
@@ -110,9 +125,9 @@ getUserInfo(userName)
 )})
     },
     {
-      inputs: ["md"],
-      value: (function(md){return(
-md `## Notebook Info`
+      inputs: ["md","notebookUrl"],
+      value: (function(md,notebookUrl){return(
+md `## [${notebookUrl}](https://beta.observablehq.com/${notebookUrl}) Notebook Info`
 )})
     },
     {
@@ -144,7 +159,7 @@ notebookFunctions.map(funct => funct.value.substring(0, funct.value.indexOf('(')
 )})
     },
     {
-      name: "namedNotebookCells",
+      name: "namedNotebookNodes",
       inputs: ["getNamedNotebookCells","notebook"],
       value: (function(getNamedNotebookCells,notebook){return(
 getNamedNotebookCells(notebook)
@@ -152,9 +167,9 @@ getNamedNotebookCells(notebook)
     },
     {
       name: "namedCells",
-      inputs: ["namedNotebookCells"],
-      value: (function(namedNotebookCells){return(
-namedNotebookCells.map(cell => cell.value.substring(0, cell.value.indexOf('=')).replace(' ', ''))
+      inputs: ["namedNotebookNodes"],
+      value: (function(namedNotebookNodes){return(
+namedNotebookNodes.map(node => node.value.substring(0, node.value.indexOf('=')).replace(' ', ''))
 )})
     },
     {
@@ -353,7 +368,7 @@ const m2 = {
       name: "dot",
       inputs: ["require"],
       value: (function(require){return(
-require("@observablehq/graphviz@0.1")
+require("@observablehq/graphviz@0.2")
 )})
     }
   ]
@@ -469,7 +484,7 @@ function getNamedNotebookCells(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@169",
+  id: "33e49de92e6a98bc@182",
   modules: [m0,m1,m2,m3,m4]
 };
 
