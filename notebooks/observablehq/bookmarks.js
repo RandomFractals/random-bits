@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/bookmarks
 // Title: Bookmarks
 // Author: Taras Novak (@randomfractals)
-// Version: 46
+// Version: 47
 // Runtime version: 1
 
 const m0 = {
-  id: "a6509fe4c567a490@46",
+  id: "a6509fe4c567a490@47",
   variables: [
     {
       inputs: ["md"],
@@ -108,7 +108,7 @@ todo: show selected notebook code cells with 🔖 toggle here for bookmarking
       value: (function(md){return(
 md `## 🔖 Bookmarks
 
-todo: show all bookmarked cells across all notebooks and bookmark collections
+todo: show all bookmarked cells across all notebooks and bookmark collections with links to the original notebook cell and options to copy cell code.
 `
 )})
     },
@@ -250,7 +250,7 @@ require("d3-format")
 };
 
 const notebook = {
-  id: "a6509fe4c567a490@46",
+  id: "a6509fe4c567a490@47",
   modules: [m0,m1]
 };
 
