@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 228
+// Version: 233
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@228",
+  id: "33e49de92e6a98bc@233",
   variables: [
     {
       inputs: ["md"],
@@ -70,9 +70,9 @@ md `## User Info and Notebook Cells Graph`
     },
     {
       name: "notebookLink",
-      inputs: ["md","notebookUrl"],
-      value: (function(md,notebookUrl){return(
-md `## [${notebookUrl}](https://beta.observablehq.com/${notebookUrl})`
+      inputs: ["getNotebookHtml","notebook"],
+      value: (function(getNotebookHtml,notebook){return(
+getNotebookHtml(notebook)
 )})
     },
     {
@@ -288,6 +288,18 @@ html
 )})
     },
     {
+      name: "notebookStyles",
+      inputs: ["html"],
+      value: (function(html){return(
+html `
+<style>
+.notebook-thumbnail {float: left;} 
+.notebook-thumbnail img {max-width: 128px; border-radius: 2px; margin-right: 10px;}
+</style>
+`
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Imports`
@@ -327,6 +339,11 @@ md `## Imports`
       from: "@randomfractals/notebooks",
       name: "getNotebookByUrl",
       remote: "getNotebookByUrl"
+    },
+    {
+      from: "@randomfractals/notebooks",
+      name: "getNotebookHtml",
+      remote: "getNotebookHtml"
     },
     {
       from: "@randomfractals/notebooks",
@@ -510,6 +527,23 @@ function getNotebookByUrl(notebookUrl) {
 )})
     },
     {
+      name: "getNotebookHtml",
+      inputs: ["html"],
+      value: (function(html){return(
+function getNotebookHtml(notebook) {
+  return html `
+    <div class="notebook-thumbnail">
+      <a href="https://beta.observablehq.com/@${notebook.creator.login}/${notebook.slug}" 
+        title="${notebook.title}" target="_blank">
+        <img src="https://static.observableusercontent.com/thumbnail/${notebook.thumbnail}.jpg"></img>
+      </a>
+    </div>
+    <b><i>${notebook.title}</i></b>: <a href="https://beta.observablehq.com/@${notebook.creator.login}/${notebook.slug}"" target="_blank">@${notebook.creator.login}/${notebook.slug}</a>
+    <br />`;
+}
+)})
+    },
+    {
       name: "getNotebookFunctions",
       value: (function(){return(
 function getNotebookFunctions(notebook) {
@@ -557,7 +591,7 @@ function getNotebookImports(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@228",
+  id: "33e49de92e6a98bc@233",
   modules: [m0,m1,m2,m3,m4]
 };
 

@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebooks
 // Title: Notebooks Visualizer
 // Author: Taras Novak (@randomfractals)
-// Version: 858
+// Version: 873
 // Runtime version: 1
 
 const m0 = {
-  id: "5c54ccd4ac62f235@858",
+  id: "5c54ccd4ac62f235@873",
   variables: [
     {
       inputs: ["md"],
@@ -519,6 +519,13 @@ md `## Getting Notebook Info`
 )})
     },
     {
+      name: "notebookHtml",
+      inputs: ["getNotebookHtml","notebook"],
+      value: (function(getNotebookHtml,notebook){return(
+getNotebookHtml(notebook)
+)})
+    },
+    {
       name: "notebook",
       inputs: ["getNotebookInfo","notebooks"],
       value: (function(getNotebookInfo,notebooks){return(
@@ -618,6 +625,23 @@ getNotebookImports(notebook)
 )})
     },
     {
+      name: "getNotebookHtml",
+      inputs: ["html"],
+      value: (function(html){return(
+function getNotebookHtml(notebook) {
+  return html `
+    <div class="notebook-thumbnail">
+      <a href="https://beta.observablehq.com/@${notebook.creator.login}/${notebook.slug}" 
+        title="${notebook.title}" target="_blank">
+        <img src="https://static.observableusercontent.com/thumbnail/${notebook.thumbnail}.jpg"></img>
+      </a>
+    </div>
+    <b><i>${notebook.title}</i></b>: <a href="https://beta.observablehq.com/@${notebook.creator.login}/${notebook.slug}"" target="_blank">@${notebook.creator.login}/${notebook.slug}</a>
+    <br />`;
+}
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Displaying Notebook Stats and Cells Code
@@ -666,6 +690,8 @@ html `
 .short-list {
   max-height: 200px;
 }
+.notebook-thumbnail {float: left;} 
+.notebook-thumbnail img {max-width: 128px; border-radius: 2px; margin-right: 10px;}
 </style>
 `
 )})
@@ -1217,7 +1243,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "5c54ccd4ac62f235@858",
+  id: "5c54ccd4ac62f235@873",
   modules: [m0,m1,m2,m3,m4]
 };
 
