@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 238
+// Version: 240
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@238",
+  id: "33e49de92e6a98bc@240",
   variables: [
     {
       inputs: ["md"],
@@ -117,9 +117,9 @@ digraph "${notebookUrl}" {
       href="https://beta.observablehq.com/${notebookUrl}/#${cellName}", target=_blank]`).join('\n')}
   ${namedCells.map(cellName => `"/${notebook.slug}" -> "#${cellName}"`).join('\n')}
   ${notebookImports.map(importedFrom => 
-    `"#${importedFrom.cell}" [shape=oval, style=filled, fillcolor="#f6f6f6", 
+    `"${importedFrom.cell}(...)" [shape=oval, style=filled, fillcolor="#f6f6f6", 
       href="https://beta.observablehq.com/${importedFrom.notebook}/#${importedFrom.cell}", target=_blank]`).join('\n')}
-  ${notebookImports.map(importedFrom => `"import from ${importedFrom.notebook}" -> "#${importedFrom.cell}"`).join('\n')}
+  ${notebookImports.map(importedFrom => `"import from ${importedFrom.notebook}" -> "${importedFrom.cell}(...)"`).join('\n')}
 }`
 )})
     },
@@ -597,7 +597,7 @@ function getNotebookImports(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@238",
+  id: "33e49de92e6a98bc@240",
   modules: [m0,m1,m2,m3,m4]
 };
 
