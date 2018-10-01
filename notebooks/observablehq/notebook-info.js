@@ -1,18 +1,18 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 233
+// Version: 236
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@233",
+  id: "33e49de92e6a98bc@236",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md `# Notebook Inspector
 
-Simple Observable js Notebook inspector for notebook info and code cells stats display. 
+Simple Observable js Notebook inspector for notebook info, code graph and code stats display. 
 
 *see [Notebooks Visualizer](https://beta.observablehq.com/@randomfractals/notebooks) for user bio, original and forked notebooks stats, etc.*
 `
@@ -65,7 +65,7 @@ html `Download
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## User Info and Notebook Cells Graph`
+md `## User Info and Notebook Code Graph`
 )})
     },
     {
@@ -211,7 +211,7 @@ getNotebookImports(notebook)
       name: "htmlCells",
       inputs: ["notebook","isMarkupCell"],
       value: (function(notebook,isMarkupCell){return(
-notebook.nodes.filter(node =>  isMarkupCell(node.value, 'html'))
+notebook.nodes.filter(node => isMarkupCell(node.value, 'html'))
 )})
     },
     {
@@ -591,7 +591,7 @@ function getNotebookImports(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@233",
+  id: "33e49de92e6a98bc@236",
   modules: [m0,m1,m2,m3,m4]
 };
 
