@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/notebook-info
 // Title: Notebook Inspector
 // Author: Taras Novak (@randomfractals)
-// Version: 236
+// Version: 238
 // Runtime version: 1
 
 const m0 = {
-  id: "33e49de92e6a98bc@236",
+  id: "33e49de92e6a98bc@238",
   variables: [
     {
       inputs: ["md"],
@@ -130,6 +130,12 @@ html`
 ${DOM.download(await rasterize(notebookGraph), `${notebookUrl}-graph.png`, "Save as PNG")}
 ${DOM.download(await serialize(notebookGraph), `${notebookUrl}-graph.svg`, "Save as SVG")}
 `
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `*TODO: link dependent code cells and imports and number arcs or provide play for the order of notebook execution display*`
 )})
     },
     {
@@ -591,7 +597,7 @@ function getNotebookImports(notebook) {
 };
 
 const notebook = {
-  id: "33e49de92e6a98bc@236",
+  id: "33e49de92e6a98bc@238",
   modules: [m0,m1,m2,m3,m4]
 };
 
