@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/nlp-tag-tree
 // Title: NLP Tag Tree
 // Author: Taras Novak (@randomfractals)
-// Version: 84
+// Version: 87
 // Runtime version: 1
 
 const m0 = {
-  id: "b00ecf587a90e6f6@84",
+  id: "b00ecf587a90e6f6@87",
   variables: [
     {
       inputs: ["md"],
@@ -14,6 +14,8 @@ md `# NLP Tag Tree
 
 Displaying text tags with http://compromise.cool NLP library
 and [d3 Tidy Tree](https://beta.observablehq.com/@mbostock/d3-tidy-tree)
+
+[RTJ - Legend Has it...](https://www.youtube.com/watch?v=vWaljXUiCaE)
 `
 )})
     },
@@ -584,7 +586,7 @@ function rasterize(svg) {
 };
 
 const notebook = {
-  id: "b00ecf587a90e6f6@84",
+  id: "b00ecf587a90e6f6@87",
   modules: [m0,m1,m2,m3]
 };
 
