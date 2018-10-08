@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/bookmarks
 // Title: Bookmarks
 // Author: Taras Novak (@randomfractals)
-// Version: 47
+// Version: 138
 // Runtime version: 1
 
 const m0 = {
-  id: "a6509fe4c567a490@47",
+  id: "a6509fe4c567a490@138",
   variables: [
     {
       inputs: ["md"],
@@ -20,7 +20,9 @@ Liked notebooks bookmarker.
 - allow to select a notebook from the liked/bookmarked collection
 - load selected notebook code on notebook list item click
 - add 🔖 toggle to the notebook cell to bookmark it (named cells and functions only? or all???)
-- use local storage for 📚's with 🔖's save and display ... 🤗`
+- use local storage for 📚's with 🔖's save and display ... 🤗
+---
+`
 )})
     },
     {
@@ -30,7 +32,23 @@ md `## 🔖 📚 Bookmark Collections`
 )})
     },
     {
-      name: "viewof addCollection",
+      name: "viewof bookmarkCollections",
+      inputs: ["select","collectionNames"],
+      value: (function(select,collectionNames){return(
+select({
+  title: 'Bookmark Collections',
+  description: 'your bookmark collections',
+  options: collectionNames,
+})
+)})
+    },
+    {
+      name: "bookmarkCollections",
+      inputs: ["Generators","viewof bookmarkCollections"],
+      value: (G, _) => G.input(_)
+    },
+    {
+      name: "viewof addCollectionName",
       inputs: ["text"],
       value: (function(text){return(
 text({
@@ -42,34 +60,50 @@ text({
 )})
     },
     {
-      name: "addCollection",
-      inputs: ["Generators","viewof addCollection"],
+      name: "addCollectionName",
+      inputs: ["Generators","viewof addCollectionName"],
       value: (G, _) => G.input(_)
     },
     {
-      name: "viewof bookmarkCollections",
-      inputs: ["select"],
-      value: (function(select){return(
-select({
-  title: 'Collections',
-  description: 'your bookmark collections',
-  options: [],
+      name: "newCollection",
+      inputs: ["addCollection","addCollectionName"],
+      value: (function(addCollection,addCollectionName){return(
+addCollection(addCollectionName)
+)})
+    },
+    {
+      name: "viewof removeCollectionName",
+      inputs: ["text"],
+      value: (function(text){return(
+text({
+  title: 'Remove Bookmark Collection',
+  placeholder: 'bookmark collection name', 
+  description: 'enter collection name', 
+  submit: 'Remove Collection',
 })
 )})
     },
     {
-      name: "bookmarkCollections",
-      inputs: ["Generators","viewof bookmarkCollections"],
+      name: "removeCollectionName",
+      inputs: ["Generators","viewof removeCollectionName"],
       value: (G, _) => G.input(_)
+    },
+    {
+      name: "removedCollection",
+      inputs: ["removeCollection","removeCollectionName"],
+      value: (function(removeCollection,removeCollectionName){return(
+removeCollection(removeCollectionName)
+)})
     },
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## 📚 Notebooks`
+md `---
+## 📚 Notebooks`
 )})
     },
     {
-      name: "viewof addNotebook",
+      name: "viewof notebookUrl",
       inputs: ["text"],
       value: (function(text){return(
 text({
@@ -81,8 +115,8 @@ text({
 )})
     },
     {
-      name: "addNotebook",
-      inputs: ["Generators","viewof addNotebook"],
+      name: "notebookUrl",
+      inputs: ["Generators","viewof notebookUrl"],
       value: (G, _) => G.input(_)
     },
     {
@@ -96,7 +130,8 @@ todo: show notebooks in the selected bookmarks collection
     {
       inputs: ["md"],
       value: (function(md){return(
-md `## Notebook Code
+md `---
+## Notebook Code
 
 todo: show selected notebook code cells with 🔖 toggle here for bookmarking
 `
@@ -106,7 +141,8 @@ todo: show selected notebook code cells with 🔖 toggle here for bookmarking
       name: "allBookmarks",
       inputs: ["md"],
       value: (function(md){return(
-md `## 🔖 Bookmarks
+md `---
+## 🔖 Bookmarks
 
 todo: show all bookmarked cells across all notebooks and bookmark collections with links to the original notebook cell and options to copy cell code.
 `
@@ -115,7 +151,112 @@ todo: show all bookmarked cells across all notebooks and bookmark collections wi
     {
       inputs: ["md"],
       value: (function(md){return(
-md `### Imports`
+md `---
+### Bookmark Collections API`
+)})
+    },
+    {
+      name: "localStorage",
+      value: (function(){return(
+window.localStorage
+)})
+    },
+    {
+      name: "BookmarksPath",
+      value: (function(){return(
+'bookmarks'
+)})
+    },
+    {
+      name: "bookmarks",
+      inputs: ["getBookmarks"],
+      value: (function(getBookmarks){return(
+getBookmarks()
+)})
+    },
+    {
+      name: "collections",
+      inputs: ["getCollections"],
+      value: (function(getCollections){return(
+getCollections()
+)})
+    },
+    {
+      name: "collectionNames",
+      inputs: ["bookmarks"],
+      value: (function(bookmarks){return(
+bookmarks.collections.map(collection => collection.name)
+)})
+    },
+    {
+      name: "getBookmarks",
+      inputs: ["localStorage","BookmarksPath"],
+      value: (function(localStorage,BookmarksPath){return(
+async function getBookmarks() {
+  let data = await localStorage[BookmarksPath];
+  if (data) return JSON.parse(data);
+  return {collections: []};
+}
+)})
+    },
+    {
+      name: "saveBookmarks",
+      inputs: ["localStorage","BookmarksPath"],
+      value: (function(localStorage,BookmarksPath){return(
+async function saveBookmarks(bookmarks) {
+  if (!bookmarks.collections) {
+    bookmarks.collections = [];
+  }
+  return localStorage[BookmarksPath] = JSON.stringify(bookmarks);
+}
+)})
+    },
+    {
+      name: "getCollections",
+      inputs: ["bookmarks"],
+      value: (function(bookmarks){return(
+function getCollections() {
+  return bookmarks.collections; 
+}
+)})
+    },
+    {
+      name: "addCollection",
+      inputs: ["bookmarks","saveBookmarks"],
+      value: (function(bookmarks,saveBookmarks){return(
+function addCollection(collectionName) {
+  if (!collectionName || collectionName === undefined)
+    return null;
+  const collection = {name: collectionName.trim(), bookmarks: []};
+  bookmarks.collections.push(collection);
+  saveBookmarks(bookmarks);
+  return collection;
+}
+)})
+    },
+    {
+      name: "removeCollection",
+      inputs: ["collections","saveBookmarks","bookmarks"],
+      value: (function(collections,saveBookmarks,bookmarks){return(
+function removeCollection(collectionName) {
+  let collection = null;
+  for (let i=0; i<collections.length; i++) {
+    let collection = collections[i];
+    if (collection.name === collectionName) {
+      collections.splice(i, 1);
+      saveBookmarks(bookmarks);
+      break;
+    }
+  }
+  return collection;
+}
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `---
+### Imports`
 )})
     },
     {
@@ -250,7 +391,7 @@ require("d3-format")
 };
 
 const notebook = {
-  id: "a6509fe4c567a490@47",
+  id: "a6509fe4c567a490@138",
   modules: [m0,m1]
 };
 
