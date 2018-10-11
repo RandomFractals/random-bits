@@ -1,11 +1,11 @@
 // URL: https://beta.observablehq.com/@randomfractals/bookmarks
 // Title: Bookmarks
 // Author: Taras Novak (@randomfractals)
-// Version: 138
+// Version: 139
 // Runtime version: 1
 
 const m0 = {
-  id: "a6509fe4c567a490@138",
+  id: "a6509fe4c567a490@139",
   variables: [
     {
       inputs: ["md"],
@@ -391,7 +391,7 @@ require("d3-format")
 };
 
 const notebook = {
-  id: "a6509fe4c567a490@138",
+  id: "a6509fe4c567a490@139",
   modules: [m0,m1]
 };
 
