@@ -1,11 +1,11 @@
-// URL: https://beta.observablehq.com/@randomfractals/fetch
+// URL: https://observablehq.com/@randomfractals/fetch
 // Title: Fetch
 // Author: Taras Novak (@randomfractals)
-// Version: 139
+// Version: 140
 // Runtime version: 1
 
 const m0 = {
-  id: "b4b4d8b0cd47e57c@139",
+  id: "b4b4d8b0cd47e57c@140",
   variables: [
     {
       inputs: ["md"],
@@ -65,7 +65,7 @@ fetch(proxy + url, {
   headers: {
     Accept: '*/*',
     'Accept-Language': 'en-US,en;q=0.5',
-    Referer: 'https://beta.observablehq.com/@randomfractals/fetch',
+    Referer: 'https://observablehq.com/@randomfractals/fetch',
   },
   //credentials: 'include',
   cache: 'no-store',
@@ -130,11 +130,33 @@ const m1 = {
       inputs: ["input"],
       value: (function(input){return(
 function text(config = {}) {
-  const {value, title, description, autocomplete, maxlength, minlength, pattern, placeholder, size, submit} = config;
+  const {
+    value,
+    title,
+    description,
+    autocomplete = "off",
+    maxlength,
+    minlength,
+    pattern,
+    placeholder,
+    size,
+    submit
+  } = config;
   if (typeof config == "string") value = config;
   const form = input({
-    type: "text", title, description, submit,
-    attributes: {value, autocomplete, maxlength, minlength, pattern, placeholder, size}
+    type: "text",
+    title,
+    description,
+    submit,
+    attributes: {
+      value,
+      autocomplete,
+      maxlength,
+      minlength,
+      pattern,
+      placeholder,
+      size
+    }
   });
   form.output.remove();
   form.input.style.fontSize = "1em";
@@ -176,13 +198,13 @@ function select(config = {}) {
         <select name="input" ${
           multiple ? `multiple size="${size || options.length}"` : ""
         }>
-          ${options.map(
-            ({ value, label }) => `
-            <option value="${value}" ${
-              value === formValue ? "selected" : ""
-            }>${label}</option>
-          `
-          )}
+          ${options.map(({ value, label }) => Object.assign(html`<option>`, {
+              value,
+              selected: Array.isArray(formValue)
+                ? formValue.includes(value)
+                : formValue === value,
+              textContent: label
+            }))}
         </select>
       </form>
     `
@@ -197,35 +219,83 @@ function select(config = {}) {
       inputs: ["html","d3format"],
       value: (function(html,d3format){return(
 function input(config) {
-  let {form, type = "text", attributes = {}, action, getValue, title, description, format, submit, options} = config;
-  if (!form) form = html`<form>
+  let {
+    form,
+    type = "text",
+    attributes = {},
+    action,
+    getValue,
+    title,
+    description,
+    format,
+    display,
+    submit,
+    options
+  } = config;
+  const wrapper = html`<div></div>`;
+  if (!form)
+    form = html`<form>
 	<input name=input type=${type} />
   </form>`;
-  const input = form.input;
   Object.keys(attributes).forEach(key => {
     const val = attributes[key];
-    if (val != null) input.setAttribute(key, val);
+    if (val != null) form.input.setAttribute(key, val);
   });
-  if (submit) form.append(html`<input name=submit type=submit style="margin: 0 0.75em" value="${typeof submit == 'string' ? submit : 'Submit'}" />`);
-  form.append(html`<output name=output style="font: 14px Menlo, Consolas, monospace; margin-left: 0.5em;"></output>`);
-  if (title) form.prepend(html`<div style="font: 700 0.9rem sans-serif;">${title}</div>`);
-  if (description) form.append(html`<div style="font-size: 0.85rem; font-style: italic;">${description}</div>`);
-  if (format) format = d3format.format(format);
+  if (submit)
+    form.append(
+      html`<input name=submit type=submit style="margin: 0 0.75em" value="${
+        typeof submit == "string" ? submit : "Submit"
+      }" />`
+    );
+  form.append(
+    html`<output name=output style="font: 14px Menlo, Consolas, monospace; margin-left: 0.5em;"></output>`
+  );
+  if (title)
+    form.prepend(
+      html`<div style="font: 700 0.9rem sans-serif;">${title}</div>`
+    );
+  if (description)
+    form.append(
+      html`<div style="font-size: 0.85rem; font-style: italic;">${description}</div>`
+    );
+  if (format) format = typeof format === "function" ? format : d3format.format(format);
   if (action) {
     action(form);
   } else {
-    const verb = submit ? "onsubmit" : type == "button" ? "onclick" : type == "checkbox" || type == "radio" ? "onchange" : "oninput";
-    form[verb] = (e) => {
+    const verb = submit
+      ? "onsubmit"
+      : type == "button"
+      ? "onclick"
+      : type == "checkbox" || type == "radio"
+      ? "onchange"
+      : "oninput";
+    form[verb] = e => {
       e && e.preventDefault();
-      const value = getValue ? getValue(input) : input.value;
-      if (form.output) form.output.value = format ? format(value) : value;
+      const value = getValue ? getValue(form.input) : form.input.value;
+      if (form.output) {
+        const out = display ? display(value) : format ? format(value) : value;
+        if (out instanceof window.Element) {
+          while (form.output.hasChildNodes()) {
+            form.output.removeChild(form.output.lastChild);
+          }
+          form.output.append(out);
+        } else {
+          form.output.value = out;
+        }
+      }
       form.value = value;
-      if (verb !== "oninput") form.dispatchEvent(new CustomEvent("input"));
+      if (verb !== "oninput")
+        form.dispatchEvent(new CustomEvent("input", { bubbles: true }));
     };
-    if (verb !== "oninput") input.oninput = e => e && e.stopPropagation() && e.preventDefault();
-    if (verb !== "onsubmit") form.onsubmit = (e) => e && e.preventDefault();
+    if (verb !== "oninput")
+      wrapper.oninput = e => e && e.stopPropagation() && e.preventDefault();
+    if (verb !== "onsubmit") form.onsubmit = e => e && e.preventDefault();
     form[verb]();
   }
+  while (form.childNodes.length) {
+    wrapper.appendChild(form.childNodes[0]);
+  }
+  form.append(wrapper);
   return form;
 }
 )})
@@ -234,14 +304,14 @@ function input(config) {
       name: "d3format",
       inputs: ["require"],
       value: (function(require){return(
-require("d3-format")
+require("d3-format@1")
 )})
     }
   ]
 };
 
 const notebook = {
-  id: "b4b4d8b0cd47e57c@139",
+  id: "b4b4d8b0cd47e57c@140",
   modules: [m0,m1]
 };
 
