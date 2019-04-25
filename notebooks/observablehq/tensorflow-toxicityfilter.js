@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/tensorflow-toxicityfilter
 // Title: TensorFlow ToxicityFilter
 // Author: Taras Novak (@randomfractals)
-// Version: 97
+// Version: 128
 // Runtime version: 1
 
 const m0 = {
-  id: "5557e901f2146b59@97",
+  id: "5557e901f2146b59@128",
   variables: [
     {
       inputs: ["md"],
@@ -116,6 +116,12 @@ Hustle and motivate
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Normalized Text`
+)})
+    },
+    {
       name: "normalizedText",
       inputs: ["html","printHtml","normalizedDoc"],
       value: (function(html,printHtml,normalizedDoc){return(
@@ -185,15 +191,47 @@ nlp(text.value).normalize({
 )})
     },
     {
+      name: "lines",
+      inputs: ["text"],
+      value: (function(text){return(
+text.value.split('\n')
+)})
+    },
+    {
       inputs: ["md"],
       value: (function(md){return(
-md `## TODO
+md `## Toxicity Ranking
 
-Create a print table per text line using TensorFlow toxicity classifier with ✔️ marks for flags per imported toxicity model:
+TODO: add prose/text lines rows with ✔️ marks for the 'toxicity' flags per imported toxicity model...
 
 | prose | identity attack | insult | obscene | servere toxicity | sexual explicit | threat | toxicity |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 ...`
+)})
+    },
+    {
+      name: "headers",
+      value: (function(){return(
+['prose', 'identity attack', 'insult', 'obscene', 'servere', 'toxicity', 'sexual explicit', 'threat', 'toxicity']
+)})
+    },
+    {
+      inputs: ["md","printTable","headers","lines"],
+      value: (function(md,printTable,headers,lines){return(
+md `${printTable(headers, lines)}`
+)})
+    },
+    {
+      name: "printTable",
+      value: (function(){return(
+function printTable(headers, lines) {
+  // header row
+  let markdown = `| ${headers.join(' | ')} |
+    |`;
+  headers.map(header => { markdown += ' --- |'});
+  // TODO: rank text lines with toxicity classifier
+  return markdown;
+}
 )})
     },
     {
@@ -348,7 +386,7 @@ function printHtml(doc){
 };
 
 const notebook = {
-  id: "5557e901f2146b59@97",
+  id: "5557e901f2146b59@128",
   modules: [m0,m1]
 };
 
