@@ -1,16 +1,16 @@
-// URL: https://observablehq.com/@randomfractals/tensorflow-toxicityfilter
-// Title: TensorFlow ToxicityFilter
+// URL: https://observablehq.com/@randomfractals/tensorflow-toxicityfilter-wakemeup
+// Title: TensorFlow ToxicityFilter WakeMeUp
 // Author: Taras Novak (@randomfractals)
-// Version: 282
+// Version: 288
 // Runtime version: 1
 
 const m0 = {
-  id: "5557e901f2146b59@282",
+  id: "250bf9ed390e42ce@288",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
-md`# TensorFlow ToxicityFilter
+md`# TensorFlow ToxicityFilter WakeMeUp
 
 Using [TensorFlow Toxicity Classifier](https://medium.com/tensorflow/text-classification-using-tensorflow-js-an-example-of-detecting-offensive-language-in-browser-e2b94e3565ce) for analyzing rap lyrics.
 
@@ -23,7 +23,7 @@ See my [compromise.cool NLP collection](https://observablehq.com/collection/@ran
       value: (function(md){return(
 md `## Text Input
 
-We'll test toxicity classifier with Nipsey Hussle [Hussle & Motivate](https://www.bing.com/search?q=hussle+and+motivate+lyrics) rap layrics as default :)`
+Just for fun: decided to run it through Remy Ma's [Wake Me Up](https://www.bing.com/search?q=wake%20me%20up%20remy%20ma%20%20lyrics) rap layrics :)`
 )})
     },
     {
@@ -31,87 +31,73 @@ We'll test toxicity classifier with Nipsey Hussle [Hussle & Motivate](https://ww
       inputs: ["html"],
       value: (function(html){return(
 html `<textarea rows="10" cols="60">
-Pull up in motorcades, I got a show today
-It's all I'm tryna do, hustle and motivate
-Choppers a throwaway, hustle the Hova way
-That's why they follow me, huh, they think I know the way
-'Cause I took control of things, balling the solo way
-And if you counter my trend, I make you my protege
-Slauson Ave soldier race, niggas don't know them days
-Take you in back of the buildings, make you expose your age
-Take you across the tracks, make you explode a face
-Now you official now, but you got a soul to save
-I just been cooking that new, I'm 'bout to drop in a few
-Think if I call it the great, the people gon' call it the truth
-Ain't really trip on the credit, I just payed all of my dues
-I disrespected the game, now my name all in the news
-Tripping on all of my moves, quote me on this, got a lot more to prove
-Remember I came in this bitch, fresh out the county with nothing to lose
+If Peter Piper pecked 'em, I bet you Remy duffed 'em
+I told you not to touch 'em, it's not up for discussion
+All my clothes is custom, straight from France
+My hands like Mayweather's, all my friends eight and better
+I get a lot of money, honey
+Queen Bitch, inf beam bitch
+Body a guy for my guy make you a mean bitch
+I'm his dream bitch
+Mean bitch, take one for the team bitch!
 
-Nigga I don't do this for nothing, no
-From the ground up, yeah
-Well, I don't do this shit for nothing, no
-Not at all, yeah
-My money real, money real
-So I don't do this shit for nothing, no, not at all
-I told her I got it, yeah
-So I don't do this shit for nothing, not at all
-Where the green now?
-Hustle and motivate
+Wake me up, mmm, when the mornin' come
+You bitches ain't humble enough
+Mmm, when the mornin' come
+Mmm, when the mornin' come
+Wake me up, mmm, when the mornin' come
+Mmm, when the mornin' come
+Mmm, when the mornin' come
+These fake-ass bitches is done
+So wake me up early!
 
-Back in this bitch like I never left
-Stand for some shit that you never rep
-Passing through stages in life, through the ups and downs, like it's all just another test
-Live by the rules like a fucking ref
-I got respect in a hundred sets
-Too many chains, need another chest
-Playing no games if it wasn't chess
-Cut from that cloth that you couldn't stretch
-Cut from that serpent you couldn't test
-Heavily pressured and under stressed
-Even though niggas ain't show up, it was a mess
-Honest and template to the left
-Judge a young nigga by they address
-Left us no option, what they expect?
-Only thing we knew for sure was to bang the set
-Fuck living basic, I'm taking risks
-Fuck what they saying, I'm saying this
-Don't waste your time, it don't make you rich, it don't mean nothing
-Fuck 'em so let's make a grip
-Double up, triple up, make assist
-Balling so hard, you could play your bitch
-Lead to the lake, if they wanna fish
-Make sure them niggas around you stick to the script
-This should be written in stone
-You should come visit my zone
-Don't take my word, double check all of my flows
-Ask 'em how Hussle got on, but fuck what you heard
-This is for everybody who walked down that road
-Sold everything but they soul
-Straight off the curb, real niggas rich as you nerds
-Addressed to whom it may concern
+I'm rich, I'ma stay that bitch
+You fake-ass bitch, you owe homage, pay that shit
+Spray that fif', the crown, I'mma take that shit
+'Cause you a clown and Homey don't play that shit
+See, they ain't slick, be talkin' all cray and shit
+And then you see 'em, they be like that they ain't say that shit
+I hate that shit, I can make or break your shit
+See, I got options, don't make me weigh them shits
+I heard he lay that dick, you let him filet that fish
+You just met him, how he bae that quick?
+I'll say it to your face, don't gotta relay that shit
+If Nicole a Kid-man, OJ that bitch
+Take that trip, get money, make that lick
+Take your pick, that's your set, claim that clique
+Bitch, you so thirsty, obey that shit
+If that's your dog, I suggest you go train that bitch
 
-Nigga I don't do this for nothing, no
-From the ground up, yeah
-Well, I don't do this shit for nothing, no
-Not at all, yeah
-My money real, money real
-So I don't do this shit for nothing, no, not at all
-I told her I got it, yeah
-So I don't do this shit for nothing, not at all
-Where the green now?
-Hustle and motivate
+Wake me up, mmm, when the mornin' come
+You bitches ain't humble enough
+Mmm, when the mornin' come
+Mmm, when the mornin' come
+Wake me up, mmm, when the mornin' come
+Mmm, when the mornin' come
+Mmm, when the mornin' come
+These fake-ass bitches is done
+So wake me up early
 
-Hustle and motivate (Cut the bass off)
-Hustle and mo'
-Hustle and mo'
-Hustle and motivate
-All Money In
-Hustle and mo'
-Hustle and mo'
-Hustle and mo'
-Hustle and motivate
-(Victory Lap)
+Kimmy B don't trust 'em, I bet you Remy bust
+Got these niggas on lock, but we never cuff
+If Kimmy B don't trust 'em, I bet you Remy bust
+Got these niggas on lock, but we never cuff
+If Queen Bee don't trust 'em, I bet you Remy bust
+Got these niggas on lock, but we never cuff
+If Queen Bee don't trust 'em, I bet you Remy bust
+Got these niggas on lock, but we never cuff
+
+Wake me up, mmm, when the mornin' come
+You bitches ain't humble 'nough
+Mmm, when the mornin' come
+Mmm, when the mornin' come
+Wake me up, mmm, when the mornin' come
+Mmm, when the mornin' come
+Mmm, when the mornin' come
+These fake-ass bitches is done
+So wake me up early
+
+
 `
 )})
     },
@@ -522,7 +508,7 @@ require("d3-format@1")
 };
 
 const notebook = {
-  id: "5557e901f2146b59@282",
+  id: "250bf9ed390e42ce@288",
   modules: [m0,m1,m2]
 };
 
