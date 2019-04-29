@@ -1,11 +1,11 @@
-// URL: https://beta.observablehq.com/@randomfractals/perspective
+// URL: https://observablehq.com/@randomfractals/perspective
 // Title: Perspective
 // Author: Taras Novak (@randomfractals)
-// Version: 290
+// Version: 295
 // Runtime version: 1
 
 const m0 = {
-  id: "056c564660a4ccc1@290",
+  id: "056c564660a4ccc1@295",
   variables: [
     {
       inputs: ["md"],
@@ -14,8 +14,8 @@ md`# Perspective
 
 [Perspective](https://github.com/jpmorganchase/perspective) is a streaming data visualization engine for Javascript.
 
-Perspective makes it simple to build realtime user configurable analytics entirely in the browser utilizing 
-[Apache Arrow](https://beta.observablehq.com/@randomfractals/apache-arrow) columnar data load and display 
+Perspective makes it simple to build real-time user configurable analytics entirely in the browser utilizing 
+[Apache Arrow](https://beta.observablehq.com/@randomfractals/apache-arrow) columnar data format and display it
 via [Highcharts](https://github.com/highcharts/highcharts) 
 and [Hypergrid](https://github.com/fin-hypergrid/core) web assembly plugin modules.
 
@@ -44,9 +44,9 @@ html `
       inputs: ["require"],
       value: (async function(require)
 {
-  const perspectiveView = await require('https://unpkg.com/@jpmorganchase/perspective-examples/build/perspective.view.js');
-  const hyperGrid = await require('https://unpkg.com/@jpmorganchase/perspective-examples/build/hypergrid.plugin.js');
-  const highCharts = await require('https://unpkg.com/@jpmorganchase/perspective-examples/build/highcharts.plugin.js');
+  const perspectiveView = await require('https://unpkg.com/@jpmorganchase/perspective-examples@0.1.18/build/perspective.view.js');
+  const hyperGrid = await require('https://unpkg.com/@jpmorganchase/perspective-examples@0.1.18/build/hypergrid.plugin.js');
+  const highCharts = await require('https://unpkg.com/@jpmorganchase/perspective-examples@0.1.18/build/highcharts.plugin.js');
   return perspectiveView;
 }
 )
@@ -92,7 +92,7 @@ md `## Superstore Arrow Data`
     {
       name: "dataUrl",
       value: (function(){return(
-'https://raw.githubusercontent.com/jpmorganchase/perspective/master/packages/perspective-examples/src/csv/superstore.arrow'
+'https://raw.githubusercontent.com/jpmorganchase/perspective/master/examples/simple/superstore.arrow'
 )})
     },
     {
@@ -127,7 +127,7 @@ md`${getMarkdown(every2KRecord, fields, ['Order Date', 'Ship Date'])}`
       name: "arrow",
       inputs: ["require"],
       value: (function(require){return(
-require('apache-arrow')
+require('apache-arrow@0.3.1')
 )})
     },
     {
@@ -220,7 +220,7 @@ function toDate(timestamp) {
 };
 
 const notebook = {
-  id: "056c564660a4ccc1@290",
+  id: "056c564660a4ccc1@295",
   modules: [m0,m1]
 };
 
