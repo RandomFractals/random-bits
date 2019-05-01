@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/perspective
 // Title: Perspective
 // Author: Taras Novak (@randomfractals)
-// Version: 295
+// Version: 304
 // Runtime version: 1
 
 const m0 = {
-  id: "056c564660a4ccc1@295",
+  id: "056c564660a4ccc1@304",
   variables: [
     {
       inputs: ["md"],
@@ -44,9 +44,10 @@ html `
       inputs: ["require"],
       value: (async function(require)
 {
-  const perspectiveView = await require('https://unpkg.com/@jpmorganchase/perspective-examples@0.1.18/build/perspective.view.js');
-  const hyperGrid = await require('https://unpkg.com/@jpmorganchase/perspective-examples@0.1.18/build/hypergrid.plugin.js');
-  const highCharts = await require('https://unpkg.com/@jpmorganchase/perspective-examples@0.1.18/build/highcharts.plugin.js');
+  const corePerspective = await require('https://unpkg.com/@jpmorganchase/perspective/build/perspective.js');
+  const perspectiveView = await require('https://unpkg.com/@jpmorganchase/perspective-viewer/build/perspective.view.js');
+  const hyperGrid = await require('https://unpkg.com/@jpmorganchase/perspective-viewer-hypergrid/build/hypergrid.plugin.js');
+  const highCharts = await require('https://unpkg.com/@jpmorganchase/perspective-viewer-highcharts/build/highcharts.plugin.js');
   return perspectiveView;
 }
 )
@@ -63,6 +64,12 @@ window.addEventListener('WebComponentsReady', function() {
     viewer._toggle_config();
   });
 })
+)})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Styles`
 )})
     },
     {
@@ -220,7 +227,7 @@ function toDate(timestamp) {
 };
 
 const notebook = {
-  id: "056c564660a4ccc1@295",
+  id: "056c564660a4ccc1@304",
   modules: [m0,m1]
 };
 
