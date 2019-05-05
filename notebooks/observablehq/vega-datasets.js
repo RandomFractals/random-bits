@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/vega-datasets
 // Title: Vega Datasets
 // Author: Taras Novak (@randomfractals)
-// Version: 118
+// Version: 144
 // Runtime version: 1
 
 const m0 = {
-  id: "746209ee3f3ea6d2@118",
+  id: "746209ee3f3ea6d2@144",
   variables: [
     {
       inputs: ["md"],
@@ -19,6 +19,8 @@ List of [vega-datasets](https://github.com/vega/vega-datasets) for preview in
 This notebook uses [d3-fetch](https://github.com/d3/d3-fetch) for fetching selected dataset and
 [fin-hypergrid](https://github.com/fin-hypergrid/core) high performance canvas-based grid renderer 
 for fast data display and scrolling.
+
+**Note**: this data preview utility notebook can be used to preview any public online csv or json data. just paste your data url to fetch it ;)
 `
 )})
     },
@@ -122,8 +124,15 @@ md `## Data`
       value: (function(){return(
 ['airports.csv', 'co2-concentration.csv', 'disasters.csv', 'flights-3m.csv', 'flights-airport.csv',
            'gapminder-health-income.csv', 'github.csv', 'iowa-electricity.csv', 'la-riots.csv', 'lookup_groups.csv',
-           'lookup_people.csv', 'population_engineers_hurricanes.csv', 'seattle-templs.csv', 'seattle-weather.csv',
-           'sf-temps.csv', 'sp500.csv', 'stocks.csv', 'us-employment.csv', 'weather.csv', 'windvectors.csv', 'zipcodes.csv']
+           'lookup_people.csv', 'population_engineers_hurricanes.csv', 'seattle-temps.csv', 'seattle-weather.csv',
+           'sf-temps.csv', 'sp500.csv', 'stocks.csv', 'us-employment.csv', 'weather.csv', 'windvectors.csv', 'zipcodes.csv',
+           'barley.json', 'birdstrikes.json', 'budget.json', 'budgets.json', 'burtin.json', 'cars.json', 'climate.json',
+           'countries.json', 'crimea.json', 'driving.json', 'flare-dependencies.json', 'flare.json', 
+           'flights-2k.json', 'flights-5k.json', 'flights-10k.json', 'flights-20k.json', 'flights-200k.json',
+           'gapminder.json', 'income.json', 'iris.json', 'jobs.json', 'londonCentroids.json',
+           'monarchs.json', 'movies.json', 'normal-2d.json', 'points.json',
+           'udistrict.json', 'unemployment-across-industries.json', 'us-state-capitals.json',
+           'weball26.json', 'wheat.json']
 )})
     },
     {
@@ -147,11 +156,12 @@ async function fetchData(dataUrl) {
     {
       name: "showData",
       value: (function(){return(
-function showData (data, grid) {
+function showData(data, grid) {
   grid.reset();
   grid.setData({data: data});
   grid.behaviorChanged();
   grid.repaint();
+  return grid;
 }
 )})
     },
@@ -163,13 +173,13 @@ md `## Imports`
     },
     {
       from: "@jashkenas/inputs",
-      name: "text",
-      remote: "text"
+      name: "select",
+      remote: "select"
     },
     {
       from: "@jashkenas/inputs",
-      name: "select",
-      remote: "select"
+      name: "text",
+      remote: "text"
     },
     {
       name: "d3Fetch",
@@ -191,45 +201,6 @@ require('https://fin-hypergrid.github.io/core/3.2.0/build/fin-hypergrid.js').cat
 const m1 = {
   id: "@jashkenas/inputs",
   variables: [
-    {
-      name: "text",
-      inputs: ["input"],
-      value: (function(input){return(
-function text(config = {}) {
-  const {
-    value,
-    title,
-    description,
-    autocomplete = "off",
-    maxlength,
-    minlength,
-    pattern,
-    placeholder,
-    size,
-    submit
-  } = config;
-  if (typeof config == "string") value = config;
-  const form = input({
-    type: "text",
-    title,
-    description,
-    submit,
-    attributes: {
-      value,
-      autocomplete,
-      maxlength,
-      minlength,
-      pattern,
-      placeholder,
-      size
-    }
-  });
-  form.output.remove();
-  form.input.style.fontSize = "1em";
-  return form;
-}
-)})
-    },
     {
       name: "select",
       inputs: ["input","html"],
@@ -276,6 +247,45 @@ function select(config = {}) {
     `
   });
   form.output.remove();
+  return form;
+}
+)})
+    },
+    {
+      name: "text",
+      inputs: ["input"],
+      value: (function(input){return(
+function text(config = {}) {
+  const {
+    value,
+    title,
+    description,
+    autocomplete = "off",
+    maxlength,
+    minlength,
+    pattern,
+    placeholder,
+    size,
+    submit
+  } = config;
+  if (typeof config == "string") value = config;
+  const form = input({
+    type: "text",
+    title,
+    description,
+    submit,
+    attributes: {
+      value,
+      autocomplete,
+      maxlength,
+      minlength,
+      pattern,
+      placeholder,
+      size
+    }
+  });
+  form.output.remove();
+  form.input.style.fontSize = "1em";
   return form;
 }
 )})
@@ -377,7 +387,7 @@ require("d3-format@1")
 };
 
 const notebook = {
-  id: "746209ee3f3ea6d2@118",
+  id: "746209ee3f3ea6d2@144",
   modules: [m0,m1]
 };
 
