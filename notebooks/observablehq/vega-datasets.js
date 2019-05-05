@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/vega-datasets
 // Title: Vega Datasets
 // Author: Taras Novak (@randomfractals)
-// Version: 115
+// Version: 118
 // Runtime version: 1
 
 const m0 = {
-  id: "746209ee3f3ea6d2@115",
+  id: "746209ee3f3ea6d2@118",
   variables: [
     {
       inputs: ["md"],
@@ -19,8 +19,6 @@ List of [vega-datasets](https://github.com/vega/vega-datasets) for preview in
 This notebook uses [d3-fetch](https://github.com/d3/d3-fetch) for fetching selected dataset and
 [fin-hypergrid](https://github.com/fin-hypergrid/core) high performance canvas-based grid renderer 
 for fast data display and scrolling.
-
-TODO: fix data reload and grid display on dataset selection change
 `
 )})
     },
@@ -150,7 +148,9 @@ async function fetchData(dataUrl) {
       name: "showData",
       value: (function(){return(
 function showData (data, grid) {
+  grid.reset();
   grid.setData({data: data});
+  grid.behaviorChanged();
   grid.repaint();
 }
 )})
@@ -377,7 +377,7 @@ require("d3-format@1")
 };
 
 const notebook = {
-  id: "746209ee3f3ea6d2@115",
+  id: "746209ee3f3ea6d2@118",
   modules: [m0,m1]
 };
 
