@@ -1,26 +1,26 @@
 // URL: https://observablehq.com/@randomfractals/vega-datasets
 // Title: Vega Datasets
 // Author: Taras Novak (@randomfractals)
-// Version: 144
+// Version: 162
 // Runtime version: 1
 
 const m0 = {
-  id: "746209ee3f3ea6d2@144",
+  id: "746209ee3f3ea6d2@162",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md`# Vega Datasets
 
-List of [vega-datasets](https://github.com/vega/vega-datasets) for preview in 
+List of [vega-datasets](https://github.com/vega/vega-datasets) used in
 [Vega](https://github.com/vega/vega/tree/master/docs/examples) and 
-[Vega-Lite](https://github.com/vega/vega-lite/tree/master/examples/specs) examples.
+[Vega-Lite](https://github.com/vega/vega-lite/tree/master/examples/specs) examples for data preview.
 
-This notebook uses [d3-fetch](https://github.com/d3/d3-fetch) for fetching selected dataset and
+This notebook 📓 uses [d3-fetch](https://github.com/d3/d3-fetch) to fetch selected dataset and
 [fin-hypergrid](https://github.com/fin-hypergrid/core) high performance canvas-based grid renderer 
 for fast data display and scrolling.
 
-**Note**: this data preview utility notebook can be used to preview any public online csv or json data. just paste your data url to fetch it ;)
+**Note**: this data preview utility 🛠️ notebook 📓 can be used to preview any public online **csv** or **json** data. Just paste your data url to fetch it ;)
 `
 )})
     },
@@ -193,6 +193,17 @@ require("d3-fetch@1.1.2")
       inputs: ["require"],
       value: (function(require){return(
 require('https://fin-hypergrid.github.io/core/3.2.0/build/fin-hypergrid.js').catch(() => window.fin.Hypergrid)
+)})
+    },
+    {
+      name: "outro",
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Outro
+
+See online [Vega Editor Examples](https://vega.github.io/editor/#/examples) or get
+[Vega Viewer](https://twitter.com/TarasNovak/status/1123973629635629056) vscode extention I created to play with these data sets and Vega **json** specs for maps 🗺️ & graphs 📈 🤗
+`
 )})
     }
   ]
@@ -387,7 +398,7 @@ require("d3-format@1")
 };
 
 const notebook = {
-  id: "746209ee3f3ea6d2@144",
+  id: "746209ee3f3ea6d2@162",
   modules: [m0,m1]
 };
 
