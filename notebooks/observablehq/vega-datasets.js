@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/vega-datasets
 // Title: Vega Datasets
 // Author: Taras Novak (@randomfractals)
-// Version: 162
+// Version: 212
 // Runtime version: 1
 
 const m0 = {
-  id: "746209ee3f3ea6d2@162",
+  id: "746209ee3f3ea6d2@212",
   variables: [
     {
       inputs: ["md"],
@@ -20,7 +20,9 @@ This notebook 📓 uses [d3-fetch](https://github.com/d3/d3-fetch) to fetch sele
 [fin-hypergrid](https://github.com/fin-hypergrid/core) high performance canvas-based grid renderer 
 for fast data display and scrolling.
 
-**Note**: this data preview utility 🛠️ notebook 📓 can be used to preview any public online **csv** or **json** data. Just paste your data url to fetch it ;)
+**Note**: this data preview utility 🛠️ notebook 📓 can be used to preview any public online
+[Apache Arrow](https://observablehq.com/@randomfractals/apache-arrow), 
+**csv** or **json** array data. Just paste your data url to fetch it ;)
 `
 )})
     },
@@ -128,7 +130,8 @@ md `## Data`
            'sf-temps.csv', 'sp500.csv', 'stocks.csv', 'us-employment.csv', 'weather.csv', 'windvectors.csv', 'zipcodes.csv',
            'barley.json', 'birdstrikes.json', 'budget.json', 'budgets.json', 'burtin.json', 'cars.json', 'climate.json',
            'countries.json', 'crimea.json', 'driving.json', 'flare-dependencies.json', 'flare.json', 
-           'flights-2k.json', 'flights-5k.json', 'flights-10k.json', 'flights-20k.json', 'flights-200k.json',
+           'flights-2k.json', 'flights-5k.json', 'flights-10k.json', 'flights-20k.json', 
+           'flights-200k.json', 'flights-200k.arrow',
            'gapminder.json', 'income.json', 'iris.json', 'jobs.json', 'londonCentroids.json',
            'monarchs.json', 'movies.json', 'normal-2d.json', 'points.json',
            'udistrict.json', 'unemployment-across-industries.json', 'us-state-capitals.json',
@@ -137,8 +140,8 @@ md `## Data`
     },
     {
       name: "fetchData",
-      inputs: ["d3Fetch"],
-      value: (function(d3Fetch){return(
+      inputs: ["d3Fetch","loadArrowData"],
+      value: (function(d3Fetch,loadArrowData){return(
 async function fetchData(dataUrl) {
   let data = [];
   console.log('fetchData:dataUrl:', dataUrl);
@@ -148,8 +151,32 @@ async function fetchData(dataUrl) {
   else if (dataUrl.endsWith('.json')) {
     data = await d3Fetch.json(dataUrl);
   }
-  // TODO: add arrow data support too
+  else if (dataUrl.endsWith('.arrow')) {
+    data = loadArrowData(dataUrl);
+  }
   return data;
+}
+)})
+    },
+    {
+      name: "loadArrowData",
+      inputs: ["arrow"],
+      value: (function(arrow){return(
+async function loadArrowData(dataUrl){
+  const response = await fetch(dataUrl);
+  const arrayBuffer = await response.arrayBuffer();
+  const table = arrow.Table.from(new Uint8Array(arrayBuffer));
+  const rows = Array(table.length);
+  const fields = table.schema.fields.map(d => d.name);  
+  for (let i=0, n=rows.length; i<n; ++i) {
+    const proto = {};
+    fields.forEach((fieldName, index) => {
+      const column = table.getColumnAt(index);
+      proto[fieldName] = column.get(i);
+    });
+    rows[i] = proto;
+  }
+  return rows;
 }
 )})
     },
@@ -193,6 +220,13 @@ require("d3-fetch@1.1.2")
       inputs: ["require"],
       value: (function(require){return(
 require('https://fin-hypergrid.github.io/core/3.2.0/build/fin-hypergrid.js').catch(() => window.fin.Hypergrid)
+)})
+    },
+    {
+      name: "arrow",
+      inputs: ["require"],
+      value: (function(require){return(
+require('apache-arrow@0.4.1')
 )})
     },
     {
@@ -398,7 +432,7 @@ require("d3-format@1")
 };
 
 const notebook = {
-  id: "746209ee3f3ea6d2@162",
+  id: "746209ee3f3ea6d2@212",
   modules: [m0,m1]
 };
 
