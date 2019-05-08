@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/vega-datasets
 // Title: Vega Datasets
 // Author: Taras Novak (@randomfractals)
-// Version: 212
+// Version: 223
 // Runtime version: 1
 
 const m0 = {
-  id: "746209ee3f3ea6d2@212",
+  id: "746209ee3f3ea6d2@223",
   variables: [
     {
       inputs: ["md"],
@@ -44,12 +44,12 @@ select({
     },
     {
       name: "viewof dataUrl",
-      inputs: ["text","baseUrl","dataSet"],
-      value: (function(text,baseUrl,dataSet){return(
+      inputs: ["text","dataParam","baseUrl","dataSet"],
+      value: (function(text,dataParam,baseUrl,dataSet){return(
 text({
   placeholder: 'type data url and click fetch', 
   description: 'data url to fetch',
-  value: `${baseUrl}/${dataSet}`,
+  value: `${dataParam ? dataParam : baseUrl + dataSet}`,
   submit: 'fetchData'})
 )})
     },
@@ -57,6 +57,13 @@ text({
       name: "dataUrl",
       inputs: ["Generators","viewof dataUrl"],
       value: (G, _) => G.input(_)
+    },
+    {
+      name: "shareLink",
+      inputs: ["md","dataUrl"],
+      value: (function(md,dataUrl){return(
+md `*share a link to your [data](https://observablehq.com/@randomfractals/vega-datasets?data=${dataUrl})*`
+)})
     },
     {
       name: "data",
@@ -116,9 +123,16 @@ md `## Data`
 )})
     },
     {
+      name: "dataParam",
+      inputs: ["URLSearchParams","html"],
+      value: (function(URLSearchParams,html){return(
+new URLSearchParams(html`<a href>`.search).get('data')
+)})
+    },
+    {
       name: "baseUrl",
       value: (function(){return(
-'https://raw.githubusercontent.com/vega/vega-datasets/master/data'
+'https://raw.githubusercontent.com/vega/vega-datasets/master/data/'
 )})
     },
     {
@@ -432,7 +446,7 @@ require("d3-format@1")
 };
 
 const notebook = {
-  id: "746209ee3f3ea6d2@212",
+  id: "746209ee3f3ea6d2@223",
   modules: [m0,m1]
 };
 
