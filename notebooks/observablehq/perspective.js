@@ -1,25 +1,25 @@
 // URL: https://observablehq.com/@randomfractals/perspective
 // Title: Perspective
 // Author: Taras Novak (@randomfractals)
-// Version: 358
+// Version: 369
 // Runtime version: 1
 
 const m0 = {
-  id: "056c564660a4ccc1@358",
+  id: "056c564660a4ccc1@369",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md`# Perspective
 
-[Perspective](https://github.com/jpmorganchase/perspective) is a streaming data visualization engine for Javascript.
+[Perspective](https://github.com/finos/perspective) is a streaming data visualization engine for JavaScript.
 
-Perspective makes it simple to build real-time user configurable analytics entirely in the browser utilizing 
-[Apache Arrow](https://beta.observablehq.com/@randomfractals/apache-arrow) columnar data format and display it
+Perspective makes it simple to build real-time user configurable analytics entirely in your browser utilizing 
+[Apache Arrow](https://beta.observablehq.com/@randomfractals/apache-arrow) array data format & displaying it
 via [Highcharts](https://github.com/highcharts/highcharts) 
 and [Hypergrid](https://github.com/fin-hypergrid/core) web assembly plugin modules.
 
-This notebook is based on [Superstore Arrow demo](https://unpkg.com/@jpmorganchase/perspective-examples/build/superstore-arrow.html)
+This notebook 📓 is based on [Superstore Arrow demo](https://unpkg.com/@jpmorganchase/perspective-examples/build/superstore-arrow.html)
 `
 )})
     },
@@ -66,30 +66,6 @@ async function loadPerspectiveViewerPlugins() {
   const highCharts = await require('@finos/perspective-viewer-highcharts@0.3.0-rc.1/build/highcharts.plugin.js');
   return hyperGrid;
 }
-)})
-    },
-    {
-      inputs: ["md"],
-      value: (function(md){return(
-md `## Styles`
-)})
-    },
-    {
-      name: "viewerStyle",
-      inputs: ["html"],
-      value: (function(html){return(
-html`
-<link rel='stylesheet' href="https://unpkg.com/@finos/perspective-viewer@0.3.0-rc.1/build/material.css" is="custom-style" />
-<style>
-perspective-viewer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-</style>
-`
 )})
     },
     {
@@ -179,6 +155,30 @@ require('@finos/perspective@0.3.0-rc.1/build/perspective.js')
       value: (function(require){return(
 require('@finos/perspective-viewer@0.3.0-rc.1/build/perspective.view.js')
 )})
+    },
+    {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Styles`
+)})
+    },
+    {
+      name: "viewerStyle",
+      inputs: ["html"],
+      value: (function(html){return(
+html`
+<link rel='stylesheet' href="https://unpkg.com/@finos/perspective-viewer@0.3.0-rc.1/build/material.css" is="custom-style" />
+<style>
+perspective-viewer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+</style>
+`
+)})
     }
   ]
 };
@@ -250,7 +250,7 @@ function toDate(timestamp) {
 };
 
 const notebook = {
-  id: "056c564660a4ccc1@358",
+  id: "056c564660a4ccc1@369",
   modules: [m0,m1]
 };
 
