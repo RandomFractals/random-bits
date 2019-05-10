@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/perspective
 // Title: Perspective
 // Author: Taras Novak (@randomfractals)
-// Version: 304
+// Version: 352
 // Runtime version: 1
 
 const m0 = {
-  id: "056c564660a4ccc1@304",
+  id: "056c564660a4ccc1@352",
   variables: [
     {
       inputs: ["md"],
@@ -30,7 +30,7 @@ This notebook is based on [Superstore Arrow demo](https://unpkg.com/@jpmorgancha
 html `
 <div style="height:${width*.6}px">
   <perspective-viewer
-    view="sunburst"
+    view="treemap"
     row-pivots='["Sub-Category","Region","Segment"]'
     sort='[["Profit","desc"]]'
     columns='["Sales", "Profit"]'>                
@@ -40,30 +40,32 @@ html `
 )})
     },
     {
-      name: "perspective",
-      inputs: ["require"],
-      value: (async function(require)
-{
-  const corePerspective = await require('https://unpkg.com/@jpmorganchase/perspective/build/perspective.js');
-  const perspectiveView = await require('https://unpkg.com/@jpmorganchase/perspective-viewer/build/perspective.view.js');
-  const hyperGrid = await require('https://unpkg.com/@jpmorganchase/perspective-viewer-hypergrid/build/hypergrid.plugin.js');
-  const highCharts = await require('https://unpkg.com/@jpmorganchase/perspective-viewer-highcharts/build/highcharts.plugin.js');
-  return perspectiveView;
-}
-)
-    },
-    {
       name: "viewerLoad",
-      inputs: ["loadData","dataUrl"],
-      value: (function(loadData,dataUrl){return(
+      inputs: ["loadPerspectiveViewerPlugins","dataUrl","loadData"],
+      value: (function(loadPerspectiveViewerPlugins,dataUrl,loadData){return(
 window.addEventListener('WebComponentsReady', function() {
-  const viewer = document.getElementsByTagName('perspective-viewer')[0];  
+  console.log('WebComponentsReady: loading plugins...');
+  const hyperGrid = loadPerspectiveViewerPlugins();  
+  const viewer = document.getElementsByTagName('perspective-viewer')[0];
+  console.log('WebComponentsReady: loading data:', dataUrl);
   loadData(dataUrl).then(buffer => {
     console.log('Loading view data...');
     viewer.load(buffer);
-    viewer._toggle_config();
+    viewer.toggleConfig();
   });
 })
+)})
+    },
+    {
+      name: "loadPerspectiveViewerPlugins",
+      inputs: ["require"],
+      value: (function(require){return(
+async function loadPerspectiveViewerPlugins() {
+  console.log('loadPerspectiveViewerPlugins: loading plugins...');
+  const hyperGrid = await require('@finos/perspective-viewer-hypergrid@0.3.0-rc.1/build/hypergrid.plugin.js');
+  const highCharts = await require('@finos/perspective-viewer-highcharts@0.3.0-rc.1/build/highcharts.plugin.js');
+  return hyperGrid;
+}
 )})
     },
     {
@@ -77,6 +79,7 @@ md `## Styles`
       inputs: ["html"],
       value: (function(html){return(
 html`
+<link rel='stylesheet' href="https://unpkg.com/@finos/perspective-viewer@0.3.0-rc.1/build/material.css" is="custom-style" />
 <style>
 perspective-viewer {
   position: absolute;
@@ -138,6 +141,12 @@ require('apache-arrow@0.3.1')
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `## Imports`
+)})
+    },
+    {
       from: "@randomfractals/apache-arrow",
       name: "loadData",
       remote: "loadData"
@@ -156,6 +165,20 @@ require('apache-arrow@0.3.1')
       from: "@randomfractals/apache-arrow",
       name: "toDate",
       remote: "toDate"
+    },
+    {
+      name: "perspective",
+      inputs: ["require"],
+      value: (function(require){return(
+require('@finos/perspective@0.3.0-rc.1/build/perspective.js')
+)})
+    },
+    {
+      name: "perspectiveViewer",
+      inputs: ["require"],
+      value: (function(require){return(
+require('@finos/perspective-viewer@0.3.0-rc.1/build/perspective.view.js')
+)})
     }
   ]
 };
@@ -227,7 +250,7 @@ function toDate(timestamp) {
 };
 
 const notebook = {
-  id: "056c564660a4ccc1@304",
+  id: "056c564660a4ccc1@352",
   modules: [m0,m1]
 };
 
