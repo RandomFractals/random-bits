@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/vega-datasets
 // Title: Vega Datasets
 // Author: Taras Novak (@randomfractals)
-// Version: 223
+// Version: 224
 // Runtime version: 1
 
 const m0 = {
-  id: "746209ee3f3ea6d2@223",
+  id: "746209ee3f3ea6d2@224",
   variables: [
     {
       inputs: ["md"],
@@ -233,7 +233,7 @@ require("d3-fetch@1.1.2")
       name: "Hypergrid",
       inputs: ["require"],
       value: (function(require){return(
-require('https://fin-hypergrid.github.io/core/3.2.0/build/fin-hypergrid.js').catch(() => window.fin.Hypergrid)
+require('https://fin-hypergrid.github.io/core/3.2.1/build/fin-hypergrid.js').catch(() => window.fin.Hypergrid)
 )})
     },
     {
@@ -446,7 +446,7 @@ require("d3-format@1")
 };
 
 const notebook = {
-  id: "746209ee3f3ea6d2@223",
+  id: "746209ee3f3ea6d2@224",
   modules: [m0,m1]
 };
 
