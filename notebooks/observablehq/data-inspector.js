@@ -1,18 +1,18 @@
 // URL: https://observablehq.com/@randomfractals/data-inspector
 // Title: Data Inspector 🕵️‍
 // Author: Taras Novak (@randomfractals)
-// Version: 97
+// Version: 110
 // Runtime version: 1
 
 const m0 = {
-  id: "08772c01decd03fb@97",
+  id: "08772c01decd03fb@110",
   variables: [
     {
       inputs: ["md"],
       value: (function(md){return(
 md `# Data Inspector 🕵️‍
 
-Simple csv data utility notebook for viewing, slicing, dicing, and graphing data with [perspectiveJS](https://github.com/jpmorganchase/perspective) for exploratory data analysis (EDA)
+Simple csv data utility notebook for viewing, slicing, dicing & graphing data with [perspectiveJS](https://github.com/jpmorganchase/perspective) for exploratory data analysis (EDA)
 `
 )})
     },
@@ -58,6 +58,12 @@ md `## Perspective Viewer Setup`
 )})
     },
     {
+      inputs: ["md"],
+      value: (function(md){return(
+md `TODO: resolve perspective viewer plugins registering & loading for grid & charts display`
+)})
+    },
+    {
       name: "viewerLoad",
       inputs: ["loadPerspectiveViewerPlugins"],
       value: (function(loadPerspectiveViewerPlugins){return(
@@ -94,18 +100,18 @@ loadData(dataFile)
       name: "loadData",
       value: (function(){return(
 function loadData(file) {
-  let reader = new FileReader();
-  reader.onload = function(fileLoadedEvent) {
+  const fileReader = new FileReader();
+  fileReader.onload = function(fileLoadedEvent) {
     console.log('loadData: loading file:', file.name);
-    let txt = fileLoadedEvent.target.result;
+    const textData = fileLoadedEvent.target.result;
     const viewer = document.getElementsByTagName('perspective-viewer')[0];
     viewer.reset();
-    viewer.load(txt);
-    viewer.update(txt);
+    viewer.load(textData);
+    viewer.update(textData);
     viewer.toggleConfig();
   };        
-  // read csv data as text, triggering the onload when finished
-  reader.readAsText(file);
+  // read csv data file as text to trigger file onLoad event
+  fileReader.readAsText(file);
 }
 )})
     },
@@ -291,7 +297,7 @@ require("d3-format@1")
 };
 
 const notebook = {
-  id: "08772c01decd03fb@97",
+  id: "08772c01decd03fb@110",
   modules: [m0,m1]
 };
 
