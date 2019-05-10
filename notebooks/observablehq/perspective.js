@@ -1,11 +1,11 @@
 // URL: https://observablehq.com/@randomfractals/perspective
 // Title: Perspective
 // Author: Taras Novak (@randomfractals)
-// Version: 352
+// Version: 358
 // Runtime version: 1
 
 const m0 = {
-  id: "056c564660a4ccc1@352",
+  id: "056c564660a4ccc1@358",
   variables: [
     {
       inputs: ["md"],
@@ -134,13 +134,6 @@ md`${getMarkdown(every2KRecord, fields, ['Order Date', 'Ship Date'])}`
 )})
     },
     {
-      name: "arrow",
-      inputs: ["require"],
-      value: (function(require){return(
-require('apache-arrow@0.3.1')
-)})
-    },
-    {
       inputs: ["md"],
       value: (function(md){return(
 md `## Imports`
@@ -165,6 +158,13 @@ md `## Imports`
       from: "@randomfractals/apache-arrow",
       name: "toDate",
       remote: "toDate"
+    },
+    {
+      name: "arrow",
+      inputs: ["require"],
+      value: (function(require){return(
+require('apache-arrow@0.3.1')
+)})
     },
     {
       name: "perspective",
@@ -250,7 +250,7 @@ function toDate(timestamp) {
 };
 
 const notebook = {
-  id: "056c564660a4ccc1@352",
+  id: "056c564660a4ccc1@358",
   modules: [m0,m1]
 };
 
